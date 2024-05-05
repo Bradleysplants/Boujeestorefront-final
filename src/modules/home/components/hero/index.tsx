@@ -1,36 +1,25 @@
-import { Github } from "@medusajs/icons"
-import { Button, Heading } from "@medusajs/ui"
+import { Github } from "@medusajs/icons";
+import { Button, Heading } from "@medusajs/ui";
 
 const Hero = () => {
   return (
-    <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">
-        <span>
-          <Heading
-            level="h1"
-            className="text-3xl leading-10 text-ui-fg-base font-normal"
-          >
-            Ecommerce Starter Template
-          </Heading>
-          <Heading
-            level="h2"
-            className="text-3xl leading-10 text-ui-fg-subtle font-normal"
-          >
-            Powered by Medusa and Next.js
-          </Heading>
-        </span>
-        <a
-          href="https://github.com/medusajs/nextjs-starter-medusa"
-          target="_blank"
+    <div className="h-[75vh] w-full border-b border-gray-200 relative bg-slate-gray flex justify-center items-center">
+      <div className="text-center p-10 lg:p-32 space-y-6">
+        <Heading
+          level="h1"
+          className="text-5xl leading-snug text-pastel-pink font-bold"
         >
-          <Button variant="secondary">
-            View on GitHub
-            <Github />
-          </Button>
-        </a>
+          Welcome to DeLisa&apos;s Boujee Botanical Store
+        </Heading>
+        <Heading
+          level="h2"
+          className="text-2xl leading-tight text-pastel-pink font-light"
+        >
+          Discover the charm of luxury plants and exclusive care products
+        </Heading>
       </div>
     </div>
-  )
+  );
 }
 
-export default Hero
+export default Hero;

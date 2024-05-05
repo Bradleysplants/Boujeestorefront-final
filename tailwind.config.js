@@ -1,24 +1,20 @@
-const path = require("path")
+const path = require("path");
 
 module.exports = {
-  darkMode: "class",
-  presets: [require("@medusajs/ui-preset")],
+  darkMode: "class", // Enables dark mode toggle based on class
+  presets: [require("@medusajs/ui-preset")], // Integrates Medusa UI preset
   content: [
-    "./src/app/**/*.{js,ts,jsx,tsx}",
-    "./src/pages/**/*.{js,ts,jsx,tsx}",
-    "./src/components/**/*.{js,ts,jsx,tsx}",
-    "./src/modules/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
+    "./src/app/**/*.{js,ts,jsx,tsx}", // Path to all JavaScript and TypeScript files in app directory
+    "./src/pages/**/*.{js,ts,jsx,tsx}", // Path to all JavaScript and TypeScript files in pages directory
+    "./src/components/**/*.{js,ts,jsx,tsx}", // Path to all JavaScript and TypeScript files in components directory
+    "./src/styles/**/*.css", // Path to all CSS files in styles directory
+    "./src/modules/**/*.{js,ts,jsx,tsx}", // Path to all JavaScript and TypeScript files in modules directory
+    "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}", // Includes UI components from Medusa
   ],
   theme: {
     extend: {
-      transitionProperty: {
-        width: "width margin",
-        height: "height",
-        bg: "background-color",
-        display: "display opacity",
-        visibility: "visibility",
-        padding: "padding-top padding-right padding-bottom padding-left",
+      fontFamily: {
+        'elegant': ['"Open Sans"', 'sans-serif'], // Custom font family named 'elegant'
       },
       colors: {
         grey: {
@@ -34,6 +30,18 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        'pastel-pink': '#E38F90', // Custom pink color
+        'slate-gray': '#333940', // Custom slate gray color
+        'darker-slate-gray': '#1A1A1A', // Custom darker slate gray color
+        'primary-green': '#3cb043', // Custom primary green color
+      },
+      transitionProperty: {
+        width: "width margin",
+        height: "height",
+        bg: "background-color",
+        display: "display opacity",
+        visibility: "visibility",
+        padding: "padding-top padding-right padding-bottom padding-left",
       },
       borderRadius: {
         none: "0px",
@@ -57,18 +65,6 @@ module.exports = {
       },
       fontSize: {
         "3xl": "2rem",
-      },
-      fontFamily: {
-        sans: [
-          "Inter",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "Helvetica Neue",
-          "Ubuntu",
-          "sans-serif",
-        ],
       },
       keyframes: {
         ring: {
@@ -143,20 +139,16 @@ module.exports = {
       },
       animation: {
         ring: "ring 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite",
-        "fade-in-right":
-          "fade-in-right 0.3s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+        "fade-in-right": "fade-in-right 0.3s cubic-bezier(0.5, 0, 0.5, 1) forwards",
         "fade-in-top": "fade-in-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
-        "fade-out-top":
-          "fade-out-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
-        "accordion-open":
-          "accordion-slide-down 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
-        "accordion-close":
-          "accordion-slide-up 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
+        "fade-out-top": "fade-out-top 0.2s cubic-bezier(0.5, 0, 0.5, 1) forwards",
+        "accordion-open": "accordion-slide-down 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
+        "accordion-close": "accordion-slide-up 300ms cubic-bezier(0.87, 0, 0.13, 1) forwards",
         enter: "enter 200ms ease-out",
-        "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
         leave: "leave 150ms ease-in forwards",
+        "slide-in": "slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)",
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [require("tailwindcss-radix")()], // Plugin for enhancing UI components with Radix
 }

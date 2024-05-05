@@ -1,21 +1,21 @@
-import { Region } from "@medusajs/medusa"
-import { PricedProduct } from "@medusajs/medusa/dist/types/pricing"
-import React, { Suspense } from "react"
+import { Region } from "@medusajs/medusa";
+import { PricedProduct } from "@medusajs/medusa/dist/types/pricing";
+import React, { Suspense } from "react";
 
-import ImageGallery from "@modules/products/components/image-gallery"
-import ProductActions from "@modules/products/components/product-actions"
-import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta"
-import ProductTabs from "@modules/products/components/product-tabs"
-import RelatedProducts from "@modules/products/components/related-products"
-import ProductInfo from "@modules/products/templates/product-info"
-import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
-import { notFound } from "next/navigation"
-import ProductActionsWrapper from "./product-actions-wrapper"
+import ImageGallery from "@modules/products/components/image-gallery";
+import ProductActions from "@modules/products/components/product-actions";
+import ProductOnboardingCta from "@modules/products/components/product-onboarding-cta";
+import ProductTabs from "@modules/products/components/product-tabs";
+import RelatedProducts from "@modules/products/components/related-products";
+import ProductInfo from "@modules/products/templates/product-info";
+import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products";
+import { useRouter } from "next/navigation"; // Using useRouter for navigation actions
+import ProductActionsWrapper from "./product-actions-wrapper";
 
 type ProductTemplateProps = {
-  product: PricedProduct
-  region: Region
-  countryCode: string
+  product: PricedProduct;
+  region: Region;
+  countryCode: string;
 }
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
@@ -23,15 +23,19 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
   region,
   countryCode,
 }) => {
+  const router = useRouter(); // Use useRouter hook for routing
+
   if (!product || !product.id) {
-    return notFound()
+    router.replace('/404'); // Navigate to custom 404 page
+    return null; // Return null after redirection
   }
 
   return (
     <>
       <div
-        className="content-container flex flex-col small:flex-row small:items-start py-6 relative"
+        className="content-container flex flex-col small:flex-row small:items-start py-6 relative bg-slate-gray text-pastel-pink"
         data-testid="product-container"
+        aria-label="Product details"  // ARIA label for better accessibility
       >
         <div className="flex flex-col small:sticky small:top-48 small:py-0 small:max-w-[300px] w-full py-8 gap-y-6">
           <ProductInfo product={product} />
@@ -48,6 +52,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
                 disabled={true}
                 product={product}
                 region={region}
+                className="opacity-50"  // Fallback style
               />
             }
           >
@@ -58,6 +63,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
       <div
         className="content-container my-16 small:my-32"
         data-testid="related-products-container"
+        aria-label="Related products"  // ARIA label for related products section
       >
         <Suspense fallback={<SkeletonRelatedProducts />}>
           <RelatedProducts product={product} countryCode={countryCode} />

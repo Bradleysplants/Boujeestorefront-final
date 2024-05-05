@@ -6,11 +6,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 export function Pagination({
   page,
   totalPages,
-  'data-testid': dataTestid
+  'data-testid': dataTestid,
+  className // Continue to accept className for external styling
 }: {
   page: number
   totalPages: number
   'data-testid'?: string
+  className?: string // Specify that className is an optional prop
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -60,25 +62,19 @@ export function Pagination({
     const buttons = []
 
     if (totalPages <= 7) {
-      // Show all pages
       buttons.push(
         ...arrayRange(1, totalPages).map((p) =>
           renderPageButton(p, p, p === page)
         )
       )
     } else {
-      // Handle different cases for displaying pages and ellipses
       if (page <= 4) {
-        // Show 1, 2, 3, 4, 5, ..., lastpage
         buttons.push(
           ...arrayRange(1, 5).map((p) => renderPageButton(p, p, p === page))
         )
         buttons.push(renderEllipsis("ellipsis1"))
-        buttons.push(
-          renderPageButton(totalPages, totalPages, totalPages === page)
-        )
+        buttons.push(renderPageButton(totalPages, totalPages, totalPages === page))
       } else if (page >= totalPages - 3) {
-        // Show 1, ..., lastpage - 4, lastpage - 3, lastpage - 2, lastpage - 1, lastpage
         buttons.push(renderPageButton(1, 1, 1 === page))
         buttons.push(renderEllipsis("ellipsis2"))
         buttons.push(
@@ -87,7 +83,6 @@ export function Pagination({
           )
         )
       } else {
-        // Show 1, ..., page - 1, page, page + 1, ..., lastpage
         buttons.push(renderPageButton(1, 1, 1 === page))
         buttons.push(renderEllipsis("ellipsis3"))
         buttons.push(
@@ -96,9 +91,7 @@ export function Pagination({
           )
         )
         buttons.push(renderEllipsis("ellipsis4"))
-        buttons.push(
-          renderPageButton(totalPages, totalPages, totalPages === page)
-        )
+        buttons.push(renderPageButton(totalPages, totalPages, totalPages === page))
       }
     }
 
@@ -107,7 +100,7 @@ export function Pagination({
 
   // Render the component
   return (
-    <div className="flex justify-center w-full mt-12">
+    <div className={clx("flex justify-center w-full mt-12", className)}> {/* Applied className at the root div */}
       <div className="flex gap-3 items-end" data-testid={dataTestid}>{renderPageButtons()}</div>
     </div>
   )
