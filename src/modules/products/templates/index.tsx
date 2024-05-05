@@ -9,7 +9,7 @@ import ProductTabs from "@modules/products/components/product-tabs";
 import RelatedProducts from "@modules/products/components/related-products";
 import ProductInfo from "@modules/products/templates/product-info";
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products";
-import { useRouter } from "next/navigation"; // Using useRouter for navigation actions
+import { notFound } from "next/navigation";  // Import notFound from next/navigation for handling errors
 import ProductActionsWrapper from "./product-actions-wrapper";
 
 type ProductTemplateProps = {
@@ -23,11 +23,8 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
   region,
   countryCode,
 }) => {
-  const router = useRouter(); // Use useRouter hook for routing
-
   if (!product || !product.id) {
-    router.replace('/404'); // Navigate to custom 404 page
-    return null; // Return null after redirection
+    return notFound();  // Use notFound from next/navigation to handle missing product cases
   }
 
   return (
@@ -52,7 +49,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
                 disabled={true}
                 product={product}
                 region={region}
-                className="opacity-50"  // Fallback style
+                className="opacity-50"
               />
             }
           >
@@ -63,14 +60,14 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
       <div
         className="content-container my-16 small:my-32"
         data-testid="related-products-container"
-        aria-label="Related products"  // ARIA label for related products section
+        aria-label="Related products"  // ARIA label for the related products section
       >
         <Suspense fallback={<SkeletonRelatedProducts />}>
           <RelatedProducts product={product} countryCode={countryCode} />
         </Suspense>
       </div>
     </>
-  )
+  );
 }
 
-export default ProductTemplate
+export default ProductTemplate;
