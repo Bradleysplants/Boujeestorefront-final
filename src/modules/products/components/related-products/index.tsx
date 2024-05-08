@@ -20,7 +20,6 @@ export default async function RelatedProducts({
     return null
   }
 
-  // edit this function to define your related products logic
   const setQueryParams = (): StoreGetProductsParams => {
     const params: StoreGetProductsParams = {}
 
@@ -61,19 +60,19 @@ export default async function RelatedProducts({
   }
 
   return (
-    <div className="product-page-constraint">
+    <div className="bg-slate-gray product-page-constraint" aria-labelledby="related-products-heading">
       <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-base-regular text-gray-600 mb-6">
-          Related products
-        </span>
-        <p className="text-2xl-regular text-ui-fg-base max-w-lg">
+        <h2 id="related-products-heading" className="text-base-regular text-darker-slate-gray mb-6">
+          Related Products
+        </h2>
+        <p className="text-2xl-regular text-pastel-pink max-w-lg">
           You might also want to check out these products.
         </p>
       </div>
 
-      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8">
+      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8" aria-label="List of related products">
         {productPreviews.map((productPreview) => (
-          <li key={productPreview.id}>
+          <li key={productPreview.id} aria-label={`Related product: ${productPreview.title}`}>
             <ProductPreview region={region} productPreview={productPreview} />
           </li>
         ))}

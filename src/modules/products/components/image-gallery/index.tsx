@@ -4,6 +4,7 @@ import Image from "next/image"
 
 type ImageGalleryProps = {
   images: MedusaImage[]
+  className?: string
 }
 
 const ImageGallery = ({ images }: ImageGalleryProps) => {

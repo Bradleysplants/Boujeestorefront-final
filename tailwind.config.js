@@ -30,7 +30,7 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
-        'pastel-pink': '#E38F90', // Custom pink color
+        'pastel-pink': '#E46F90', // Custom pink color
         'slate-gray': '#333940', // Custom slate gray color
         'darker-slate-gray': '#1A1A1A', // Custom darker slate gray color
         'primary-green': '#3cb043', // Custom primary green color

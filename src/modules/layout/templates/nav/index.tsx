@@ -18,9 +18,9 @@ export default async function Nav() {
           <div className="flex items-center h-full">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus hover:text-primary-green uppercase"
+              className="text-3xl hover:text-primary-green uppercase"  // Updated text size to 3XL
               data-testid="nav-store-link"
-              aria-label="Navigate to homepage"
+              aria-label="Navigate to homepage"  // ARIA label for better accessibility
             >
               DeLisa&apos;s Boujee Botanical Store
             </LocalizedClientLink>
@@ -34,7 +34,7 @@ export default async function Nav() {
                   href="/search"
                   scroll={false}
                   data-testid="nav-search-link"
-                  aria-label="Search products"
+                  aria-label="Search products"  // ARIA label for the search link
                 >
                   Search
                 </LocalizedClientLink>
@@ -43,7 +43,7 @@ export default async function Nav() {
                 className="hover:text-primary-green"
                 href="/account"
                 data-testid="nav-account-link"
-                aria-label="Access account settings"
+                aria-label="Access account settings"  // ARIA label for the account link
               >
                 Account
               </LocalizedClientLink>

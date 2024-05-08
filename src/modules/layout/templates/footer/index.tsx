@@ -4,14 +4,13 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import MedusaCTA from "@modules/layout/components/medusa-cta";
 import { Text, clx } from "@medusajs/ui"; 
 
-
 export default async function Footer() {
   const { collections } = await getCollectionsList(0, 6);
   const { product_categories } = await getCategoriesList(0, 6);
 
   return (
     <footer className="border-t border-gray-300 w-full bg-darker-slate-gray">
-      <div className="content-container flex flex-col w-full py-40">
+      <div className="content-container flex flex-col w-full py-4"> {/* Padding adjusted uniformly */}
         <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between">
           <div>
             <LocalizedClientLink
@@ -90,7 +89,7 @@ export default async function Footer() {
             )}
           </div>
         </div>
-        <div className="flex w-full mb-16 justify-between text-pastel-pink">
+        <div className="flex w-full justify-between text-pastel-pink">
           <Text className="txt-compact-small">
             © {new Date().getFullYear()} DeLisa&apos;s Boujee Botanical Store. All rights reserved.
           </Text>

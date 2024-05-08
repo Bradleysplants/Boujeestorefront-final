@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { Popover, Transition } from "@headlessui/react"
-import { ArrowRightMini, XMark } from "@medusajs/icons"
-import { Region } from "@medusajs/medusa"
-import { Text, clx, useToggleState } from "@medusajs/ui"
-import { Fragment } from "react"
+import { Popover, Transition } from "@headlessui/react";
+import { ArrowRightMini, XMark } from "@medusajs/icons";
+import { Region } from "@medusajs/medusa";
+import { Text, clx, useToggleState } from "@medusajs/ui";
+import { Fragment } from "react";
 
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import CountrySelect from "../country-select"
+import LocalizedClientLink from "@modules/common/components/localized-client-link";
+import CountrySelect from "../country-select";
 
 const SideMenuItems = {
   Home: "/",
@@ -15,10 +15,10 @@ const SideMenuItems = {
   Search: "/search",
   Account: "/account",
   Cart: "/cart",
-}
+};
 
 const SideMenu = ({ regions }: { regions: Region[] | null }) => {
-  const toggleState = useToggleState()
+  const toggleState = useToggleState();
 
   return (
     <div className="h-full">
@@ -27,7 +27,11 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
           {({ open, close }) => (
             <>
               <div className="relative flex h-full">
-                <Popover.Button data-testid="nav-menu-button" className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base">
+                <Popover.Button 
+                  data-testid="nav-menu-button" 
+                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-2xl hover:text-primary-green"
+                  aria-label="Open navigation menu"  // ARIA label for the menu button
+                >
                   Menu
                 </Popover.Button>
               </div>
@@ -42,28 +46,33 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                 leaveFrom="opacity-100 backdrop-blur-2xl"
                 leaveTo="opacity-0"
               >
-                <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl" 
+                  aria-label="Navigation menu"  // ARIA label for the panel
+                >
                   <div data-testid="nav-menu-popup" className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6">
                     <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
+                      <button 
+                        data-testid="close-menu-button" 
+                        onClick={close}
+                        aria-label="Close navigation menu"  // ARIA label for the close button
+                      >
                         <XMark />
                       </button>
                     </div>
                     <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name}>
-                            <LocalizedClientLink
-                              href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
-                              onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
-                            >
-                              {name}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
+                      {Object.entries(SideMenuItems).map(([name, href]) => (
+                        <li key={name}>
+                          <LocalizedClientLink
+                            href={href}
+                            className="text-3xl leading-10 hover:text-ui-fg-disabled"
+                            onClick={close}
+                            data-testid={`${name.toLowerCase()}-link`}
+                            aria-label={`Navigate to ${name.toLowerCase()}`}  // ARIA label for each navigation link
+                          >
+                            {name}
+                          </LocalizedClientLink>
+                        </li>
+                      ))}
                     </ul>
                     <div className="flex flex-col gap-y-6">
                       <div
@@ -85,8 +94,7 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                         />
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
-                        reserved.
+                        © {new Date().getFullYear()} Medusa Store. All rights reserved.
                       </Text>
                     </div>
                   </div>
@@ -97,7 +105,7 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
         </Popover>
       </div>
     </div>
-  )
+  );
 }
 
-export default SideMenu
+export default SideMenu;

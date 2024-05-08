@@ -1,33 +1,65 @@
-import { PricedProduct } from "@medusajs/medusa/dist/types/pricing"
-import { Heading, Text } from "@medusajs/ui"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import {
+  PricedProduct,
+  PricedVariant,
+} from "@medusajs/medusa/dist/types/pricing"
+import { clx } from "@medusajs/ui"
 
-type ProductInfoProps = {
+import { getProductPrice } from "@lib/util/get-product-price"
+import { RegionInfo } from "types/global"
+
+export default function ProductPrice({
+  product,
+  variant,
+  region,
+}: {
   product: PricedProduct
-}
+  variant?: PricedVariant
+  region: RegionInfo
+}) {
+  const { cheapestPrice, variantPrice } = getProductPrice({
+    product,
+    variantId: variant?.id,
+    region,
+  })
 
-const ProductInfo = ({ product }: ProductInfoProps) => {
+  const selectedPrice = variant ? variantPrice : cheapestPrice
+
+  if (!selectedPrice) {
+    return <div className="block w-32 h-9 bg-slate-gray animate-pulse" />
+  }
+
   return (
-    <div id="product-info">
-      <div className="flex flex-col gap-y-4 lg:max-w-[500px] mx-auto">
-        {product.collection && (
-          <LocalizedClientLink
-            href={`/collections/${product.collection.handle}`}
-            className="text-medium text-ui-fg-muted hover:text-ui-fg-subtle"
-          >
-            {product.collection.title}
-          </LocalizedClientLink>
-        )}
-        <Heading level="h2" className="text-3xl leading-10 text-ui-fg-base" data-testid="product-title">
-          {product.title}
-        </Heading>
-
-        <Text className="text-medium text-ui-fg-subtle" data-testid="product-description">
-          {product.description}
-        </Text>
-      </div>
+    <div className="flex flex-col font-complementary-sans text-pastel-pink">
+      <span
+        className={clx("text-xl hover:text-primary-green", {
+          "text-pastel-pink": selectedPrice.price_type === "sale",  // Ensure text remains pastel pink
+        })}
+      >
+        {!variant && "From "}
+        <span
+          data-testid="product-price"
+          data-value={selectedPrice.calculated_price_number}
+        >
+          {selectedPrice.calculated_price}
+        </span>
+      </span>
+      {selectedPrice.price_type === "sale" && (
+        <>
+          <p className="text-pastel-pink">
+            <span>Original: </span>
+            <span
+              className="line-through"
+              data-testid="original-product-price"
+              data-value={selectedPrice.original_price_number}
+            >
+              {selectedPrice.original_price}
+            </span>
+          </p>
+          <span className="text-primary-green">
+            -{selectedPrice.percentage_diff}%  // Ensure this is green
+          </span>
+        </>
+      )}
     </div>
   )
 }
-
-export default ProductInfo
