@@ -1,16 +1,21 @@
-import React from 'react';
-import { getCategoriesList, getCollectionsList } from "@lib/data";
+"use client";
+import React, { useState } from 'react';
 import LocalizedClientLink from "@modules/common/components/localized-client-link";
 import MedusaCTA from "@modules/layout/components/medusa-cta";
-import { Text, clx } from "@medusajs/ui"; 
+import { Text } from "@medusajs/ui";
+import TermsAndConditionsModal from '@modules/layout/components/terms-and-conditions-modal/index';
+import ReturnPolicyModal from '@modules/layout/components/returns-modal/index';
 
-export default async function Footer() {
-  const { collections } = await getCollectionsList(0, 6);
-  const { product_categories } = await getCategoriesList(0, 6);
+function Footer() {
+  const [showTerms, setShowTerms] = useState(false);
+  const [showReturns, setShowReturns] = useState(false);
+
+  const toggleTermsModal = () => setShowTerms(!showTerms);
+  const toggleReturnsModal = () => setShowReturns(!showReturns);
 
   return (
     <footer className="border-t border-gray-300 w-full bg-darker-slate-gray">
-      <div className="content-container flex flex-col w-full py-4"> {/* Padding adjusted uniformly */}
+      <div className="content-container flex flex-col w-full py-4">
         <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between">
           <div>
             <LocalizedClientLink
@@ -22,71 +27,31 @@ export default async function Footer() {
             </LocalizedClientLink>
           </div>
           <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3 text-pastel-pink">
-            {/* Adding the standard links */}
             <div className="flex flex-col gap-y-2" aria-label="Helpful Links">
               <span className="txt-small-plus text-pastel-pink">
                 Helpful Links
               </span>
               <ul className="grid grid-cols-1 gap-y-2">
                 <li>
-                  <LocalizedClientLink
-                    href="/terms"
-                    className="hover:text-primary-green"
-                    aria-label="Terms and Conditions"
+                  <button
+                    onClick={toggleTermsModal}
+                    className="text-pastel-pink hover:text-primary-green"
+                    aria-label="Open Terms and Conditions"
                   >
                     Terms and Conditions
-                  </LocalizedClientLink>
+                  </button>
                 </li>
                 <li>
-                  <LocalizedClientLink
-                    href="/returns"
-                    className="hover:text-primary-green"
-                    aria-label="Returns"
+                  <button
+                    onClick={toggleReturnsModal}
+                    className="text-pastel-pink hover:text-primary-green"
+                    aria-label="Open Return Policy"
                   >
-                    Returns
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <LocalizedClientLink
-                    href="/privacy"
-                    className="hover:text-primary-green"
-                    aria-label="Privacy Policy"
-                  >
-                    Privacy Policy
-                  </LocalizedClientLink>
+                    Return Policy
+                  </button>
                 </li>
               </ul>
             </div>
-            {/* Existing categories and collections links */}
-            {product_categories && product_categories.length > 0 && (
-              <div className="flex flex-col gap-y-2" aria-label="Product categories">
-                <span className="txt-small-plus text-pastel-pink">
-                  Categories
-                </span>
-                <ul className="grid grid-cols-1 gap-2" data-testid="footer-categories">
-                  {product_categories.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return null; // Skip categories with a parent category
-                    }
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-pastel-pink"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className="hover:text-primary-green"
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                          aria-label={`View products in ${c.name}`}
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
           </div>
         </div>
         <div className="flex w-full justify-between text-pastel-pink">
@@ -96,6 +61,10 @@ export default async function Footer() {
           <MedusaCTA />
         </div>
       </div>
+      {showTerms && <TermsAndConditionsModal onClose={toggleTermsModal} />}
+      {showReturns && <ReturnPolicyModal onClose={toggleReturnsModal} />}
     </footer>
   );
 }
+
+export default Footer;
