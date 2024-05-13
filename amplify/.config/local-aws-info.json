@@ -3,5 +3,10 @@
     "configLevel": "project",
     "useProfile": false,
     "awsConfigFilePath": "/home/bradley/.amplify/awscloudformation/r5QpTZ2EbQ"
+  },
+  "prod": {
+    "configLevel": "project",
+    "useProfile": false,
+    "awsConfigFilePath": "/home/bradley/.amplify/awscloudformation/hbXAl9BXQz"
   }
 }

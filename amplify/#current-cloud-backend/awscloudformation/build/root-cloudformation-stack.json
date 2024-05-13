@@ -151,17 +151,6 @@
           "Ref": "UnauthRoleName"
         }
       }
-    },
-    "hostingamplifyhosting": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-boujeestorefront2-dev-c5933-deployment/amplify-cfn-templates/hosting/amplifyhosting-template.json",
-        "Parameters": {
-          "appId": "dwbhp7h597r3e",
-          "type": "manual",
-          "env": "dev"
-        }
-      }
     }
   }
 }

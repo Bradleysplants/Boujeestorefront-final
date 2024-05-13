@@ -1,29 +1,22 @@
 {
   "providers": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-boujeestorefront2-dev-c5933-authRole",
-      "UnauthRoleArn": "arn:aws:iam::767397701258:role/amplify-boujeestorefront2-dev-c5933-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::767397701258:role/amplify-boujeestorefront2-dev-c5933-authRole",
+      "AuthRoleName": "amplify-boujeestorefront2-prod-b15b9-authRole",
+      "UnauthRoleArn": "arn:aws:iam::767397701258:role/amplify-boujeestorefront2-prod-b15b9-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::767397701258:role/amplify-boujeestorefront2-prod-b15b9-authRole",
       "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-boujeestorefront2-dev-c5933-deployment",
-      "UnauthRoleName": "amplify-boujeestorefront2-dev-c5933-unauthRole",
-      "StackName": "amplify-boujeestorefront2-dev-c5933",
-      "StackId": "arn:aws:cloudformation:us-east-2:767397701258:stack/amplify-boujeestorefront2-dev-c5933/1b0abe30-0fb9-11ef-87a5-0ad966ab1b31",
-      "AmplifyAppId": "dwbhp7h597r3e"
+      "DeploymentBucketName": "amplify-boujeestorefront2-prod-b15b9-deployment",
+      "UnauthRoleName": "amplify-boujeestorefront2-prod-b15b9-unauthRole",
+      "StackName": "amplify-boujeestorefront2-prod-b15b9",
+      "StackId": "arn:aws:cloudformation:us-east-2:767397701258:stack/amplify-boujeestorefront2-prod-b15b9/813dbb10-115a-11ef-b4f1-0a2620d34987",
+      "AmplifyAppId": "d3qvww1ty6h2d9"
     }
   },
   "hosting": {
     "amplifyhosting": {
-      "service": "amplifyhosting",
       "providerPlugin": "awscloudformation",
-      "type": "manual",
-      "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-boujeestorefront2-dev-c5933-deployment/amplify-cfn-templates/hosting/amplifyhosting-template.json",
-        "logicalId": "hostingamplifyhosting"
-      },
-      "lastPushTimeStamp": "2024-05-11T17:51:41.989Z",
-      "output": {},
-      "lastPushDirHash": "G3m3xTH36J86os4PS0MUuewY2y4="
+      "service": "amplifyhosting",
+      "type": "manual"
     }
   }
 }
