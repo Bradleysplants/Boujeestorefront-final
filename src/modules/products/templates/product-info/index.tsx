@@ -1,39 +1,46 @@
+import React from "react";
 import {
   PricedProduct,
   PricedVariant,
-} from "@medusajs/medusa/dist/types/pricing"
-import { clx } from "@medusajs/ui"
+} from "@medusajs/medusa/dist/types/pricing";
+import { clx } from "@medusajs/ui";
+import { getProductPrice } from "@lib/util/get-product-price";
+import { RegionInfo } from "types/global";
 
-import { getProductPrice } from "@lib/util/get-product-price"
-import { RegionInfo } from "types/global"
-
-export default function ProductPrice({
+export default function ProductInfo({
   product,
   variant,
   region,
 }: {
-  product: PricedProduct
-  variant?: PricedVariant
-  region: RegionInfo
+  product: PricedProduct;
+  variant?: PricedVariant;
+  region: RegionInfo;
 }) {
   const { cheapestPrice, variantPrice } = getProductPrice({
     product,
     variantId: variant?.id,
     region,
-  })
+  });
 
-  const selectedPrice = variant ? variantPrice : cheapestPrice
+  const selectedPrice = variant ? variantPrice : cheapestPrice;
 
   if (!selectedPrice) {
-    return <div className="block w-32 h-9 bg-slate-gray animate-pulse" />
+    return <div className="block w-32 h-9 bg-slate-gray animate-pulse" aria-label="Loading price" />;
   }
 
   return (
-    <div className="flex flex-col font-complementary-sans text-pastel-pink">
+    <div className="flex flex-col font-complementary-sans text-pastel-pink" aria-labelledby="product-title" role="article">
+      {/* Render the product title */}
+      <h1 id="product-title" className="text-4xl font-bold text-pastel-pink" aria-label="Product title">
+        {product.title}
+      </h1>
+      
+      {/* Render the product price */}
       <span
         className={clx("text-xl hover:text-primary-green", {
-          "text-pastel-pink": selectedPrice.price_type === "sale",  // Ensure text remains pastel pink
+          "text-pastel-pink": selectedPrice.price_type === "sale",
         })}
+        aria-label="Current price"
       >
         {!variant && "From "}
         <span
@@ -45,7 +52,7 @@ export default function ProductPrice({
       </span>
       {selectedPrice.price_type === "sale" && (
         <>
-          <p className="text-pastel-pink">
+          <p className="text-pastel-pink" aria-label="Original price">
             <span>Original: </span>
             <span
               className="line-through"
@@ -55,11 +62,11 @@ export default function ProductPrice({
               {selectedPrice.original_price}
             </span>
           </p>
-          <span className="text-primary-green">
-            -{selectedPrice.percentage_diff}%  // Ensure this is green
+          <span className="text-primary-green" aria-label="Discount percentage">
+            -{selectedPrice.percentage_diff}%
           </span>
         </>
       )}
     </div>
-  )
+  );
 }

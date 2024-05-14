@@ -8,14 +8,11 @@ import { cache } from "react";
 
 export const metadata: Metadata = {
   title: "DeLisa's Boujee Botanical Store – Exclusive Plant Boutique",
-  description:
-    "Discover exclusive plants and accessories tailored for your home or office environment. Experience premium horticulture with our curated collections.",
-}
+  description: "Discover exclusive plants and accessories tailored for your home or office environment. Experience premium horticulture with our curated collections.",
+};
 
 const getCollectionsWithProducts = cache(
-  async (
-    countryCode: string
-  ): Promise<ProductCollectionWithPreviews[] | null> => {
+  async (countryCode: string): Promise<ProductCollectionWithPreviews[] | null> => {
     const { collections } = await getCollectionsList(0, 3);
 
     if (!collections) {
@@ -62,17 +59,15 @@ export default async function Home({
   const region = await getRegion(countryCode);
 
   if (!collections || !region) {
-    return null;
+    return <div>Error loading data. Please try again later.</div>;
   }
 
   return (
-    <>
+    <div className="bg-slate-gray min-h-screen"> {/* Ensure the whole page has the slate-gray background */}
       <Hero />
       <div className="container mx-auto py-12">
-        <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
+        <FeaturedProducts collections={collections} region={region} />
       </div>
-    </>
+    </div>
   );
 }

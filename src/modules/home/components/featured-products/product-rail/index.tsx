@@ -1,7 +1,6 @@
 import React from 'react';
 import { Region } from "@medusajs/medusa";
 import { Text } from "@medusajs/ui";
-
 import InteractiveLink from "@modules/common/components/interactive-link";
 import ProductPreview from "@modules/products/components/product-preview";
 import { ProductCollectionWithPreviews } from "types/global";
@@ -13,6 +12,9 @@ export default function ProductRail({
   collection: ProductCollectionWithPreviews;
   region: Region;
 }) {
+  console.log("Collection in ProductRail:", collection);
+  console.log("Region in ProductRail:", region);
+
   const { products } = collection;
 
   if (!products || products.length === 0) {
@@ -32,14 +34,14 @@ export default function ProductRail({
           View all
         </InteractiveLink>
       </div>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-24 sm:gap-y-36">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-12 sm:gap-y-18">
         {products.map((product) => (
-          <li key={product.id}>
+          <li key={product.id} className="flex flex-col justify-between items-center">
             <ProductPreview
               productPreview={product}
               region={region}
               isFeatured
-              aria-label={`Preview of ${product.title || 'product'}`} // Fallback if name is not defined
+              aria-label={`Preview of ${product.title || 'product'}`}
             />
           </li>
         ))}

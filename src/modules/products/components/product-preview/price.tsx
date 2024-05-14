@@ -1,8 +1,8 @@
-import { Text, clx } from "@medusajs/ui"
+import { Text, clx } from "@medusajs/ui";
 
-import { PriceType } from "../product-actions"
+import { PriceType } from "../product-actions";
 
-export default async function PreviewPrice({ price }: { price: PriceType }) {
+export default function PreviewPrice({ price }: { price: PriceType }) {
   return (
     <>
       {price.price_type === "sale" && (
@@ -19,5 +19,5 @@ export default async function PreviewPrice({ price }: { price: PriceType }) {
         {price.calculated_price}
       </Text>
     </>
-  )
+  );
 }

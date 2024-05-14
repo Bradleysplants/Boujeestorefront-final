@@ -11,7 +11,7 @@ type FilterRadioGroupProps = {
     className?: string; // Optional className for custom styles
   }[];
   value: any;
-  handleChange: (...args: any[]) => void;
+  handleChange: (e: ChangeEvent<HTMLInputElement>, value: string) => void;
   'data-testid'?: string;
 }
 

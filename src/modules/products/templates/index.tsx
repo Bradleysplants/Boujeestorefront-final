@@ -15,7 +15,7 @@ type ProductTemplateProps = {
   product: PricedProduct;
   region: Region;
   countryCode: string;
-}
+};
 
 const ProductTemplate: React.FC<ProductTemplateProps> = ({
   product,
@@ -64,6 +64,6 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
       </div>
     </>
   );
-}
+};
 
 export default ProductTemplate;
