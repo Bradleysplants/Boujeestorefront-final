@@ -1,3 +1,4 @@
+//hello
 const { withStoreConfig } = require("./store-config")
 const store = require("./store.config.json")
 
