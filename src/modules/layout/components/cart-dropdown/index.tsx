@@ -4,7 +4,7 @@ import { Popover, Transition } from "@headlessui/react";
 import { Cart } from "@medusajs/medusa";
 import { Button } from "@medusajs/ui";
 import { useParams, usePathname } from "next/navigation";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 
 import { formatAmount } from "@lib/util/prices";
 import DeleteButton from "@modules/common/components/delete-button";
@@ -22,19 +22,20 @@ const CartDropdown = ({
   const [cartDropdownOpen, setCartDropdownOpen] = useState(false);
 
   const { countryCode } = useParams();
-  const open = () => setCartDropdownOpen(true);
-  const close = () => setCartDropdownOpen(false);
+
+  const open = useCallback(() => setCartDropdownOpen(true), []);
+  const close = useCallback(() => setCartDropdownOpen(false), []);
 
   const totalItems =
     cartState?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   const itemRef = useRef<number>(totalItems || 0);
 
-  const timedOpen = () => {
+  const timedOpen = useCallback(() => {
     open();
     const timer = setTimeout(close, 5000);
     setActiveTimer(timer);
-  };
+  }, [open, close]);
 
   const openAndCancel = () => {
     if (activeTimer) {
@@ -57,7 +58,7 @@ const CartDropdown = ({
     if (itemRef.current !== totalItems && !pathname.includes("/cart")) {
       timedOpen();
     }
-  }, [totalItems, itemRef.current]);
+  }, [totalItems, pathname, timedOpen]);
 
   return (
     <div className="h-full z-50" onMouseEnter={openAndCancel} onMouseLeave={close}>
@@ -94,69 +95,73 @@ const CartDropdown = ({
               <h3 className="text-large-semi">Cart</h3>
             </div>
             {cartState && cartState.items?.length ? (
-              <><div className="overflow-y-scroll max-h-[402px] px-4 grid grid-cols-1 gap-y-8 no-scrollbar p-px">
-                {cartState.items
-                  .sort((a, b) => {
-                    return a.created_at > b.created_at ? -1 : 1;
-                  })
-                  .map((item) => (
-                    <div
-                      className="grid grid-cols-[122px_1fr] gap-x-4"
-                      key={item.id}
-                      data-testid="cart-item"
-                    >
-                      <LocalizedClientLink
-                        href={`/products/${item.variant.product.handle}`}
-                        className="w-24"
-                        aria-label={`View product ${item.title}`}
+              <>
+                <div className="overflow-y-scroll max-h-[402px] px-4 grid grid-cols-1 gap-y-8 no-scrollbar p-px">
+                  {cartState.items
+                    .sort((a, b) => {
+                      return a.created_at > b.created_at ? -1 : 1;
+                    })
+                    .map((item) => (
+                      <div
+                        className="grid grid-cols-[122px_1fr] gap-x-4"
+                        key={item.id}
+                        data-testid="cart-item"
                       >
-                        <Thumbnail thumbnail={item.thumbnail} size="square" />
-                      </LocalizedClientLink>
-                      <div className="flex flex-col justify-between flex-1">
+                        <LocalizedClientLink
+                          href={`/products/${item.variant.product.handle}`}
+                          className="w-24"
+                          aria-label={`View product ${item.title}`}
+                        >
+                          <Thumbnail thumbnail={item.thumbnail} size="square" />
+                        </LocalizedClientLink>
                         <div className="flex flex-col justify-between flex-1">
-                          <div className="flex items-start justify-between">
-                            <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
-                              <h3 className="text-base-regular overflow-hidden text-ellipsis">
-                                <LocalizedClientLink
-                                  href={`/products/${item.variant.product.handle}`}
-                                  data-testid="product-link"
-                                  aria-label={`View details for ${item.title}`}
+                          <div className="flex flex-col justify-between flex-1">
+                            <div className="flex items-start justify-between">
+                              <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
+                                <h3 className="text-base-regular overflow-hidden text-ellipsis">
+                                  <LocalizedClientLink
+                                    href={`/products/${item.variant.product.handle}`}
+                                    data-testid="product-link"
+                                    aria-label={`View details for ${item.title}`}
+                                  >
+                                    {item.title}
+                                  </LocalizedClientLink>
+                                </h3>
+                                <LineItemOptions
+                                  variant={item.variant}
+                                  data-testid="cart-item-variant"
+                                  data-value={item.variant}
+                                />
+                                <span
+                                  data-testid="cart-item-quantity"
+                                  data-value={item.quantity}
+                                  aria-label={`Quantity: ${item.quantity}`}
                                 >
-                                  {item.title}
-                                </LocalizedClientLink>
-                              </h3>
-                              <LineItemOptions
-                                variant={item.variant}
-                                data-testid="cart-item-variant"
-                                data-value={item.variant} />
-                              <span
-                                data-testid="cart-item-quantity"
-                                data-value={item.quantity}
-                                aria-label={`Quantity: ${item.quantity}`}
-                              >
-                                Quantity: {item.quantity}
-                              </span>
-                            </div>
-                            <div className="flex justify-end">
-                              <LineItemPrice
-                                region={cartState.region}
-                                item={item}
-                                style="tight" />
+                                  Quantity: {item.quantity}
+                                </span>
+                              </div>
+                              <div className="flex justify-end">
+                                <LineItemPrice
+                                  region={cartState.region}
+                                  item={item}
+                                  style="tight"
+                                />
+                              </div>
                             </div>
                           </div>
+                          <DeleteButton
+                            id={item.id}
+                            className="mt-1"
+                            data-testid="cart-item-remove-button"
+                            aria-label="Remove item"
+                          >
+                            Remove
+                          </DeleteButton>
                         </div>
-                        <DeleteButton
-                          id={item.id}
-                          className="mt-1"
-                          data-testid="cart-item-remove-button"
-                          aria-label="Remove item"
-                        >
-                          Remove
-                        </DeleteButton>
                       </div>
-                    </div>
-                  ))}
-              </div><div className="p-4 flex flex-col gap-y-4 text-small-regular">
+                    ))}
+                </div>
+                <div className="p-4 flex flex-col gap-y-4 text-small-regular">
                   <div className="flex items-center justify-between">
                     <span className="text-ui-fg-base font-semibold">
                       Subtotal <span className="font-normal">(excl. taxes)</span>
@@ -184,7 +189,8 @@ const CartDropdown = ({
                       Go to cart
                     </Button>
                   </LocalizedClientLink>
-                </div></>
+                </div>
+              </>
             ) : (
               <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
                 <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
@@ -205,6 +211,6 @@ const CartDropdown = ({
       </Popover>
     </div>
   );
-}
+};
 
 export default CartDropdown;
