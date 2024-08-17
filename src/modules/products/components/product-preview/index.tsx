@@ -12,10 +12,12 @@ export default async function ProductPreview({
   productPreview,
   isFeatured,
   region,
+  className,
 }: {
   productPreview: ProductPreviewType;
   isFeatured?: boolean;
   region: Region;
+  className?: string;
 }) {
   if (!productPreview || !productPreview.id) {
     console.error("productPreview or productPreview.id is undefined", { productPreview });
@@ -39,21 +41,20 @@ export default async function ProductPreview({
   return (
     <LocalizedClientLink
       href={`/products/${productPreview.handle}`}
-      className="group"
+      className={`group ${className} flex flex-col justify-between h-full`}
     >
-      <div className="flex flex-col justify-between h-full" data-testid="product-wrapper">
-        <Thumbnail
-          thumbnail={productPreview.thumbnail}
-          size="medium"
-          isFeatured={isFeatured}
-        />
-        <div className="flex flex-col mt-4">
-          <Text className="text-4xl text-pastel-pink" data-testid="product-title">
-            {productPreview.title}
-          </Text>
-          <div className="flex items-center gap-x-2 mt-2">
-            {cheapestPrice && <PreviewPrice price={cheapestPrice as PriceType} />}
-          </div>
+      <Thumbnail
+        thumbnail={productPreview.thumbnail}
+        size="medium"
+        isFeatured={isFeatured}
+        className="mx-auto w-full max-w-full"
+      />
+      <div className="flex flex-col mt-2 text-center"> {/* Centered and reduced text size */}
+        <Text className="text-xl sm:text-2xl text-pastel-pink" data-testid="product-title">
+          {productPreview.title}
+        </Text>
+        <div className="flex justify-center items-center gap-x-1 mt-1">
+          {cheapestPrice && <PreviewPrice price={cheapestPrice as PriceType} />}
         </div>
       </div>
     </LocalizedClientLink>

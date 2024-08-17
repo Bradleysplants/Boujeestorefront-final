@@ -16,11 +16,11 @@ const SideMenuItems = {
   Cart: "/cart",
 };
 
-const SideMenu = ({ regions }: { regions: Region[] | null }) => {
+const SideMenu = ({ regions, className }: { regions: Region[] | null; className?: string }) => { // Add className prop
   const toggleState = useToggleState();
 
   return (
-    <div className="h-full">
+    <div className={`h-full ${className}`}>  {/* Apply className */}
       <div className="flex items-center h-full">
         <Popover className="h-full flex">
           {({ open, close }) => (
@@ -29,7 +29,7 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                 <Popover.Button 
                   data-testid="nav-menu-button" 
                   className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-2xl hover:text-primary-green"
-                  aria-label="Open navigation menu"  // ARIA label for the menu button
+                  aria-label="Open navigation menu"
                 >
                   Menu
                 </Popover.Button>
@@ -46,14 +46,14 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                 leaveTo="opacity-0"
               >
                 <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl" 
-                  aria-label="Navigation menu"  // ARIA label for the panel
+                  aria-label="Navigation menu"
                 >
                   <div data-testid="nav-menu-popup" className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6">
                     <div className="flex justify-end" id="xmark">
                       <button 
                         data-testid="close-menu-button" 
                         onClick={close}
-                        aria-label="Close navigation menu"  // ARIA label for the close button
+                        aria-label="Close navigation menu"
                       >
                         <XMark />
                       </button>
@@ -66,7 +66,7 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
                             className="text-3xl leading-10 hover:text-ui-fg-disabled"
                             onClick={close}
                             data-testid={`${name.toLowerCase()}-link`}
-                            aria-label={`Navigate to ${name.toLowerCase()}`}  // ARIA label for each navigation link
+                            aria-label={`Navigate to ${name.toLowerCase()}`}
                           >
                             {name}
                           </LocalizedClientLink>
@@ -105,6 +105,6 @@ const SideMenu = ({ regions }: { regions: Region[] | null }) => {
       </div>
     </div>
   );
-}
+};
 
 export default SideMenu;

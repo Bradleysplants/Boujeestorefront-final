@@ -1,3 +1,33 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.custom-text {
+    display: inline-block;
+    text-align: center;
+    word-break: break-word;
+    white-space: normal;
+  }
+  
+  @media (max-width: 768px) {
+    .custom-text {
+      max-width: 100%;
+      display: block;
+    }
+  
+    .force-break {
+      display: block;
+    }
+  }
+  
+  @media (min-width: 769px) {
+    .force-break {
+      display: none;
+    }
+  }
+ 
+  .break-word {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  
