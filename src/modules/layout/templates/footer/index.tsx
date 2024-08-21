@@ -1,12 +1,17 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useState and useEffect
 import LocalizedClientLink from "@modules/common/components/localized-client-link";
 import MedusaCTA from "@modules/layout/components/medusa-cta";
 import { Text } from "@medusajs/ui";
 import TermsAndConditionsModal from '@modules/layout/components/terms-and-conditions-modal/index';
 import ReturnPolicyModal from '@modules/layout/components/returns-modal/index';
 
-<script type="text/javascript">!function(){var b=function(){window.__AudioEyeSiteHash = "045413179e4990e7c12cee43ab444e90"; var a=document.createElement("script");a.src="https://wsmcdn.audioeye.com/aem.js";a.type="text/javascript";a.setAttribute("async","");document.getElementsByTagName("body")[0].appendChild(a)};"complete"!==document.readyState?window.addEventListener?window.addEventListener("load",b):window.attachEvent&&window.attachEvent("onload",b):b()}();</script>
+// Extend the Window interface to include __AudioEyeSiteHash
+declare global {
+  interface Window {
+    __AudioEyeSiteHash: string;
+  }
+}
 
 function Footer() {
   const [showTerms, setShowTerms] = useState(false);
@@ -14,6 +19,24 @@ function Footer() {
 
   const toggleTermsModal = () => setShowTerms(!showTerms);
   const toggleReturnsModal = () => setShowReturns(!showReturns);
+
+  useEffect(() => {
+    const loadScript = () => {
+      window.__AudioEyeSiteHash = "045413179e4990e7c12cee43ab444e90";
+      const script = document.createElement("script");
+      script.src = "https://wsmcdn.audioeye.com/aem.js";
+      script.type = "text/javascript";
+      script.async = true;
+      document.body.appendChild(script);
+    };
+
+    if (document.readyState === "complete") {
+      loadScript();
+    } else {
+      window.addEventListener("load", loadScript);
+      return () => window.removeEventListener("load", loadScript);
+    }
+  }, []);
 
   return (
     <footer className="border-t border-gray-300 w-full bg-darker-slate-gray">
