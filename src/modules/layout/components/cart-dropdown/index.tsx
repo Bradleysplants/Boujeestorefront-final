@@ -15,10 +15,10 @@ import Thumbnail from "@modules/products/components/thumbnail";
 
 const CartDropdown = ({
   cart: cartState,
-  className, // Add className prop
+  className,
 }: {
   cart?: Omit<Cart, "beforeInsert" | "afterLoad"> | null;
-  className?: string; // Declare className as an optional prop
+  className?: string;
 }) => {
   const [activeTimer, setActiveTimer] = useState<NodeJS.Timer | undefined>(undefined);
   const [cartDropdownOpen, setCartDropdownOpen] = useState(false);
@@ -69,11 +69,11 @@ const CartDropdown = ({
     >
       <Popover className="relative h-full">
         <Popover.Button
-          className="h-full text-base sm:text-lg lg:text-xl hover:text-primary-green text-pastel-pink"
+          className="h-full text-base sm:text-lg lg:text-xl hover:text-primary-green text-pastel-pink underline"
           aria-label="Open cart"
           onClick={openAndCancel}
         >
-          <span className="hover:text-primary-green text-pastel-pink">
+          <span className="hover:text-primary-green text-pastel-pink underline">
             {`Cart (${totalItems})`}
           </span>
         </Popover.Button>
@@ -89,7 +89,7 @@ const CartDropdown = ({
         >
           <Popover.Panel
             static
-            className="absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[95vw] sm:w-[500px] max-w-md text-ui-fg-base"
+            className="absolute top-[calc(100%+1px)] right-0 bg-slate-gray border-x border-b border-gray-200 w-[95vw] sm:w-[500px] max-w-md text-ui-fg-base"
             data-testid="nav-cart-dropdown"
           >
             <div className="p-3 flex items-center justify-center">

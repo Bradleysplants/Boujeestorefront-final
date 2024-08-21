@@ -21,7 +21,7 @@ function Footer() {
             <LocalizedClientLink
               href="/"
               className="txt-compact-xlarge-plus text-pastel-pink hover:text-primary-green uppercase"
-              aria-label="Back to homepage"
+              aria-label="Homepage"
             >
               DeLisa&apos;s Boujee Botanical Store
             </LocalizedClientLink>
@@ -35,8 +35,8 @@ function Footer() {
                 <li>
                   <button
                     onClick={toggleTermsModal}
-                    className="text-pastel-pink hover:text-primary-green"
-                    aria-label="Open Terms and Conditions"
+                    className="text-pastel-pink hover:text-primary-green underline"
+                    aria-label="Terms and Conditions"
                   >
                     Terms and Conditions
                   </button>
@@ -44,8 +44,8 @@ function Footer() {
                 <li>
                   <button
                     onClick={toggleReturnsModal}
-                    className="text-pastel-pink hover:text-primary-green"
-                    aria-label="Open Return Policy"
+                    className="text-pastel-pink hover:text-primary-green underline"
+                    aria-label="Return Policy"
                   >
                     Return Policy
                   </button>

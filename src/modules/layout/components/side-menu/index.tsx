@@ -16,11 +16,11 @@ const SideMenuItems = {
   Cart: "/cart",
 };
 
-const SideMenu = ({ regions, className }: { regions: Region[] | null; className?: string }) => { // Add className prop
+const SideMenu = ({ regions, className }: { regions: Region[] | null; className?: string }) => {
   const toggleState = useToggleState();
 
   return (
-    <div className={`h-full ${className}`}>  {/* Apply className */}
+    <div className={`h-full ${className}`}>
       <div className="flex items-center h-full">
         <Popover className="h-full flex">
           {({ open, close }) => (
@@ -28,8 +28,8 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
               <div className="relative flex h-full">
                 <Popover.Button 
                   data-testid="nav-menu-button" 
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-2xl hover:text-primary-green"
-                  aria-label="Open navigation menu"
+                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-2xl hover:text-primary-green underline"
+                  aria-label="Menu"
                 >
                   Menu
                 </Popover.Button>
@@ -53,9 +53,9 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
                       <button 
                         data-testid="close-menu-button" 
                         onClick={close}
-                        aria-label="Close navigation menu"
+                        aria-label="Close navigation menu"  // Added aria-label
                       >
-                        <XMark />
+                        <XMark aria-hidden="true" />  {/* Hide the icon from screen readers */}
                       </button>
                     </div>
                     <ul className="flex flex-col gap-6 items-start justify-start">
@@ -63,10 +63,10 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
                         <li key={name}>
                           <LocalizedClientLink
                             href={href}
-                            className="text-3xl leading-10 hover:text-ui-fg-disabled"
+                            className="text-3xl leading-10 hover:text-ui-fg-disabled underline"
                             onClick={close}
                             data-testid={`${name.toLowerCase()}-link`}
-                            aria-label={`Navigate to ${name.toLowerCase()}`}
+                            aria-label={`Navigate to ${name}`}
                           >
                             {name}
                           </LocalizedClientLink>

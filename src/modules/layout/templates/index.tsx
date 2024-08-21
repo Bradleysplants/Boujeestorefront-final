@@ -8,8 +8,14 @@ const Layout: React.FC<{
 }> = ({ children }) => {
   return (
     <div>
+      {/* Skip Link */}
+      <a href="#main-content" className="sr-only focus:not-sr-only">
+        Skip to main content
+      </a>
       <Nav />
-      <main className="relative">{children}</main>
+      <main id="main-content" className="relative">
+        {children}
+      </main>
       <Footer />
     </div>
   )

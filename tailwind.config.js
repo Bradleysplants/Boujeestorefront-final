@@ -31,8 +31,8 @@ module.exports = {
           90: "#111827",
         },
         'pastel-pink': '#FFC5E1', // Custom pink color
-        'slate-gray': '#4D6E92', // Custom slate gray color
-        'darker-slate-gray': '#6C78AD', // Custom darker slate gray color
+        'slate-gray': '#3E5875', // Custom slate gray color
+        'darker-slate-gray': '#495483', // Custom darker slate gray color
         'primary-green': '#B6B9DB', // Custom primary green color
       },
       transitionProperty: {
