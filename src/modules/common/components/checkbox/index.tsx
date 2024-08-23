@@ -7,6 +7,7 @@ type CheckboxProps = {
   label: string
   name?: string
   'data-testid'?: string
+  className?: string // Add className as an optional prop
 }
 
 const CheckboxWithLabel: React.FC<CheckboxProps> = ({
@@ -14,12 +15,13 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
   onChange,
   label,
   name,
-  'data-testid': dataTestId
+  'data-testid': dataTestId,
+  className, // Destructure className prop
 }) => {
   return (
-    <div className="flex items-center space-x-2 ">
+    <div className={`flex items-center space-x-2 ${className}`}>
       <Checkbox
-        className="text-base-regular flex items-center gap-x-2"
+        className="bg-black text-pastel-pink border-pastel-pink checked:border-pastel-pink checked:bg-pastel-pink checked:text-black font-bold h-5 w-5 flex items-center justify-center rounded-sm"
         id="checkbox"
         role="checkbox"
         type="button"
@@ -31,7 +33,7 @@ const CheckboxWithLabel: React.FC<CheckboxProps> = ({
       />
       <Label
         htmlFor="checkbox"
-        className="!transform-none !txt-medium"
+        className="text-pastel-pink text-base-regular font-bold"
         size="large"
       >
         {label}

@@ -8,7 +8,6 @@ import { useFormState } from "react-dom";
 
 import useToggleState from "@lib/hooks/use-toggle-state";
 import CountrySelect from "@modules/checkout/components/country-select";
-import Input from "@modules/common/components/input";
 import Modal from "@modules/common/components/modal";
 import { SubmitButton } from "@modules/checkout/components/submit-button";
 import { addCustomerShippingAddress } from "@modules/account/actions";
@@ -58,7 +57,12 @@ const AddAddress = ({ region }: { region: Region }) => {
     });
   };
 
-  const renderInput = (label: string, name: string, type = "text", required = false) => (
+  const renderInput = (
+    label: string,
+    name: string,
+    type = "text",
+    required = false
+  ) => (
     <div className="relative">
       <input
         type={type}
@@ -67,10 +71,10 @@ const AddAddress = ({ region }: { region: Region }) => {
         autoComplete={name}
         value={inputValues[name as keyof typeof inputValues]}
         onChange={handleInputChange}
-        className="bg-white text-slate-gray border border-primary-green p-2 h-10 w-full focus:outline-none focus:ring-0 transition-all duration-200"
+        className="bg-black text-slate-gray border border-pastel-pink p-2 h-10 w-full focus:outline-none focus:ring-0 transition-all duration-200"
       />
       <label
-        className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-gray pointer-events-none transition-all duration-200 ease-in-out ${
+        className={`absolute left-3 top-1/2 transform -translate-y-1/2 text-pastel-pink pointer-events-none transition-all duration-200 ease-in-out ${
           inputValues[name as keyof typeof inputValues] ? "opacity-0" : "opacity-100"
         }`}
       >
@@ -82,7 +86,7 @@ const AddAddress = ({ region }: { region: Region }) => {
   return (
     <>
       <button
-        className="border border-gray-900 bg-slate-gray text-pastel-pink rounded-lg p-5 min-h-[220px] h-full w-full flex flex-col justify-between hover:bg-gray-800"
+        className="border border-pastel-pink bg-slate-gray text-pastel-pink rounded-lg p-5 min-h-[220px] h-full w-full flex flex-col justify-between hover:bg-darker-slate-gray"
         onClick={open}
         data-testid="add-address-button"
       >
@@ -115,13 +119,16 @@ const AddAddress = ({ region }: { region: Region }) => {
                   name="country_code"
                   required
                   autoComplete="country"
-                  className="bg-white text-slate-gray border border-primary-green p-2 h-10 w-full focus:outline-none focus:ring-0"
+                  className="bg-black text-pastel-pink border border-pastel-pink p-2 h-10 w-full focus:outline-none focus:ring-0"
                   data-testid="country-select"
                 />
                 {renderInput("Phone", "phone")}
               </div>
               {formState.error && (
-                <div className="text-red-500 text-small-regular py-1" data-testid="address-error">
+                <div
+                  className="text-red-500 text-small-regular py-1"
+                  data-testid="address-error"
+                >
                   {formState.error}
                 </div>
               )}
@@ -132,12 +139,15 @@ const AddAddress = ({ region }: { region: Region }) => {
                   type="reset"
                   variant="secondary"
                   onClick={close}
-                  className="h-10 bg-gray-100 text-slate-gray hover:bg-gray-200"
+                  className="h-10 bg-black text-pastel-pink border-pastel-pink hover:bg-darker-slate-gray"
                   data-testid="cancel-button"
                 >
                   Cancel
                 </Button>
-                <SubmitButton className="w-full bg-primary-green text-slate-gray hover:bg-pastel-pink" data-testid="save-button">
+                <SubmitButton
+                  className="w-full bg-black text-pastel-pink border-pastel-pink hover:bg-darker-slate-gray"
+                  data-testid="save-button"
+                >
                   Save
                 </SubmitButton>
               </div>

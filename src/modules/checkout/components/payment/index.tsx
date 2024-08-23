@@ -19,8 +19,10 @@ import { StripeContext } from "@modules/checkout/components/payment-wrapper"
 
 const Payment = ({
   cart,
+  inputClassName, // Add inputClassName prop
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
+  inputClassName?: string // Optional inputClassName prop
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -48,17 +50,20 @@ const Payment = ({
       style: {
         base: {
           fontFamily: "Inter, sans-serif",
-          color: "#424270",
+          color: "#FFC5E1", // Use pastel-pink color for text
           "::placeholder": {
             color: "rgb(107 114 128)",
           },
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out",
+        base: clx(
+          "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-black text-pastel-pink font-bold border-2 border-pastel-pink rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out", // Black background, pastel-pink text, bold text
+          inputClassName // Apply custom input className
+        ),
       },
     }
-  }, [])
+  }, [inputClassName])
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -104,12 +109,12 @@ const Payment = ({
   }, [isOpen])
 
   return (
-    <div className="bg-white">
+    <div className="bg-slate-gray text-pastel-pink p-6 rounded-md"> {/* Apply slate-gray background and pastel-pink text */}
       <div className="flex flex-row items-center justify-between mb-6">
         <Heading
           level="h2"
           className={clx(
-            "flex flex-row text-3xl-regular gap-x-2 items-baseline",
+            "flex flex-row text-3xl-regular gap-x-2 items-baseline font-bold", // Apply bold text
             {
               "opacity-50 pointer-events-none select-none":
                 !isOpen && !paymentReady,
@@ -123,7 +128,7 @@ const Payment = ({
           <Text>
             <button
               onClick={handleEdit}
-              className="text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+              className="text-pastel-pink hover:text-primary-green underline font-bold" // Apply pastel-pink, underline, bold text
               data-testid="edit-payment-button"
             >
               Edit
@@ -158,7 +163,7 @@ const Payment = ({
               </RadioGroup>
               {isStripe && stripeReady && (
                 <div className="mt-5 transition-all duration-150 ease-in-out">
-                  <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                  <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold"> {/* Ensure text is pastel-pink and bold */}
                     Enter your card details:
                   </Text>
 
@@ -178,11 +183,11 @@ const Payment = ({
             </>
           ) : paidByGiftcard ? (
             <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
+              <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold"> {/* Ensure text is pastel-pink and bold */}
                 Payment method
               </Text>
               <Text
-                className="txt-medium text-ui-fg-subtle"
+                className="txt-medium text-pastel-pink font-bold"
                 data-testid="payment-method-summary"
               >
                 Gift card
@@ -201,7 +206,7 @@ const Payment = ({
 
           <Button
             size="large"
-            className="mt-6"
+            className="mt-6 bg-black text-pastel-pink font-bold border-2 border-pastel-pink" // Apply black background, pastel-pink text, bold text
             onClick={handleSubmit}
             isLoading={isLoading}
             disabled={
@@ -218,11 +223,11 @@ const Payment = ({
           {cart && paymentReady && cart.payment_session ? (
             <div className="flex items-start gap-x-1 w-full">
               <div className="flex flex-col w-1/3">
-                <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold"> {/* Ensure text is pastel-pink and bold */}
                   Payment method
                 </Text>
                 <Text
-                  className="txt-medium text-ui-fg-subtle"
+                  className="txt-medium text-pastel-pink font-bold"
                   data-testid="payment-method-summary"
                 >
                   {paymentInfoMap[cart.payment_session.provider_id]?.title ||
@@ -237,39 +242,27 @@ const Payment = ({
                   )}
               </div>
               <div className="flex flex-col w-1/3">
-                <Text className="txt-medium-plus text-ui-fg-base mb-1">
+                <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold"> {/* Ensure text is pastel-pink and bold */}
                   Payment details
                 </Text>
                 <div
-                  className="flex gap-2 txt-medium text-ui-fg-subtle items-center"
+                  className="flex gap-2 txt-medium text-pastel-pink font-bold"
                   data-testid="payment-details-summary"
                 >
-                  <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
-                    {paymentInfoMap[cart.payment_session.provider_id]?.icon || (
-                      <CreditCard />
-                    )}
-                  </Container>
-                  <Text>
-                    {cart.payment_session.provider_id === "stripe" && cardBrand
-                      ? cardBrand
-                      : "Another step will appear"}
-                  </Text>
+                  <CreditCard />
+                  {cart.payment_session.provider_id === "stripe" ? (
+                    <>{cardBrand || "Credit Card"}</>
+                  ) : (
+                    <>{paymentInfoMap[cart.payment_session.provider_id]?.title}</>
+                  )}
                 </div>
               </div>
             </div>
-          ) : paidByGiftcard ? (
-            <div className="flex flex-col w-1/3">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                Payment method
-              </Text>
-              <Text
-                className="txt-medium text-ui-fg-subtle"
-                data-testid="payment-method-summary"
-              >
-                Gift card
-              </Text>
+          ) : (
+            <div className="flex flex-col items-center justify-center px-4 py-8 text-ui-fg-base">
+              <Spinner />
             </div>
-          ) : null}
+          )}
         </div>
       </div>
       <Divider className="mt-8" />

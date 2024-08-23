@@ -28,7 +28,7 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
               <div className="relative flex h-full">
                 <Popover.Button 
                   data-testid="nav-menu-button" 
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-2xl hover:text-primary-green underline"
+                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none text-2xl text-pastel-pink hover:text-primary-green underline"
                   aria-label="Menu"
                 >
                   Menu
@@ -45,17 +45,18 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
                 leaveFrom="opacity-100 backdrop-blur-2xl"
                 leaveTo="opacity-0"
               >
-                <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl" 
+                <Popover.Panel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-30 inset-x-0 text-sm text-pastel-pink m-2 backdrop-blur-2xl" 
                   aria-label="Navigation menu"
                 >
-                  <div data-testid="nav-menu-popup" className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6">
+                  <div data-testid="nav-menu-popup" className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-lg justify-between p-6">
                     <div className="flex justify-end" id="xmark">
                       <button 
                         data-testid="close-menu-button" 
                         onClick={close}
-                        aria-label="Close navigation menu"  // Added aria-label
+                        aria-label="Close navigation menu"
+                        className="text-pastel-pink hover:text-primary-green"
                       >
-                        <XMark aria-hidden="true" />  {/* Hide the icon from screen readers */}
+                        <XMark aria-hidden="true" />
                       </button>
                     </div>
                     <ul className="flex flex-col gap-6 items-start justify-start">
@@ -63,7 +64,7 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
                         <li key={name}>
                           <LocalizedClientLink
                             href={href}
-                            className="text-3xl leading-10 hover:text-ui-fg-disabled underline"
+                            className="text-3xl leading-10 text-pastel-pink hover:text-primary-green underline"
                             onClick={close}
                             data-testid={`${name.toLowerCase()}-link`}
                             aria-label={`Navigate to ${name}`}
@@ -83,17 +84,18 @@ const SideMenu = ({ regions, className }: { regions: Region[] | null; className?
                           <CountrySelect
                             toggleState={toggleState}
                             regions={regions}
+                            // Removed className prop
                           />
                         )}
                         <ArrowRightMini
                           className={clx(
-                            "transition-transform duration-150",
+                            "transition-transform duration-150 text-pastel-pink",
                             toggleState.state ? "-rotate-90" : ""
                           )}
                         />
                       </div>
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights reserved.
+                      <Text className="flex justify-between txt-compact-small text-pastel-pink">
+                        © {new Date().getFullYear()} Delisa&apos;s Boujee Botanical Store. All rights reserved.
                       </Text>
                     </div>
                   </div>

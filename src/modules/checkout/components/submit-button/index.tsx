@@ -6,24 +6,29 @@ import { useFormStatus } from "react-dom";
 
 export function SubmitButton({
   children,
-  variant = "primary",
   className,
-  'data-testid': dataTestId
+  'data-testid': dataTestId,
+  variant = "primary",
 }: {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "transparent" | "danger"; // Remove null from type
   className?: string;
   'data-testid'?: string;
+  variant?: "primary" | "secondary" | "danger";
 }) {
   const { pending } = useFormStatus();
+
+  const variantStyles = {
+    primary: "bg-black text-pastel-pink font-bold border-2 border-pastel-pink",
+    secondary: "bg-gray-500 text-pastel-pink font-bold border-2 border-pastel-pink",
+    danger: "bg-red-500 text-white font-bold border-2 border-pastel-pink",
+  };
 
   return (
     <Button
       size="large"
-      className={className}
+      className={`${variantStyles[variant]} ${className}`} // Apply the variant and custom styles
       type="submit"
       isLoading={pending}
-      variant={variant || undefined} // Ensure it falls back to undefined if null
       data-testid={dataTestId}
     >
       {children}

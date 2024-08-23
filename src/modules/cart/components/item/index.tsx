@@ -46,8 +46,8 @@ const Item = ({ item, region, type = "full" }: ItemProps) => {
   }
 
   return (
-    <Table.Row className="w-full" data-testid="product-row">
-      <Table.Cell className="!pl-0 p-4 w-24">
+    <Table.Row className="w-full bg-slate-gray text-pastel-pink" data-testid="product-row">
+      <Table.Cell className="!pl-0 p-4 w-24 bg-slate-gray text-pastel-pink">
         <LocalizedClientLink
           href={`/products/${handle}`}
           className={clx("flex", {
@@ -59,19 +59,24 @@ const Item = ({ item, region, type = "full" }: ItemProps) => {
         </LocalizedClientLink>
       </Table.Cell>
 
-      <Table.Cell className="text-left">
-        <Text className="txt-medium-plus text-ui-fg-base" data-testid="product-title">{item.title}</Text>
-        <LineItemOptions variant={item.variant} data-testid="product-variant" />
+      <Table.Cell className="text-left bg-slate-gray text-pastel-pink">
+        <Text className="txt-medium-plus text-pastel-pink" data-testid="product-title">
+          {item.title}
+        </Text>
+        {/* Ensure LineItemOptions has pastel-pink text */}
+        <div className="text-pastel-pink">
+          <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        </div>
       </Table.Cell>
 
       {type === "full" && (
-        <Table.Cell>
+        <Table.Cell className="bg-slate-gray text-pastel-pink">
           <div className="flex gap-2 items-center w-28">
-            <DeleteButton id={item.id} data-testid="product-delete-button" />
+            <DeleteButton id={item.id} data-testid="product-delete-button" className="text-pastel-pink" />
             <CartItemSelect
               value={item.quantity}
               onChange={(value) => changeQuantity(parseInt(value.target.value))}
-              className="w-14 h-10 p-4"
+              className="w-14 h-10 p-4 bg-black border-2 border-pastel-pink text-pastel-pink font-bold"
               data-testid="product-select-button"
             >
               {Array.from(
@@ -84,38 +89,44 @@ const Item = ({ item, region, type = "full" }: ItemProps) => {
                   ),
                 },
                 (_, i) => (
-                  <option value={i + 1} key={i}>
+                  <option value={i + 1} key={i} className="text-pastel-pink">
                     {i + 1}
                   </option>
                 )
               )}
             </CartItemSelect>
-            {updating && <Spinner />}
+            {updating && <Spinner className="text-pastel-pink" />}
           </div>
-          <ErrorMessage error={error} data-testid="product-error-message" />
+          {/* ErrorMessage without the className prop */}
+          {error && (
+            <ErrorMessage error={error} data-testid="product-error-message" />
+          )}
         </Table.Cell>
       )}
 
       {type === "full" && (
-        <Table.Cell className="hidden small:table-cell">
+        <Table.Cell className="hidden small:table-cell bg-slate-gray text-pastel-pink">
+          {/* Ensure LineItemUnitPrice has pastel-pink text */}
           <LineItemUnitPrice item={item} region={region} style="tight" />
         </Table.Cell>
       )}
 
-      <Table.Cell className="!pr-0">
-        <span
+      <Table.Cell className="!pr-0 bg-slate-gray text-pastel-pink">
+        <div
           className={clx("!pr-0", {
             "flex flex-col items-end h-full justify-center": type === "preview",
           })}
         >
           {type === "preview" && (
-            <span className="flex gap-x-1 ">
-              <Text className="text-ui-fg-muted">{item.quantity}x </Text>
+            <span className="flex gap-x-1 text-pastel-pink">
+              <Text className="text-pastel-pink">{item.quantity}x </Text>
+              {/* Ensure LineItemUnitPrice in preview mode has pastel-pink text */}
               <LineItemUnitPrice item={item} region={region} style="tight" />
             </span>
           )}
+          {/* Ensure LineItemPrice has pastel-pink text */}
           <LineItemPrice item={item} region={region} style="tight" />
-        </span>
+        </div>
       </Table.Cell>
     </Table.Row>
   )

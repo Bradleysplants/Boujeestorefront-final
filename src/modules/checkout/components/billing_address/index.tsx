@@ -3,12 +3,16 @@ import Input from "@modules/common/components/input"
 import CountrySelect from "../country-select"
 import { Cart } from "@medusajs/medusa"
 
-const BillingAddress = ({
-  cart,
-  countryCode,
-}: {
+type BillingAddressProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
   countryCode: string
+  inputClassName?: string // Add the inputClassName prop
+}
+
+const BillingAddress: React.FC<BillingAddressProps> = ({
+  cart,
+  countryCode,
+  inputClassName, // Destructure the inputClassName prop
 }) => {
   const [formData, setFormData] = useState({
     "billing_address.first_name": cart?.billing_address?.first_name || "",
@@ -39,7 +43,7 @@ const BillingAddress = ({
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLInputElement | HTMLSelectElement
+      HTMLInputElement | HTMLSelectElement
     >
   ) => {
     setFormData({
@@ -59,6 +63,7 @@ const BillingAddress = ({
           onChange={handleChange}
           required
           data-testid="billing-first-name-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <Input
           label="Last name"
@@ -68,6 +73,7 @@ const BillingAddress = ({
           onChange={handleChange}
           required
           data-testid="billing-last-name-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <Input
           label="Address"
@@ -77,6 +83,7 @@ const BillingAddress = ({
           onChange={handleChange}
           required
           data-testid="billing-address-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <Input
           label="Company"
@@ -85,6 +92,7 @@ const BillingAddress = ({
           onChange={handleChange}
           autoComplete="organization"
           data-testid="billing-company-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <Input
           label="Postal code"
@@ -94,6 +102,7 @@ const BillingAddress = ({
           onChange={handleChange}
           required
           data-testid="billing-postal-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <Input
           label="City"
@@ -103,6 +112,7 @@ const BillingAddress = ({
           onChange={handleChange}
           required
           data-testid="billing-city-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <CountrySelect
           name="billing_address.country_code"
@@ -112,6 +122,7 @@ const BillingAddress = ({
           onChange={handleChange}
           required
           data-testid="billing-country-select"
+          inputClassName={inputClassName} // Pass inputClassName to CountrySelect
         />
         <Input
           label="State / Province"
@@ -120,6 +131,7 @@ const BillingAddress = ({
           value={formData["billing_address.province"]}
           onChange={handleChange}
           data-testid="billing-province-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
         <Input
           label="Phone"
@@ -128,6 +140,7 @@ const BillingAddress = ({
           value={formData["billing_address.phone"]}
           onChange={handleChange}
           data-testid="billing-phone-input"
+          className={inputClassName} // Apply inputClassName to Input components
         />
       </div>
     </>

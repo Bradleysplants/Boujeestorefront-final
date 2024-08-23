@@ -12,9 +12,10 @@ import compareAddresses from "@lib/util/compare-addresses"
 type AddressSelectProps = {
   addresses: Address[]
   cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
+  inputClassName?: string // Added the inputClassName prop
 }
 
-const AddressSelect = ({ addresses, cart }: AddressSelectProps) => {
+const AddressSelect = ({ addresses, cart, inputClassName }: AddressSelectProps) => {
   const handleSelect = (id: string) => {
     const savedAddress = addresses.find((a) => a.id === id)
     if (savedAddress) {
@@ -40,8 +41,12 @@ const AddressSelect = ({ addresses, cart }: AddressSelectProps) => {
     <Listbox onChange={handleSelect} value={selectedAddress?.id}>
       <div className="relative">
         <Listbox.Button
-          className="relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-white cursor-default focus:outline-none border rounded-rounded focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-gray-300 focus-visible:ring-offset-2 focus-visible:border-gray-300 text-base-regular"
-          data-testid="shipping-address-select">
+          className={clx(
+            "relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-black cursor-default focus:outline-none border border-pastel-pink rounded-rounded focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-pastel-pink focus-visible:ring-offset-black focus-visible:ring-offset-2 text-pastel-pink font-bold",
+            inputClassName // Allow custom className to be passed in
+          )}
+          data-testid="shipping-address-select"
+        >
           {({ open }) => (
             <>
               <span className="block truncate">
@@ -50,7 +55,7 @@ const AddressSelect = ({ addresses, cart }: AddressSelectProps) => {
                   : "Choose an address"}
               </span>
               <ChevronUpDown
-                className={clx("transition-rotate duration-200", {
+                className={clx("transition-rotate duration-200 text-pastel-pink", {
                   "transform rotate-180": open,
                 })}
               />
@@ -64,18 +69,23 @@ const AddressSelect = ({ addresses, cart }: AddressSelectProps) => {
           leaveTo="opacity-0"
         >
           <Listbox.Options
-            className="absolute z-20 w-full overflow-auto text-small-regular bg-white border border-top-0 max-h-60 focus:outline-none sm:text-sm"
-            data-testid="shipping-address-options">
+            className="absolute z-20 w-full overflow-auto text-small-regular bg-black border border-pastel-pink max-h-60 focus:outline-none sm:text-sm"
+            data-testid="shipping-address-options"
+          >
             {addresses.map((address) => {
               return (
                 <Listbox.Option
                   key={address.id}
                   value={address.id}
-                  className="cursor-default select-none relative pl-6 pr-10 hover:bg-gray-50 py-4"
+                  className="cursor-default select-none relative pl-6 pr-10 hover:bg-darker-slate-gray py-4 text-pastel-pink font-bold"
                   data-testid="shipping-address-option"
                 >
                   <div className="flex gap-x-4 items-start">
-                    <Radio checked={selectedAddress?.id === address.id} data-testid="shipping-address-radio" />
+                    <Radio
+                      checked={selectedAddress?.id === address.id}
+                      className={inputClassName} // Pass inputClassName to Radio component
+                      data-testid="shipping-address-radio"
+                    />
                     <div className="flex flex-col">
                       <span className="text-left text-base-semi">
                         {address.first_name} {address.last_name}

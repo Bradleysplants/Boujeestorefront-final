@@ -21,12 +21,12 @@ const CheckoutSummary = async () => {
   }
 
   return (
-    <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-8 py-8 small:py-0 ">
-      <div className="w-full bg-white flex flex-col">
+    <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-8 py-8 small:py-0 bg-slate-gray"> {/* Set background to slate-gray */}
+      <div className="w-full bg-slate-gray flex flex-col"> {/* Set background to slate-gray */}
         <Divider className="my-6 small:hidden" />
         <Heading
           level="h2"
-          className="flex flex-row text-3xl-regular items-baseline"
+          className="flex flex-row text-3xl-regular items-baseline text-pastel-pink bg-darker-slate-gray p-4 rounded-md" // Apply custom styles for Heading
         >
           In your Cart
         </Heading>

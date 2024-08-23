@@ -1,13 +1,13 @@
-import { notFound } from "next/navigation"
-import { Suspense } from "react"
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
-import { ProductCategoryWithChildren } from "types/global"
-import InteractiveLink from "@modules/common/components/interactive-link"
-import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
-import RefinementList from "@modules/store/components/refinement-list"
-import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
-import PaginatedProducts from "@modules/store/templates/paginated-products"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { ProductCategoryWithChildren } from "types/global";
+import InteractiveLink from "@modules/common/components/interactive-link";
+import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid";
+import RefinementList from "@modules/store/components/refinement-list";
+import { SortOptions } from "@modules/store/components/refinement-list/sort-products";
+import PaginatedProducts from "@modules/store/templates/paginated-products";
+import LocalizedClientLink from "@modules/common/components/localized-client-link";
 
 export default function CategoryTemplate({
   categories,
@@ -15,37 +15,36 @@ export default function CategoryTemplate({
   page,
   countryCode,
 }: {
-  categories: ProductCategoryWithChildren[]
-  sortBy?: SortOptions
-  page?: string
-  countryCode: string
+  categories: ProductCategoryWithChildren[];
+  sortBy?: SortOptions;
+  page?: string;
+  countryCode: string;
 }) {
-  const pageNumber = page ? parseInt(page) : 1
+  const pageNumber = page ? parseInt(page) : 1;
 
-  const category = categories[categories.length - 1]
-  const parents = categories.slice(0, categories.length - 1)
+  const category = categories[categories.length - 1];
+  const parents = categories.slice(0, categories.length - 1);
 
-  if (!category || !countryCode) notFound()
+  if (!category || !countryCode) notFound();
 
   return (
-    <div className="flex flex-col small:flex-row small:items-start py-6 content-container" data-testid="category-container">
-      <RefinementList sortBy={sortBy || "created_at"} data-testid="sort-by-container" />
+    <div className="flex flex-col small:flex-row small:items-start py-6 content-container text-pastel-pink bg-slate-gray">
+      <RefinementList sortBy={sortBy || "created_at"} />
       <div className="w-full">
         <div className="flex flex-row mb-8 text-2xl-semi gap-4">
           {parents &&
             parents.map((parent) => (
-              <span key={parent.id} className="text-ui-fg-subtle">
+              <span key={parent.id} className="text-darker-slate-gray">
                 <LocalizedClientLink
-                  className="mr-4 hover:text-black"
+                  className="mr-4 hover:text-white"
                   href={`/categories/${parent.handle}`}
-                  data-testid="sort-by-link"
                 >
                   {parent.name}
                 </LocalizedClientLink>
                 /
               </span>
             ))}
-          <h1 data-testid="category-page-title">{category.name}</h1>
+          <h1>{category.name}</h1>
         </div>
         {category.description && (
           <div className="mb-8 text-base-regular">
@@ -57,7 +56,10 @@ export default function CategoryTemplate({
             <ul className="grid grid-cols-1 gap-2">
               {category.category_children?.map((c) => (
                 <li key={c.id}>
-                  <InteractiveLink href={`/categories/${c.handle}`}>
+                  <InteractiveLink
+                    href={`/categories/${c.handle}`}
+                    className="hover:text-white"
+                  >
                     {c.name}
                   </InteractiveLink>
                 </li>
@@ -75,5 +77,5 @@ export default function CategoryTemplate({
         </Suspense>
       </div>
     </div>
-  )
+  );
 }

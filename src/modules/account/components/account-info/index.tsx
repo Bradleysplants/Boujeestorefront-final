@@ -1,20 +1,22 @@
-import { Disclosure } from "@headlessui/react"
-import { Badge, Button, clx } from "@medusajs/ui"
-import { useEffect } from "react"
+"use client";
 
-import useToggleState from "@lib/hooks/use-toggle-state"
-import { useFormStatus } from "react-dom"
+import { Disclosure } from "@headlessui/react";
+import { Badge, Button, clx } from "@medusajs/ui";
+import { useEffect } from "react";
+
+import useToggleState from "@lib/hooks/use-toggle-state";
+import { useFormStatus } from "react-dom";
 
 type AccountInfoProps = {
-  label: string
-  currentInfo: string | React.ReactNode
-  isSuccess?: boolean
-  isError?: boolean
-  errorMessage?: string
-  clearState: () => void
-  children?: React.ReactNode
-  'data-testid'?: string
-}
+  label: string;
+  currentInfo: string | React.ReactNode;
+  isSuccess?: boolean;
+  isError?: boolean;
+  errorMessage?: string;
+  clearState: () => void;
+  children?: React.ReactNode;
+  "data-testid"?: string;
+};
 
 const AccountInfo = ({
   label,
@@ -24,31 +26,33 @@ const AccountInfo = ({
   clearState,
   errorMessage = "An error occurred, please try again",
   children,
-  'data-testid': dataTestid
+  "data-testid": dataTestid,
 }: AccountInfoProps) => {
-  const { state, close, toggle } = useToggleState()
+  const { state, close, toggle } = useToggleState();
 
-  const { pending } = useFormStatus()
+  const { pending } = useFormStatus();
 
   const handleToggle = () => {
-    clearState()
-    setTimeout(() => toggle(), 100)
-  }
+    clearState();
+    setTimeout(() => toggle(), 100);
+  };
 
   useEffect(() => {
     if (isSuccess) {
-      close()
+      close();
     }
-  }, [isSuccess, close])
+  }, [isSuccess, close]);
 
   return (
     <div className="text-small-regular" data-testid={dataTestid}>
       <div className="flex items-end justify-between">
         <div className="flex flex-col">
-          <span className="uppercase text-ui-fg-base">{label}</span>
+          <span className="uppercase text-pastel-pink">{label}</span>
           <div className="flex items-center flex-1 basis-0 justify-end gap-x-4">
             {typeof currentInfo === "string" ? (
-              <span className="font-semibold" data-testid="current-info">{currentInfo}</span>
+              <span className="font-semibold text-pastel-pink" data-testid="current-info">
+                {currentInfo}
+              </span>
             ) : (
               currentInfo
             )}
@@ -57,7 +61,7 @@ const AccountInfo = ({
         <div>
           <Button
             variant="secondary"
-            className="w-[100px] min-h-[25px] py-1"
+            className="w-[100px] min-h-[25px] py-1 bg-black text-pastel-pink border-pastel-pink"
             onClick={handleToggle}
             type={state ? "reset" : "button"}
             data-testid="edit-button"
@@ -81,8 +85,8 @@ const AccountInfo = ({
           )}
           data-testid="success-message"
         >
-          <Badge className="p-2 my-4" color="green">
-            <span>{label} updated succesfully</span>
+          <Badge className="p-2 my-4 bg-black text-pastel-pink border-pastel-pink">
+            <span>{label} updated successfully</span>
           </Badge>
         </Disclosure.Panel>
       </Disclosure>
@@ -100,7 +104,7 @@ const AccountInfo = ({
           )}
           data-testid="error-message"
         >
-          <Badge className="p-2 my-4" color="red">
+          <Badge className="p-2 my-4 bg-black text-pastel-pink border-pastel-pink">
             <span>{errorMessage}</span>
           </Badge>
         </Disclosure.Panel>
@@ -122,7 +126,7 @@ const AccountInfo = ({
             <div className="flex items-center justify-end mt-2">
               <Button
                 isLoading={pending}
-                className="w-full small:max-w-[140px]"
+                className="w-full small:max-w-[140px] bg-black text-pastel-pink border-pastel-pink"
                 type="submit"
                 data-testid="save-button"
               >
@@ -133,7 +137,7 @@ const AccountInfo = ({
         </Disclosure.Panel>
       </Disclosure>
     </div>
-  )
-}
+  );
+};
 
-export default AccountInfo
+export default AccountInfo;

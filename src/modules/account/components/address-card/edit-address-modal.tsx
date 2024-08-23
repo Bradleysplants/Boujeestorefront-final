@@ -7,7 +7,6 @@ import { Address, Region } from "@medusajs/medusa";
 
 import useToggleState from "@lib/hooks/use-toggle-state";
 import CountrySelect from "@modules/checkout/components/country-select";
-import Input from "@modules/common/components/input";
 import Modal from "@modules/common/components/modal";
 import {
   deleteCustomerShippingAddress,
@@ -94,10 +93,10 @@ const EditAddress: React.FC<EditAddressProps> = ({
         autoComplete={name}
         value={inputValues[name as keyof typeof inputValues]}
         onChange={handleInputChange}
-        className="bg-white text-slate-gray border border-primary-green p-2 h-10 w-full focus:outline-none focus:ring-0 transition-all duration-200 text-sm"
+        className="bg-black text-pastel-pink border border-pastel-pink p-2 h-10 w-full focus:outline-none focus:ring-0 transition-all duration-200 text-sm"
       />
       <label
-        className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-gray pointer-events-none transition-all duration-200 ease-in-out text-sm ${
+        className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-pastel-pink pointer-events-none transition-all duration-200 ease-in-out text-sm ${
           inputValues[name as keyof typeof inputValues] ? "opacity-0" : "opacity-100"
         }`}
       >
@@ -112,17 +111,23 @@ const EditAddress: React.FC<EditAddressProps> = ({
         className={clx(
           "border rounded-lg p-5 min-h-[220px] h-full w-full flex flex-col justify-between transition-colors bg-slate-gray",
           {
-            "border-gray-900": isActive,
+            "border-pastel-pink": isActive,
           }
         )}
         data-testid="address-container"
       >
         <div className="flex flex-col">
-          <Heading className="text-left text-base-semi text-pastel-pink" data-testid="address-name">
+          <Heading
+            className="text-left text-base-semi text-pastel-pink"
+            data-testid="address-name"
+          >
             {address.first_name} {address.last_name}
           </Heading>
           {address.company && (
-            <Text className="txt-compact-small text-pastel-pink" data-testid="address-company">
+            <Text
+              className="txt-compact-small text-pastel-pink"
+              data-testid="address-company"
+            >
               {address.company}
             </Text>
           )}
@@ -142,7 +147,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
         </div>
         <div className="flex items-center gap-x-4">
           <button
-            className="text-small-regular text-pastel-pink flex items-center gap-x-2 hover:text-primary-green"
+            className="text-small-regular text-pastel-pink flex items-center gap-x-2 hover:text-pastel-pink"
             onClick={open}
             data-testid="address-edit-button"
           >
@@ -161,9 +166,14 @@ const EditAddress: React.FC<EditAddressProps> = ({
       </div>
 
       <Modal isOpen={state} close={close} data-testid="edit-address-modal">
-        <div className="bg-[#353A40] p-6 rounded-lg" style={{ maxHeight: "80vh" }}>
+        <div
+          className="bg-slate-gray p-6 rounded-lg"
+          style={{ maxHeight: "80vh" }}
+        >
           <Modal.Title>
-            <Heading className="mb-2 text-pastel-pink text-lg">Edit address</Heading>
+            <Heading className="mb-2 text-pastel-pink text-lg">
+              Edit address
+            </Heading>
           </Modal.Title>
           <form action={formAction}>
             <Modal.Body>
@@ -185,7 +195,7 @@ const EditAddress: React.FC<EditAddressProps> = ({
                   region={region}
                   required
                   autoComplete="country"
-                  className="bg-white text-slate-gray border border-primary-green p-2 h-10 w-full focus:outline-none focus:ring-0 text-sm"
+                  className="bg-black text-pastel-pink border border-pastel-pink p-2 h-10 w-full focus:outline-none focus:ring-0 text-sm"
                   data-testid="country-select"
                 />
                 {renderInput("Phone", "phone")}
@@ -202,12 +212,15 @@ const EditAddress: React.FC<EditAddressProps> = ({
                   type="reset"
                   variant="secondary"
                   onClick={close}
-                  className="h-8 bg-gray-100 text-slate-gray hover:bg-gray-200 text-sm"
+                  className="h-8 bg-black text-pastel-pink border border-pastel-pink hover:bg-darker-slate-gray text-sm"
                   data-testid="cancel-button"
                 >
                   Cancel
                 </Button>
-                <SubmitButton className="w-full bg-primary-green text-slate-gray hover:bg-pastel-pink h-8 text-sm" data-testid="save-button">
+                <SubmitButton
+                  className="w-full bg-black text-pastel-pink border border-pastel-pink hover:bg-darker-slate-gray h-8 text-sm"
+                  data-testid="save-button"
+                >
                   Save
                 </SubmitButton>
               </div>

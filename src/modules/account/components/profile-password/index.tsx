@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { Customer } from "@medusajs/medusa"
-import React, { useEffect } from "react"
+import { Customer } from "@medusajs/medusa";
+import React, { useEffect } from "react";
 
-import Input from "@modules/common/components/input"
+import Input from "@modules/common/components/input";
 
-import AccountInfo from "../account-info"
-import { updateCustomerPassword } from "@modules/account/actions"
-import { useFormState } from "react-dom"
+import AccountInfo from "../account-info";
+import { updateCustomerPassword } from "@modules/account/actions";
+import { useFormState } from "react-dom";
 
 type MyInformationProps = {
-  customer: Omit<Customer, "password_hash">
-}
+  customer: Omit<Customer, "password_hash">;
+};
 
-const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
-  const [successState, setSuccessState] = React.useState(false)
+const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
+  const [successState, setSuccessState] = React.useState(false);
 
   const [state, formAction] = useFormState(updateCustomerPassword, {
     customer,
     success: false,
     error: false,
-  })
+  });
 
   const clearState = () => {
-    setSuccessState(false)
-  }
+    setSuccessState(false);
+  };
 
   useEffect(() => {
-    setSuccessState(state.success)
-  }, [state])
+    setSuccessState(state.success);
+  }, [state]);
 
   return (
     <form action={formAction} onReset={() => clearState()} className="w-full">
       <AccountInfo
         label="Password"
         currentInfo={
-          <span>The password is not shown for security reasons</span>
+          <span className="text-pastel-pink">The password is not shown for security reasons</span>
         }
         isSuccess={successState}
         isError={!!state.error}
@@ -50,6 +50,7 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
             required
             type="password"
             data-testid="old-password-input"
+            className="bg-black text-pastel-pink border border-pastel-pink h-10"
           />
           <Input
             label="New password"
@@ -57,6 +58,7 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
             name="new_password"
             required
             data-testid="new-password-input"
+            className="bg-black text-pastel-pink border border-pastel-pink h-10"
           />
           <Input
             label="Confirm password"
@@ -64,11 +66,21 @@ const ProfileName: React.FC<MyInformationProps> = ({ customer }) => {
             name="confirm_password"
             required
             data-testid="confirm-password-input"
+            className="bg-black text-pastel-pink border border-pastel-pink h-10"
           />
+        </div>
+        <div className="flex justify-end mt-4">
+          <button
+            type="submit"
+            className="bg-black text-pastel-pink border border-pastel-pink py-2 px-4 rounded-lg hover:bg-pastel-pink hover:text-black transition-colors duration-200"
+            data-testid="submit-button"
+          >
+            Save
+          </button>
         </div>
       </AccountInfo>
     </form>
-  )
-}
+  );
+};
 
-export default ProfileName
+export default ProfilePassword;

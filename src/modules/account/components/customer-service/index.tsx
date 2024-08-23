@@ -1,18 +1,20 @@
-import { useState } from 'react';
+"use client";
+
+import { useState } from "react";
 
 const FAQItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="faq-item border-b-2 border-gray-200 py-4">
+    <div className="faq-item border-b-2 border-pastel-pink py-4">
       <h3
-        className="cursor-pointer text-lg font-semibold text-gray-800"
+        className="cursor-pointer text-lg font-semibold text-pastel-pink"
         onClick={() => setIsOpen(!isOpen)}
       >
         {question}
       </h3>
       {isOpen && (
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-pastel-pink">
           {answer}
         </p>
       )}
@@ -23,7 +25,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 const FAQPage = () => {
   const faqs = [
     {
-      question: "What is the return policy for DeLisa&#39;s Boujee Botanical Store?",
+      question: "What is the return policy for DeLisa's Boujee Botanical Store?",
       answer:
         "We accept returns or exchanges for products damaged due to our negligence. Please contact us within 48 hours of receiving your order with photographic evidence. Unfortunately, we cannot accept returns for live plants or products damaged by the shipping carrier. For full details, please review our Return Policy."
     },
@@ -76,7 +78,7 @@ const FAQPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+      <h1 className="text-3xl font-bold text-center text-pastel-pink mb-8">
         Customer Service &amp; FAQ
       </h1>
       <div className="max-w-2xl mx-auto">
@@ -90,27 +92,27 @@ const FAQPage = () => {
       </div>
 
       <div className="mt-12">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Contact Us</h2>
-        <p className="text-gray-600">
+        <h2 className="text-2xl font-bold text-pastel-pink mb-4">Contact Us</h2>
+        <p className="text-pastel-pink">
           If you have any further questions or need assistance, please don&#39;t hesitate to reach out to us. Our customer service team is here to help.
         </p>
         <div className="mt-4">
-          <h3 className="text-lg font-semibold text-gray-800">Email:</h3>
-          <p className="text-gray-600">
-            <a href="mailto:support@delisasboujeebotanicalstore.com" className="text-blue-500 hover:underline">
+          <h3 className="text-lg font-semibold text-pastel-pink">Email:</h3>
+          <p className="text-pastel-pink">
+            <a href="mailto:support@delisasboujeebotanicalstore.com" className="text-pastel-pink hover:underline">
               support@delisasboujeebotanicalstore.com
             </a>
           </p>
         </div>
         <div className="mt-4">
-          <h3 className="text-lg font-semibold text-gray-800">Phone:</h3>
-          <p className="text-gray-600">
+          <h3 className="text-lg font-semibold text-pastel-pink">Phone:</h3>
+          <p className="text-pastel-pink">
             [Your Business Phone Number]
           </p>
         </div>
         <div className="mt-4">
-          <h3 className="text-lg font-semibold text-gray-800">Address:</h3>
-          <p className="text-gray-600">
+          <h3 className="text-lg font-semibold text-pastel-pink">Address:</h3>
+          <p className="text-pastel-pink">
             [Your Business Address]
           </p>
         </div>

@@ -6,18 +6,22 @@ import { OnApproveActions, OnApproveData } from "@paypal/paypal-js"
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { placeOrder } from "@modules/checkout/actions"
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import ErrorMessage from "../error-message"
 import Spinner from "@modules/common/icons/spinner"
 
 type PaymentButtonProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
-  "data-testid": string
+  "data-testid"?: string
+  className?: string
+  inputClassName?: string
 }
 
 const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
   "data-testid": dataTestId,
+  className,
+  inputClassName,
 }) => {
   const notReady =
     !cart ||
@@ -32,7 +36,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
 
   if (paidByGiftcard) {
-    return <GiftCardPaymentButton />
+    return <GiftCardPaymentButton className={className} />
   }
 
   const paymentSession = cart.payment_session as PaymentSession
@@ -44,11 +48,18 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
+          className={className}
+          inputClassName={inputClassName}
         />
       )
     case "manual":
       return (
-        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
+        <ManualTestPaymentButton
+          notReady={notReady}
+          data-testid={dataTestId}
+          className={className}
+          inputClassName={inputClassName}
+        />
       )
     case "paypal":
       return (
@@ -56,14 +67,29 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
+          className={className}
+          inputClassName={inputClassName}
         />
       )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return (
+        <Button
+          className={`bg-black text-pastel-pink font-bold ${className}`}
+          disabled
+          aria-disabled="true"
+          aria-label="Select a payment method"
+        >
+          Select a payment method
+        </Button>
+      )
   }
 }
 
-const GiftCardPaymentButton = () => {
+const GiftCardPaymentButton = ({
+  className,
+}: {
+  className?: string
+}) => {
   const [submitting, setSubmitting] = useState(false)
 
   const handleOrder = async () => {
@@ -76,6 +102,8 @@ const GiftCardPaymentButton = () => {
       onClick={handleOrder}
       isLoading={submitting}
       data-testid="submit-order-button"
+      className={`bg-black text-pastel-pink font-bold ${className}`}
+      aria-label="Place order using gift card"
     >
       Place order
     </Button>
@@ -86,13 +114,24 @@ const StripePaymentButton = ({
   cart,
   notReady,
   "data-testid": dataTestId,
+  className,
+  inputClassName,
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
   notReady: boolean
   "data-testid"?: string
+  className?: string
+  inputClassName?: string
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (errorMessage) {
+      errorRef.current?.focus()
+    }
+  }, [errorMessage])
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch(() => {
@@ -173,13 +212,18 @@ const StripePaymentButton = ({
         size="large"
         isLoading={submitting}
         data-testid={dataTestId}
+        className={`bg-black text-pastel-pink font-bold ${className}`}
+        aria-label="Place order using Stripe"
       >
         Place order
       </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="stripe-payment-error-message"
-      />
+      <div ref={errorRef} tabIndex={-1} aria-live="assertive">
+        <ErrorMessage
+          error={errorMessage}
+          data-testid="stripe-payment-error-message"
+          className={inputClassName}
+        />
+      </div>
     </>
   )
 }
@@ -188,13 +232,24 @@ const PayPalPaymentButton = ({
   cart,
   notReady,
   "data-testid": dataTestId,
+  className,
+  inputClassName,
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
   notReady: boolean
   "data-testid"?: string
+  className?: string
+  inputClassName?: string
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (errorMessage) {
+      errorRef.current?.focus()
+    }
+  }, [errorMessage])
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch(() => {
@@ -240,18 +295,36 @@ const PayPalPaymentButton = ({
           disabled={notReady || submitting || isPending}
           data-testid={dataTestId}
         />
-        <ErrorMessage
-          error={errorMessage}
-          data-testid="paypal-payment-error-message"
-        />
+        <div ref={errorRef} tabIndex={-1} aria-live="assertive">
+          <ErrorMessage
+            error={errorMessage}
+            data-testid="paypal-payment-error-message"
+            className={inputClassName}
+          />
+        </div>
       </>
     )
   }
 }
 
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+const ManualTestPaymentButton = ({
+  notReady,
+  className,
+  inputClassName,
+}: {
+  notReady: boolean
+  className?: string
+  inputClassName?: string
+}) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const errorRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (errorMessage) {
+      errorRef.current?.focus()
+    }
+  }, [errorMessage])
 
   const onPaymentCompleted = async () => {
     await placeOrder().catch((err) => {
@@ -262,7 +335,6 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
 
   const handlePayment = () => {
     setSubmitting(true)
-
     onPaymentCompleted()
   }
 
@@ -274,13 +346,18 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         onClick={handlePayment}
         size="large"
         data-testid="submit-order-button"
+        className={`bg-black text-pastel-pink font-bold ${className}`}
+        aria-label="Place order using Manual payment method"
       >
         Place order
       </Button>
-      <ErrorMessage
-        error={errorMessage}
-        data-testid="manual-payment-error-message"
-      />
+      <div ref={errorRef} tabIndex={-1} aria-live="assertive">
+        <ErrorMessage
+          error={errorMessage}
+          data-testid="manual-payment-error-message"
+          className={inputClassName}
+        />
+      </div>
     </>
   )
 }

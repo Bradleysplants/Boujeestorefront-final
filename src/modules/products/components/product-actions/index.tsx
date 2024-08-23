@@ -1,113 +1,113 @@
 "use client";
-import { Region } from "@medusajs/medusa"
-import { PricedProduct } from "@medusajs/medusa/dist/types/pricing"
-import { Button } from "@medusajs/ui"
-import { isEqual } from "lodash"
-import { useParams } from "next/navigation"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { Region } from "@medusajs/medusa";
+import { PricedProduct } from "@medusajs/medusa/dist/types/pricing";
+import { Button } from "@medusajs/ui";
+import { isEqual } from "lodash";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { useIntersection } from "@lib/hooks/use-in-view"
-import { addToCart } from "@modules/cart/actions"
-import Divider from "@modules/common/components/divider"
-import OptionSelect from "@modules/products/components/option-select"
+import { useIntersection } from "@lib/hooks/use-in-view";
+import { addToCart } from "@modules/cart/actions";
+import Divider from "@modules/common/components/divider";
+import OptionSelect from "@modules/products/components/option-select";
 
-import MobileActions from "../mobile-actions"
-import ProductPrice from "../product-price"
+import MobileActions from "../mobile-actions";
+import ProductPrice from "../product-price";
 
 export type PriceType = {
-  calculated_price: string
-  original_price?: string
-  price_type?: "sale" | "default"
-  percentage_diff?: string
-}
+  calculated_price: string;
+  original_price?: string;
+  price_type?: "sale" | "default";
+  percentage_diff?: string;
+};
 
 type ProductActionsProps = {
-  product: PricedProduct
-  region: Region
-  disabled?: boolean
-  className?: string
-}
+  product: PricedProduct;
+  region: Region;
+  disabled?: boolean;
+  className?: string;
+};
 
 export default function ProductActions({
   product,
   region,
   disabled,
-  className
+  className,
 }: ProductActionsProps) {
-  const [options, setOptions] = useState<Record<string, string>>({})
-  const [isAdding, setIsAdding] = useState(false)
+  const [options, setOptions] = useState<Record<string, string>>({});
+  const [isAdding, setIsAdding] = useState(false);
 
-  const countryCode = useParams().countryCode as string
+  const countryCode = useParams().countryCode as string;
 
-  const variants = product.variants
+  const variants = product.variants;
 
   useEffect(() => {
-    const optionObj: Record<string, string> = {}
+    const optionObj: Record<string, string> = {};
     for (const option of product.options || []) {
-      Object.assign(optionObj, { [option.id]: undefined })
+      Object.assign(optionObj, { [option.id]: undefined });
     }
-    setOptions(optionObj)
-  }, [product])
+    setOptions(optionObj);
+  }, [product]);
 
   const variantRecord = useMemo(() => {
-    const map: Record<string, Record<string, string>> = {}
+    const map: Record<string, Record<string, string>> = {};
     for (const variant of variants) {
-      if (!variant.options || !variant.id) continue
-      const temp: Record<string, string> = {}
+      if (!variant.options || !variant.id) continue;
+      const temp: Record<string, string> = {};
       for (const option of variant.options) {
-        temp[option.option_id] = option.value
+        temp[option.option_id] = option.value;
       }
-      map[variant.id] = temp
+      map[variant.id] = temp;
     }
-    return map
-  }, [variants])
+    return map;
+  }, [variants]);
 
   const variant = useMemo(() => {
-    let variantId: string | undefined = undefined
+    let variantId: string | undefined = undefined;
     for (const key of Object.keys(variantRecord)) {
       if (isEqual(variantRecord[key], options)) {
-        variantId = key
+        variantId = key;
       }
     }
-    return variants.find((v) => v.id === variantId)
-  }, [options, variantRecord, variants])
+    return variants.find((v) => v.id === variantId);
+  }, [options, variantRecord, variants]);
 
   useEffect(() => {
     if (variants.length === 1 && variants[0].id) {
-      setOptions(variantRecord[variants[0].id])
+      setOptions(variantRecord[variants[0].id]);
     }
-  }, [variants, variantRecord])
+  }, [variants, variantRecord]);
 
   const updateOptions = (update: Record<string, string>) => {
-    setOptions({ ...options, ...update })
-  }
+    setOptions({ ...options, ...update });
+  };
 
   const inStock = useMemo(() => {
     if (variant && !variant.manage_inventory) {
-      return true
+      return true;
     }
     if (variant && variant.allow_backorder) {
-      return true
+      return true;
     }
     if (variant?.inventory_quantity && variant.inventory_quantity > 0) {
-      return true
+      return true;
     }
-    return false
-  }, [variant])
+    return false;
+  }, [variant]);
 
-  const actionsRef = useRef<HTMLDivElement>(null)
-  const inView = useIntersection(actionsRef, "0px")
+  const actionsRef = useRef<HTMLDivElement>(null);
+  const inView = useIntersection(actionsRef, "0px");
 
   const handleAddToCart = async () => {
-    if (!variant?.id) return null
-    setIsAdding(true)
+    if (!variant?.id) return null;
+    setIsAdding(true);
     await addToCart({
       variantId: variant.id,
       quantity: 1,
       countryCode,
-    })
-    setIsAdding(false)
-  }
+    });
+    setIsAdding(false);
+  };
 
   return (
     <>
@@ -136,14 +136,17 @@ export default function ProductActions({
           onClick={handleAddToCart}
           disabled={!inStock || !variant || !!disabled || isAdding}
           variant="primary"
-          className="w-full h-10"
+          className="w-full h-10 bg-black border-2 border-pastel-pink text-pastel-pink font-bold"
           isLoading={isAdding}
           data-testid="add-product-button"
+          style={{
+            backgroundColor: "black",
+            borderColor: "#FFC5E1", // Assuming this is your pastel-pink color
+            color: "#FFC5E1", // Pastel-pink text color
+            fontWeight: "bold",
+          }}
         >
-          {!variant ? "Select variant"
-            : !inStock
-            ? "Out of stock"
-            : "Add to cart"}
+          {!variant ? "Select variant" : !inStock ? "Out of stock" : "Add to cart"}
         </Button>
         <MobileActions
           product={product}
@@ -159,5 +162,5 @@ export default function ProductActions({
         />
       </div>
     </>
-  )
+  );
 }

@@ -35,7 +35,13 @@ const Register = ({ setCurrentView }: Props) => {
     });
   };
 
-  const renderInput = (label: string, name: string, type: string = "text", autoComplete: string = "", required: boolean = false) => {
+  const renderInput = (
+    label: string,
+    name: string,
+    type: string = "text",
+    autoComplete: string = "",
+    required: boolean = false
+  ) => {
     return (
       <div className="relative">
         <input
@@ -48,7 +54,9 @@ const Register = ({ setCurrentView }: Props) => {
           className="bg-white text-slate-gray border border-primary-green p-4 h-14 w-full focus:text-slate-gray focus:outline-none focus:ring-0 transition-all duration-200"
         />
         <label
-          className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-gray pointer-events-none transition-all duration-200 ease-in-out ${inputValues[name as keyof typeof inputValues] ? "opacity-0" : "opacity-100"}`}
+          className={`absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-gray pointer-events-none transition-all duration-200 ease-in-out ${
+            inputValues[name as keyof typeof inputValues] ? "opacity-0" : "opacity-100"
+          }`}
         >
           {label}
         </label>
@@ -57,13 +65,16 @@ const Register = ({ setCurrentView }: Props) => {
   };
 
   return (
-    <div className="max-w-sm w-full flex flex-col items-center bg-slate-gray p-6 rounded-lg shadow-lg" data-testid="register-page">
+    <div
+      className="max-w-sm w-full flex flex-col items-center bg-slate-gray p-6 rounded-lg shadow-lg"
+      data-testid="register-page"
+    >
       <h1 className="text-3xl text-pastel-pink uppercase mb-6">
-        Become a Medusa Store Member
+        Become a Member
       </h1>
       <p className="text-center text-lg text-pastel-pink mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+        Create your Member profile, and get access to an enhanced shopping
+        experience.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-6">
@@ -75,7 +86,8 @@ const Register = ({ setCurrentView }: Props) => {
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
         <span className="text-center text-small-regular mt-6 text-pastel-pink">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
+          By creating an account, you agree to Delisa&apos;s Boujee Botanical
+          Store{" "}
           <button
             className="underline hover:text-primary-green"
             onClick={() => setShowPrivacyModal(true)}
@@ -91,7 +103,10 @@ const Register = ({ setCurrentView }: Props) => {
           </button>
           .
         </span>
-        <SubmitButton className="w-full mt-6 bg-primary-green text-slate-gray hover:bg-pastel-pink" data-testid="register-button">
+        <SubmitButton
+          className="w-full mt-6 bg-black text-pastel-pink font-bold border-2 border-pastel-pink hover:bg-pastel-pink hover:text-black"
+          data-testid="register-button"
+        >
           Join
         </SubmitButton>
       </form>

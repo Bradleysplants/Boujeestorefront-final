@@ -12,12 +12,14 @@ const ShippingAddress = ({
   checked,
   onChange,
   countryCode,
+  inputClassName, // Add inputClassName as a prop
 }: {
   customer: Omit<Customer, "password_hash"> | null
   cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
   checked: boolean
   onChange: () => void
   countryCode: string
+  inputClassName?: string // Make it optional
 }) => {
   const [formData, setFormData] = useState({
     "shipping_address.first_name": cart?.shipping_address?.first_name || "",
@@ -34,11 +36,10 @@ const ShippingAddress = ({
   })
 
   const countriesInRegion = useMemo(
-    () => cart?.region.countries.map((c:Country) => c.iso_2),
+    () => cart?.region.countries.map((c: Country) => c.iso_2),
     [cart?.region.countries]
   )
 
-  // check if customer has saved addresses that are in the current region
   const addressesInRegion = useMemo(
     () =>
       customer?.shipping_addresses.filter(
@@ -65,7 +66,7 @@ const ShippingAddress = ({
 
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLInputElement | HTMLSelectElement
+      HTMLInputElement | HTMLSelectElement
     >
   ) => {
     setFormData({
@@ -81,7 +82,7 @@ const ShippingAddress = ({
           <p className="text-small-regular">
             {`Hi ${customer.first_name}, do you want to use one of your saved addresses?`}
           </p>
-          <AddressSelect addresses={customer.shipping_addresses} cart={cart} />
+          <AddressSelect addresses={customer.shipping_addresses} cart={cart} inputClassName={inputClassName} />
         </Container>
       )}
       <div className="grid grid-cols-2 gap-4">
@@ -93,6 +94,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-first-name-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <Input
           label="Last name"
@@ -102,6 +104,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-last-name-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <Input
           label="Address"
@@ -111,6 +114,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-address-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <Input
           label="Company"
@@ -119,6 +123,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           autoComplete="organization"
           data-testid="shipping-company-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <Input
           label="Postal code"
@@ -128,6 +133,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-postal-code-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <Input
           label="City"
@@ -137,6 +143,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-city-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <CountrySelect
           name="shipping_address.country_code"
@@ -146,6 +153,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-country-select"
+          inputClassName={inputClassName} // Pass the inputClassName to CountrySelect
         />
         <Input
           label="State / Province"
@@ -154,6 +162,7 @@ const ShippingAddress = ({
           value={formData["shipping_address.province"]}
           onChange={handleChange}
           data-testid="shipping-province-input"
+          className={inputClassName} // Apply the inputClassName here
         />
       </div>
       <div className="my-8">
@@ -163,6 +172,7 @@ const ShippingAddress = ({
           checked={checked}
           onChange={onChange}
           data-testid="billing-address-checkbox"
+          className="text-pastel-pink font-bold" // Apply the styles directly here
         />
       </div>
       <div className="grid grid-cols-2 gap-4 mb-4">
@@ -176,6 +186,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-email-input"
+          className={inputClassName} // Apply the inputClassName here
         />
         <Input
           label="Phone"
@@ -184,6 +195,7 @@ const ShippingAddress = ({
           value={formData["shipping_address.phone"]}
           onChange={handleChange}
           data-testid="shipping-phone-input"
+          className={inputClassName} // Apply the inputClassName here
         />
       </div>
     </>

@@ -1,3 +1,5 @@
+"use client";
+
 import { useFormState } from "react-dom";
 import { LOGIN_VIEW } from "@modules/account/templates/login-template";
 import { logCustomerIn } from "@modules/account/actions";
@@ -12,7 +14,11 @@ const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useFormState(logCustomerIn, null);
 
   return (
-    <div className="max-w-sm w-full flex flex-col items-center bg-slate-gray p-6 rounded-lg shadow-lg" data-testid="login-page">
+    <div 
+      className="max-w-sm w-full flex flex-col items-center bg-slate-gray p-6 rounded-lg shadow-lg"
+      style={{ paddingLeft: '10%', paddingRight: '10%' }}  
+      data-testid="login-page"
+    >
       <h1 className="text-3xl text-pastel-pink uppercase mb-6">Welcome back</h1>
       <p className="text-center text-lg text-pastel-pink mb-8">
         Sign in to access an enhanced shopping experience.
@@ -29,7 +35,7 @@ const Login = ({ setCurrentView }: Props) => {
               required
               placeholder="Email"
               data-testid="email-input"
-              className="bg-white text-slate-gray border border-primary-green p-4 h-14 w-full focus:text-slate-gray focus:outline-none focus:ring-0 transition-all duration-200"
+              className=" bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink transition-all duration-200"
             />
           </div>
           <div className="relative">
@@ -41,12 +47,15 @@ const Login = ({ setCurrentView }: Props) => {
               required
               placeholder="Password"
               data-testid="password-input"
-              className="bg-white text-slate-gray border border-primary-green p-4 h-14 w-full focus:text-slate-gray focus:outline-none focus:ring-0 transition-all duration-200"
+              className="bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink transition-all duration-200"
             />
           </div>
         </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-6 bg-primary-green text-slate-gray hover:bg-pastel-pink">
+        <SubmitButton 
+          data-testid="sign-in-button" 
+          className="w-full mt-6 bg-black text-pastel-pink border border-pastel-pink hover:bg-darker-slate-gray"
+        >
           Sign in
         </SubmitButton>
       </form>

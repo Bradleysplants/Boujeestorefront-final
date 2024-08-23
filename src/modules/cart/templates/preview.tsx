@@ -17,11 +17,11 @@ const ItemsPreviewTemplate = ({ items, region }: ItemsTemplateProps) => {
   return (
     <div
       className={clx({
-        "pl-[1px] overflow-y-scroll overflow-x-hidden no-scrollbar max-h-[420px]":
-          hasOverflow,
+        "pl-[1px] overflow-y-scroll overflow-x-hidden no-scrollbar max-h-[420px] bg-slate-gray text-pastel-pink": hasOverflow, // Ensure background is slate-gray and text is pastel-pink
+        "bg-slate-gray text-pastel-pink": !hasOverflow, // Ensure the same for non-overflow cases
       })}
     >
-      <Table>
+      <Table className="text-pastel-pink"> {/* Apply pastel-pink to table text */}
         <Table.Body data-testid="items-table">
           {items && region
             ? items

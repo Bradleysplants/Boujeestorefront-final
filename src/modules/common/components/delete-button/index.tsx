@@ -30,10 +30,14 @@ const DeleteButton = ({
       )}
     >
       <button
-        className="flex gap-x-1 text-ui-fg-subtle hover:text-ui-fg-base cursor-pointer"
+        className="flex gap-x-1 text-pastel-pink hover:text-primary-green cursor-pointer" // Text pastel-pink, hover effect primary-green
         onClick={() => handleDelete(id)}
       >
-        {isDeleting ? <Spinner className="animate-spin" /> : <Trash />}
+        {isDeleting ? (
+          <Spinner className="animate-spin text-pastel-pink" /> // Spinner pastel-pink
+        ) : (
+          <Trash className="text-pastel-pink" /> // Trash icon pastel-pink
+        )}
         <span>{children}</span>
       </button>
     </div>

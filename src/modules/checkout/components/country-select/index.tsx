@@ -1,5 +1,4 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef } from "react"
-
 import NativeSelect, {
   NativeSelectProps,
 } from "@modules/common/components/native-select"
@@ -9,8 +8,9 @@ const CountrySelect = forwardRef<
   HTMLSelectElement,
   NativeSelectProps & {
     region?: Region
+    inputClassName?: string // Add the inputClassName prop
   }
->(({ placeholder = "Country", region, defaultValue, ...props }, ref) => {
+>(({ placeholder = "Country", region, defaultValue, inputClassName, ...props }, ref) => {
   const innerRef = useRef<HTMLSelectElement>(null)
 
   useImperativeHandle<HTMLSelectElement | null, HTMLSelectElement | null>(
@@ -34,10 +34,11 @@ const CountrySelect = forwardRef<
       ref={innerRef}
       placeholder={placeholder}
       defaultValue={defaultValue}
+      className={`bg-black text-pastel-pink font-bold border-pastel-pink ${inputClassName}`} // Apply black background, pastel-pink bold text, and pastel-pink border
       {...props}
     >
       {countryOptions.map(({ value, label }, index) => (
-        <option key={index} value={value}>
+        <option key={index} value={value} className="bg-black text-pastel-pink font-bold"> {/* Ensure options also follow the style */}
           {label}
         </option>
       ))}

@@ -1,17 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
+import React, { useState, useEffect } from "react";
 import LocalizedClientLink from "@modules/common/components/localized-client-link";
 import MedusaCTA from "@modules/layout/components/medusa-cta";
 import { Text } from "@medusajs/ui";
-import TermsAndConditionsModal from '@modules/layout/components/terms-and-conditions-modal/index';
-import ReturnPolicyModal from '@modules/layout/components/returns-modal/index';
-
-// Extend the Window interface to include __AudioEyeSiteHash
-declare global {
-  interface Window {
-    __AudioEyeSiteHash: string;
-  }
-}
+import TermsAndConditionsModal from "@modules/layout/components/terms-and-conditions-modal/index";
+import ReturnPolicyModal from "@modules/layout/components/returns-modal/index";
 
 function Footer() {
   const [showTerms, setShowTerms] = useState(false);
@@ -21,21 +14,25 @@ function Footer() {
   const toggleReturnsModal = () => setShowReturns(!showReturns);
 
   useEffect(() => {
-    const loadScript = () => {
-      window.__AudioEyeSiteHash = "045413179e4990e7c12cee43ab444e90";
+    const loadAccToolbarScript = () => {
       const script = document.createElement("script");
-      script.src = "https://wsmcdn.audioeye.com/aem.js";
+      script.src =
+        "https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js";
       script.type = "text/javascript";
       script.async = true;
       document.body.appendChild(script);
+
+      script.onload = () => {
+        window.micAccessTool = new MicAccessTool({
+          link: "http://your-awesome-website.com/your-accessibility-declaration.pdf",
+          contact: "mailto:your-mail@your-awesome-website.com",
+          buttonPosition: "right",
+          forceLang: "en",
+        });
+      };
     };
 
-    if (document.readyState === "complete") {
-      loadScript();
-    } else {
-      window.addEventListener("load", loadScript);
-      return () => window.removeEventListener("load", loadScript);
-    }
+    loadAccToolbarScript();
   }, []);
 
   return (
@@ -81,7 +78,8 @@ function Footer() {
         </div>
         <div className="flex w-full justify-between text-pastel-pink">
           <Text className="txt-compact-small">
-            © {new Date().getFullYear()} DeLisa&apos;s Boujee Botanical Store. All rights reserved.
+            © {new Date().getFullYear()} DeLisa&apos;s Boujee Botanical Store.
+            All rights reserved.
           </Text>
           <MedusaCTA />
         </div>

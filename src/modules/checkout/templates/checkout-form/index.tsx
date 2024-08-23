@@ -42,26 +42,21 @@ export default async function CheckoutForm() {
   const customer = await getCustomer()
 
   return (
-    <div>
-      <div className="w-full grid grid-cols-1 gap-y-8">
-        <div>
-          <Addresses cart={cart} customer={customer} />
-        </div>
+    <div className="w-full grid grid-cols-1 gap-y-8 p-8 bg-slate-gray rounded-md"> {/* Apply slate-gray background to the entire form */}
+      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
+        <Addresses cart={cart} customer={customer} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+      </div>
 
-        <div>
-          <Shipping
-            cart={cart}
-            availableShippingMethods={availableShippingMethods}
-          />
-        </div>
+      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
+        <Shipping cart={cart} availableShippingMethods={availableShippingMethods} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+      </div>
 
-        <div>
-          <Payment cart={cart} />
-        </div>
+      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
+        <Payment cart={cart} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+      </div>
 
-        <div>
-          <Review cart={cart} />
-        </div>
+      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
+        <Review cart={cart} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
       </div>
     </div>
   )

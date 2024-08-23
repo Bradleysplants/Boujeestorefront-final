@@ -3,7 +3,7 @@
 import { InformationCircleSolid } from "@medusajs/icons"
 import { Cart } from "@medusajs/medusa"
 import { Heading, Label, Text, Tooltip } from "@medusajs/ui"
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { useFormState } from "react-dom"
 
 import Input from "@modules/common/components/input"
@@ -22,9 +22,9 @@ type DiscountCodeProps = {
 }
 
 const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
-  const [isOpen, setIsOpen] = React.useState(false)
-
+  const [isOpen, setIsOpen] = useState(false)
   const { discounts, gift_cards, region } = cart
+  const [inputValue, setInputValue] = useState('')
 
   const appliedDiscount = useMemo(() => {
     if (!discounts || !discounts.length) {
@@ -39,7 +39,6 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
           amount: discounts[0].rule.value,
           region: region,
         })}`
-
       default:
         return "Free shipping"
     }
@@ -53,28 +52,32 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
     await removeDiscount(discounts[0].code)
   }
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value)
+  }
+
   const [message, formAction] = useFormState(submitDiscountForm, null)
 
   return (
-    <div className="w-full bg-white flex flex-col">
+    <div className="w-full bg-slate-gray text-pastel-pink flex flex-col">
       <div className="txt-medium">
         {gift_cards.length > 0 && (
           <div className="flex flex-col mb-4">
-            <Heading className="txt-medium">Gift card(s) applied:</Heading>
-            {gift_cards?.map((gc) => (
+            <Heading className="txt-medium text-pastel-pink">Gift card(s) applied:</Heading>
+            {gift_cards.map((gc) => (
               <div
-                className="flex items-center justify-between txt-small-plus"
+                className="flex items-center justify-between txt-small-plus text-pastel-pink"
                 key={gc.id}
                 data-testid="gift-card"
               >
-                <Text className="flex gap-x-1 items-baseline">
+                <Text className="flex gap-x-1 text-pastel-pink items-baseline">
                   <span>Code: </span>
                   <span className="truncate" data-testid="gift-card-code">
                     {gc.code}
                   </span>
                 </Text>
                 <Text
-                  className="font-semibold"
+                  className="font-semibold text-pastel-pink"
                   data-testid="gift-card-amount"
                   data-value={gc.balance}
                 >
@@ -85,12 +88,12 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                   })}
                 </Text>
                 <button
-                  className="flex items-center gap-x-2 !background-transparent !border-none"
+                  className="flex items-center text-pastel-pink gap-x-2 !background-transparent !border-none"
                   onClick={() => removeGiftCardCode(gc.code)}
                   data-testid="remove-gift-card-button"
                 >
                   <Trash size={14} />
-                  <span className="sr-only">Remove gift card from order</span>
+                  <span className="sr-only text-pastel-pink">Remove gift card from order</span>
                 </button>
               </div>
             ))}
@@ -100,18 +103,18 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
         {appliedDiscount ? (
           <div className="w-full flex items-center">
             <div className="flex flex-col w-full">
-              <Heading className="txt-medium">Discount applied:</Heading>
+              <Heading className="txt-medium text-pastel-pink">Discount applied:</Heading>
               <div
                 className="flex items-center justify-between w-full max-w-full"
                 data-testid="discount-row"
               >
-                <Text className="flex gap-x-1 items-baseline txt-small-plus w-4/5 pr-1">
+                <Text className="flex gap-x-1 text-pastel-pink items-baseline txt-small-plus w-4/5 pr-1">
                   <span>Code:</span>
                   <span className="truncate" data-testid="discount-code">
                     {discounts[0].code}
                   </span>
                   <span
-                    className="min-w-fit"
+                    className="min-w-fit text-pastel-pink"
                     data-testid="discount-amount"
                     data-value={discounts[0].rule.value}
                   >
@@ -119,12 +122,12 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
                   </span>
                 </Text>
                 <button
-                  className="flex items-center"
+                  className="flex items-center text-pastel-pink"
                   onClick={removeDiscountCode}
                   data-testid="remove-discount-button"
                 >
                   <Trash size={14} />
-                  <span className="sr-only">
+                  <span className="sr-only text-pastel-pink">
                     Remove discount code from order
                   </span>
                 </button>
@@ -137,7 +140,7 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
-                className="txt-medium text-ui-fg-interactive hover:text-ui-fg-interactive-hover"
+                className="text-lg txt-medium text-pastel-pink hover:underline focus:underline focus:text-pastel-pink"
                 data-testid="add-discount-button"
               >
                 Add gift card or discount code
@@ -148,25 +151,31 @@ const DiscountCode: React.FC<DiscountCodeProps> = ({ cart }) => {
             </Label>
             {isOpen && (
               <>
-                <div className="flex w-full gap-x-2 items-center">
-                  <Input
-                    label="Please enter code"
+                <div className="flex w-full text-pastel-pink gap-x-2 items-center">
+                  <input
                     name="code"
                     type="text"
                     autoFocus={false}
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    placeholder="Please enter code"
+                    className="bg-black border-2 border-pastel-pink text-pastel-pink placeholder-pastel-pink focus:placeholder-transparent text-lg px-3 py-2"
                     data-testid="discount-input"
                   />
                   <SubmitButton
                     variant="secondary"
                     data-testid="discount-apply-button"
+                    className="bg-black border-2 border-pastel-pink text-pastel-pink"
                   >
                     Apply
                   </SubmitButton>
                 </div>
-                <ErrorMessage
-                  error={message}
-                  data-testid="discount-error-message"
-                />
+                {message && (
+                  <ErrorMessage
+                    error={message}
+                    data-testid="discount-error-message"
+                  />
+                )}
               </>
             )}
           </form>

@@ -6,7 +6,8 @@ type InteractiveLinkProps = {
   href: string;
   children?: React.ReactNode;
   onClick?: () => void;
-  className?: string; // Add className here to allow external styling.
+  className?: string; // Allow external styling
+  "aria-label"?: string; // Allow setting an aria-label for accessibility
 }
 
 const InteractiveLink = ({
@@ -14,6 +15,7 @@ const InteractiveLink = ({
   children,
   onClick,
   className, // Destructure className from props
+  "aria-label": ariaLabel, // Destructure aria-label from props
   ...props
 }: InteractiveLinkProps) => {
   return (
@@ -21,12 +23,15 @@ const InteractiveLink = ({
       className={`flex gap-x-1 items-center group ${className}`} // Use template literal to include external className
       href={href}
       onClick={onClick}
+      aria-label={ariaLabel} // Add aria-label for accessibility
       {...props}
     >
-      <Text className="text-ui-fg-interactive">{children}</Text>
+      <Text className="text-pastel-pink underline group-hover:text-primary-green font-bold">
+        {children}
+      </Text>
       <ArrowUpRightMini
         className="group-hover:rotate-45 ease-in-out duration-150"
-        color="var(--fg-interactive)"
+        color="var(--pastel-pink)"
       />
     </LocalizedClientLink>
   )

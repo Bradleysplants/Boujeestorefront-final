@@ -21,15 +21,15 @@ const LineItemPrice = ({
   const hasReducedPrice = (item.total || 0) < originalPrice
 
   return (
-    <div className="flex flex-col gap-x-2 text-ui-fg-subtle items-end">
+    <div className="flex flex-col gap-x-2 items-end text-pastel-pink"> {/* Ensuring all text is pastel-pink */}
       <div className="text-left">
         {hasReducedPrice && (
           <>
             <p>
               {style === "default" && (
-                <span className="text-ui-fg-subtle">Original: </span>
+                <span className="text-pastel-pink">Original: </span>
               )}
-              <span className="line-through text-ui-fg-muted" data-testid="product-original-price">
+              <span className="line-through text-pastel-pink" data-testid="product-original-price"> {/* Line-through price pastel-pink */}
                 {formatAmount({
                   amount: originalPrice,
                   region: region,
@@ -38,15 +38,15 @@ const LineItemPrice = ({
               </span>
             </p>
             {style === "default" && (
-              <span className="text-ui-fg-interactive">
-                -{getPercentageDiff(originalPrice, item.total || 0)}%
+              <span className="text-pastel-pink">
+                -{getPercentageDiff(originalPrice, item.total || 0)}% {/* Discount percentage pastel-pink */}
               </span>
             )}
           </>
         )}
         <span
-          className={clx("text-base-regular", {
-            "text-ui-fg-interactive": hasReducedPrice,
+          className={clx("text-base-regular text-pastel-pink", { /* Final price pastel-pink */
+            "text-pastel-pink": hasReducedPrice,
           })}
           data-testid="product-price"
         >
