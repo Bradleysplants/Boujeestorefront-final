@@ -24,7 +24,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
           </div>
           
           {/* Main content on the right */}
-          <div className={`relative bg-slate-gray flex-1 p-8 rounded-lg ${showWelcomeBack? 'shadow-[0_0_20px_5px_rgba(255,197,225,0.75)]' : ''}`}>
+          <div className={`relative bg-slate-gray flex-1 p-8 rounded-lg ${showWelcomeBack ? 'shadow-[0_0_20px_5px_rgba(255,197,225,0.75)]' : ''}`}>
             {children}
           </div>
         </div>
@@ -37,7 +37,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
           <span className="text-lg text-pastel-pink">
             You can find frequently asked questions and answers on our customer service page.
           </span>
-          <div className="mt-4">
+          <div className="mt-4 flex justify-center">
             <UnderlineLink href="/customer-service" className="text-pastel-pink hover:text-primary-green">
               Customer Service
             </UnderlineLink>
