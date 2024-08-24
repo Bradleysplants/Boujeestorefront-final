@@ -25,11 +25,11 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
         {tabs.map((tab, i) => (
           <Accordion.Item
             key={i}
-            title={tab.label} // Pass a string here
+            title={tab.label} // Title remains a string
             headingSize="medium"
-            value={tab.label} // This should also be a string
+            value={tab.label}
+            className="pastel-pink-title" // Applying a custom class for styling
           >
-            <span className="text-pastel-pink font-bold">{tab.label}</span>
             {tab.component}
           </Accordion.Item>
         ))}
