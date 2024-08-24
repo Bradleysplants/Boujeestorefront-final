@@ -38,11 +38,23 @@ export default async function Checkout() {
   }
 
   return (
-    <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] content-container gap-x-40 py-12 bg-slate-gray text-pastel-pink">
-      <Wrapper cart={cart}>
-        <CheckoutForm />
-      </Wrapper>
-      <CheckoutSummary />
+    <div className="content-container py-12 bg-slate-gray text-pastel-pink">
+      {/* Checkout Summary at the top for smaller screens */}
+      <div className="block small:hidden mb-8">
+        <CheckoutSummary />
+      </div>
+
+      {/* Main Content and Checkout Summary Side by Side on larger screens */}
+      <div className="grid grid-cols-1 small:grid-cols-[1fr_416px] gap-x-40">
+        <Wrapper cart={cart}>
+          <CheckoutForm />
+        </Wrapper>
+        
+        {/* Checkout Summary on the right for larger screens */}
+        <div className="hidden small:block">
+          <CheckoutSummary />
+        </div>
+      </div>
     </div>
   );
 }

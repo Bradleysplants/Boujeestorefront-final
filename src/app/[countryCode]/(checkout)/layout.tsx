@@ -19,7 +19,7 @@ export default function CheckoutLayout({
             data-testid="back-to-cart-link"
           >
             <ChevronDown className="rotate-90" size={16} />
-            <span className="mt-px hidden small:block txt-compact-plus text-darker-slate-gray hover:text-pastel-pink">
+            <span className="mt-px hidden small:block txt-compact-plus text-pastel-pink hover:text-primary-green">
               {/* Subtle text with hover effect */}
               Back to shopping cart
             </span>

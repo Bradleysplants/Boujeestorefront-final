@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react"
-import { Address, Cart, Country, Customer } from "@medusajs/medusa"
-import Checkbox from "@modules/common/components/checkbox"
-import Input from "@modules/common/components/input"
-import AddressSelect from "../address-select"
-import CountrySelect from "../country-select"
-import { Container } from "@medusajs/ui"
+import React, { useState, useEffect, useMemo } from "react";
+import { Address, Cart, Country, Customer } from "@medusajs/medusa";
+import Checkbox from "@modules/common/components/checkbox";
+import Input from "@modules/common/components/input";
+import AddressSelect from "../address-select";
+import CountrySelect from "../country-select";
+import { Container } from "@medusajs/ui";
 
 const ShippingAddress = ({
   customer,
@@ -14,12 +14,12 @@ const ShippingAddress = ({
   countryCode,
   inputClassName, // Add inputClassName as a prop
 }: {
-  customer: Omit<Customer, "password_hash"> | null
-  cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
-  checked: boolean
-  onChange: () => void
-  countryCode: string
-  inputClassName?: string // Make it optional
+  customer: Omit<Customer, "password_hash"> | null;
+  cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null;
+  checked: boolean;
+  onChange: () => void;
+  countryCode: string;
+  inputClassName?: string; // Make it optional
 }) => {
   const [formData, setFormData] = useState({
     "shipping_address.first_name": cart?.shipping_address?.first_name || "",
@@ -33,12 +33,12 @@ const ShippingAddress = ({
     "shipping_address.province": cart?.shipping_address?.province || "",
     email: cart?.email || "",
     "shipping_address.phone": cart?.shipping_address?.phone || "",
-  })
+  });
 
   const countriesInRegion = useMemo(
     () => cart?.region.countries.map((c: Country) => c.iso_2),
     [cart?.region.countries]
-  )
+  );
 
   const addressesInRegion = useMemo(
     () =>
@@ -46,7 +46,7 @@ const ShippingAddress = ({
         (a) => a.country_code && countriesInRegion?.includes(a.country_code)
       ),
     [customer?.shipping_addresses, countriesInRegion]
-  )
+  );
 
   useEffect(() => {
     setFormData({
@@ -61,19 +61,17 @@ const ShippingAddress = ({
       "shipping_address.province": cart?.shipping_address?.province || "",
       email: cart?.email || "",
       "shipping_address.phone": cart?.shipping_address?.phone || "",
-    })
-  }, [cart?.shipping_address, cart?.email])
+    });
+  }, [cart?.shipping_address, cart?.email]);
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -82,7 +80,11 @@ const ShippingAddress = ({
           <p className="text-small-regular">
             {`Hi ${customer.first_name}, do you want to use one of your saved addresses?`}
           </p>
-          <AddressSelect addresses={customer.shipping_addresses} cart={cart} inputClassName={inputClassName} />
+          <AddressSelect
+            addresses={customer.shipping_addresses}
+            cart={cart}
+            inputClassName={inputClassName}
+          />
         </Container>
       )}
       <div className="grid grid-cols-2 gap-4">
@@ -153,7 +155,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-country-select"
-          inputClassName={inputClassName} // Pass the inputClassName to CountrySelect
+          className={`${inputClassName} bg-black text-pastel-pink`} // Ensure the dropdown inherits the inputClassName and apply bg-black directly
         />
         <Input
           label="State / Province"
@@ -199,7 +201,7 @@ const ShippingAddress = ({
         />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ShippingAddress
+export default ShippingAddress;

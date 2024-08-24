@@ -18,7 +18,6 @@ export default async function CheckoutForm() {
     return null
   }
 
-  // create payment sessions and get cart
   const cart = (await createPaymentSessions(cartId).then(
     (cart) => cart
   )) as CartWithCheckoutStep
@@ -29,7 +28,6 @@ export default async function CheckoutForm() {
 
   cart.checkout_step = cart && getCheckoutStep(cart)
 
-  // get available shipping methods
   const availableShippingMethods = await listCartShippingMethods(cart.id).then(
     (methods) => methods?.filter((m) => !m.is_return)
   )
@@ -38,25 +36,40 @@ export default async function CheckoutForm() {
     return null
   }
 
-  // get customer if logged in
   const customer = await getCustomer()
 
   return (
-    <div className="w-full grid grid-cols-1 gap-y-8 p-8 bg-slate-gray rounded-md"> {/* Apply slate-gray background to the entire form */}
-      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
-        <Addresses cart={cart} customer={customer} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+    <div className="w-full grid grid-cols-1 gap-y-8 p-4 small:p-8 bg-slate-gray rounded-md max-w-full overflow-hidden">
+      {/* Use responsive classes and ensure the layout doesn't overflow */}
+      <div className="bg-slate-gray text-pastel-pink font-bold p-4 small:p-6 rounded-md max-w-full">
+        <Addresses
+          cart={cart}
+          customer={customer}
+          inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md w-full"
+          // Set width to 100% for responsive behavior
+        />
       </div>
 
-      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
-        <Shipping cart={cart} availableShippingMethods={availableShippingMethods} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+      <div className="bg-slate-gray text-pastel-pink font-bold p-4 small:p-6 rounded-md max-w-full">
+        <Shipping
+          cart={cart}
+          availableShippingMethods={availableShippingMethods}
+          inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md w-full"
+        />
       </div>
 
-      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
-        <Payment cart={cart} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+      <div className="bg-slate-gray text-pastel-pink font-bold p-4 small:p-6 rounded-md max-w-full">
+        <Payment
+          cart={cart}
+          inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md w-full"
+        />
       </div>
 
-      <div className="bg-slate-gray text-pastel-pink font-bold p-6 rounded-md"> {/* Background slate-gray, text pastel-pink, bold */}
-        <Review cart={cart} inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md" /> {/* Pass the input className */}
+      <div className="bg-slate-gray text-pastel-pink font-bold p-4 small:p-6 rounded-md max-w-full">
+        <Review
+          cart={cart}
+          inputClassName="font-bold text-pastel-pink bg-black border-2 border-pastel-pink p-2 rounded-md w-full"
+        />
       </div>
     </div>
   )
