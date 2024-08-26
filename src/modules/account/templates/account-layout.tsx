@@ -19,7 +19,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
       <div className="relative flex-1 content-container h-full max-w-5xl mx-auto bg-slate-gray flex flex-col justify-center items-center p-8">
         <div className="w-full grid grid-cols-1 small:grid-cols-1 gap-8">
           {/* Account Navigation on the left */}
-          <div className={`transition-transform transform ${showWelcomeBack ? "translate-x-0" : "-translate-x-full"} absolute left-0 top-0 bg-darker-slate-gray p-4 rounded-lg`}>
+          <div className={`transition-transform transform ${showWelcomeBack ? "translate-x-0" : "-translate-x-full"} absolute left-0 top-0 bg-slate-gray p-4 rounded-lg`}>
             {customer && <AccountNav customer={customer} />}
           </div>
           

@@ -86,7 +86,7 @@ const AddAddress = ({ region }: { region: Region }) => {
   return (
     <>
       <button
-        className="border border-pastel-pink bg-slate-gray text-pastel-pink rounded-lg p-5 min-h-[220px] h-full w-full flex flex-col justify-between hover:bg-darker-slate-gray"
+        className="border border-pastel-pink bg-black font-semibold text-pastel-pink rounded-lg p-5 min-h-[220px] h-full w-full flex flex-col justify-between hover:bg-darker-slate-gray"
         onClick={open}
         data-testid="add-address-button"
       >
