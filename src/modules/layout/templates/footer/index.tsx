@@ -46,7 +46,10 @@ function Footer() {
       { rootMargin: "100px" }
     );
 
-    observer.observe(document.querySelector("footer"));
+    const footerElement = document.querySelector("footer");
+    if (footerElement) {
+      observer.observe(footerElement);
+    }
 
     return () => {
       observer.disconnect();

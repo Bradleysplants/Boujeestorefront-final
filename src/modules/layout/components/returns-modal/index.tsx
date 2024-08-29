@@ -5,8 +5,20 @@ type ModalProps = {
 };
 
 const ReturnPolicyModal = ({ onClose }: ModalProps) => {
+  // Function to handle clicks on the backdrop
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex justify-center items-center" aria-modal="true" role="dialog">
+    <div 
+      className="fixed inset-0 z-40 bg-black bg-opacity-50 flex justify-center items-center" 
+      aria-modal="true" 
+      role="dialog"
+      onClick={handleBackdropClick} // Listen for clicks on the backdrop
+    >
       <div className="bg-slate-gray p-6 rounded-lg max-w-3xl w-full mx-4 sm:mx-6 md:mx-8 lg:mx-10 max-h-[calc(90vh-20px)] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl sm:text-3xl font-semibold text-pastel-pink ">Return Policy</h2>
@@ -32,7 +44,7 @@ const ReturnPolicyModal = ({ onClose }: ModalProps) => {
           <p>Contact us with your order number, the description of the issue, and supporting photographs. Do not send your product back without authorization from our customer service team. Once your claim is validated, we will provide detailed instructions and, if applicable, a prepaid shipping label.</p>
 
           <strong>Contact Information</strong>
-          <p>For any questions regarding our return policy, please contact us via email at support@delisasboujeebotanicalstore.com or phone at [Your Business Phone Number].</p>
+          <p>For any questions regarding our return policy, please contact us via email at delisasboujeebotanicals@gmail.com or phone at [Your Business Phone Number].</p>
         </div>
         <button onClick={onClose} className="mt-4 bg-pastel-pink hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
           Close

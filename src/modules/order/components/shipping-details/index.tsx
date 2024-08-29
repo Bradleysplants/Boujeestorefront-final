@@ -1,13 +1,16 @@
-import { Order } from "@medusajs/medusa"
-import { Heading, Text } from "@medusajs/ui"
-import { formatAmount } from "@lib/util/prices"
-import Divider from "@modules/common/components/divider"
+import { Order } from "@medusajs/medusa";
+import { Heading, Text } from "@medusajs/ui";
+import { formatAmount } from "@lib/util/prices";
+import Divider from "@modules/common/components/divider";
 
 type ShippingDetailsProps = {
-  order: Order
-}
+  order: Order;
+};
 
 const ShippingDetails = ({ order }: ShippingDetailsProps) => {
+  const shippingAddress = order.shipping_address;
+  const shippingMethod = order.shipping_methods[0];
+
   return (
     <div>
       <Heading
@@ -16,66 +19,79 @@ const ShippingDetails = ({ order }: ShippingDetailsProps) => {
       >
         Delivery
       </Heading>
-      <div className="flex items-start gap-x-8">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:gap-x-8">
+        {/* Shipping Address Section */}
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col sm:w-1/3 w-full mb-4 sm:mb-0"
           data-testid="shipping-address-summary"
         >
           <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold">
             Shipping Address
           </Text>
-          <Text className="txt-medium text-pastel-pink">
-            {order.shipping_address.first_name}{" "}
-            {order.shipping_address.last_name}
-          </Text>
-          <Text className="txt-medium text-pastel-pink">
-            {order.shipping_address.address_1}{" "}
-            {order.shipping_address.address_2}
-          </Text>
-          <Text className="txt-medium text-pastel-pink">
-            {order.shipping_address.postal_code}, {order.shipping_address.city}
-          </Text>
-          <Text className="txt-medium text-pastel-pink">
-            {order.shipping_address.country_code?.toUpperCase()}
-          </Text>
+          {shippingAddress ? (
+            <>
+              <Text className="txt-medium text-pastel-pink">
+                {shippingAddress.first_name} {shippingAddress.last_name}
+              </Text>
+              <Text className="txt-medium text-pastel-pink">
+                {shippingAddress.address_1} {shippingAddress.address_2}
+              </Text>
+              <Text className="txt-medium text-pastel-pink">
+                {shippingAddress.postal_code}, {shippingAddress.city}
+              </Text>
+              <Text className="txt-medium text-pastel-pink">
+                {shippingAddress.country_code?.toUpperCase()}
+              </Text>
+            </>
+          ) : (
+            <Text className="txt-medium text-pastel-pink">
+              Shipping address not available
+            </Text>
+          )}
         </div>
 
+        {/* Contact Section */}
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col sm:w-1/3 w-full mb-4 sm:mb-0"
           data-testid="shipping-contact-summary"
         >
           <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold">
             Contact
           </Text>
-          <Text className="txt-medium text-pastel-pink">
-            {order.shipping_address.phone}
-          </Text>
+          {shippingAddress && (
+            <Text className="txt-medium text-pastel-pink">
+              {shippingAddress.phone}
+            </Text>
+          )}
           <Text className="txt-medium text-pastel-pink">{order.email}</Text>
         </div>
 
+        {/* Shipping Method Section */}
         <div
-          className="flex flex-col w-1/3"
+          className="flex flex-col sm:w-1/3 w-full"
           data-testid="shipping-method-summary"
         >
           <Text className="txt-medium-plus text-pastel-pink mb-1 font-bold">
             Method
           </Text>
-          <Text className="txt-medium text-pastel-pink">
-            {order.shipping_methods[0].shipping_option?.name} (
-            {formatAmount({
-              amount: order.shipping_methods[0].price,
-              region: order.region,
-              includeTaxes: false,
-            })
-              .replace(/,/g, "")
-              .replace(/\./g, ",")}
-            )
-          </Text>
+          {shippingMethod && (
+            <Text className="txt-medium text-pastel-pink break-words">
+              {shippingMethod.shipping_option?.name} (
+              {formatAmount({
+                amount: shippingMethod.price,
+                region: order.region,
+                includeTaxes: false,
+              })
+                .replace(/,/g, "")
+                .replace(/\./g, ",")}
+              )
+            </Text>
+          )}
         </div>
       </div>
       <Divider className="mt-8 border-pastel-pink" />
     </div>
-  )
-}
+  );
+};
 
-export default ShippingDetails
+export default ShippingDetails;

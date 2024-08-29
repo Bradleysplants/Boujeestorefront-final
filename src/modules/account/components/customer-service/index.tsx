@@ -32,7 +32,7 @@ const FAQPage = () => {
     {
       question: "What should I do if my order arrives damaged?",
       answer:
-        "If your order arrives damaged due to our negligence, contact us within 48 hours with photos of the damage. We will arrange for a return or exchange at no additional cost. If the damage occurred during shipping, please file a claim with the shipping carrier."
+        "If your order arrives damaged due to our negligence, contact us within 48 hours with photos of the damage. If the damage occurred during shipping, please file a claim with the shipping carrier."
     },
     {
       question: "Can I return live plants?",
@@ -42,7 +42,7 @@ const FAQPage = () => {
     {
       question: "How do I initiate a return?",
       answer:
-        "To initiate a return, contact our customer service with your order number, a description of the issue, and supporting photos. Do not send the product back without our authorization. If your return is approved, we will provide you with detailed instructions and a prepaid shipping label, if applicable."
+        "To initiate a return, contact our customer service with your order number, a description of the issue, and supporting photos. Do not send the product back without our authorization. If your return is approved, we will provide you with detailed instructions, if applicable."
     },
     {
       question: "What is the warranty on your plants and products?",
@@ -52,7 +52,7 @@ const FAQPage = () => {
     {
       question: "How can I contact customer service?",
       answer:
-        "You can contact our customer service team via email at support@delisasboujeebotanicalstore.com or by phone at [Your Business Phone Number]. We are here to help with any questions or concerns you may have."
+        "You can contact our customer service team via email at delisasboujeebotanical@gmail.com or by phone at [Your Business Phone Number]. We are here to help with any questions or concerns you may have."
     },
     {
       question: "Can I cancel or modify my order?",
@@ -62,7 +62,7 @@ const FAQPage = () => {
     {
       question: "Do you ship internationally?",
       answer:
-        "Currently, we only ship within [Your Country/Region]. We are working on expanding our shipping options in the future."
+        "Currently, we only ship within the US. We are working on expanding our shipping options in the future."
     },
     {
       question: "How do you handle personal data and privacy?",
@@ -100,7 +100,7 @@ const FAQPage = () => {
           <h3 className="text-lg font-semibold text-pastel-pink">Email:</h3>
           <p className="text-pastel-pink">
             <a href="mailto:support@delisasboujeebotanicalstore.com" className="text-pastel-pink hover:underline">
-              support@delisasboujeebotanicalstore.com
+              delisasboujeebotanicalstore@gmail.com
             </a>
           </p>
         </div>
@@ -113,7 +113,8 @@ const FAQPage = () => {
         <div className="mt-4">
           <h3 className="text-lg font-semibold text-pastel-pink">Address:</h3>
           <p className="text-pastel-pink">
-            [Your Business Address]
+            251 Hillsboro Circle
+            New Market, Al. 35761
           </p>
         </div>
       </div>

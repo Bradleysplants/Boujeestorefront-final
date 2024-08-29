@@ -77,7 +77,7 @@ const ShippingAddress = ({
     <>
       {customer && (addressesInRegion?.length || 0) > 0 && (
         <Container className="mb-6 flex flex-col gap-y-4 p-5">
-          <p className="text-small-regular">
+          <p className="text-small-regular text-pastel-pink">
             {`Hi ${customer.first_name}, do you want to use one of your saved addresses?`}
           </p>
           <AddressSelect
@@ -155,7 +155,7 @@ const ShippingAddress = ({
           onChange={handleChange}
           required
           data-testid="shipping-country-select"
-          className={`${inputClassName} bg-black text-pastel-pink`} // Ensure the dropdown inherits the inputClassName and apply bg-black directly
+          className={`${inputClassName} bg-black text-pastel-pink border border-pastel-pink`} // Ensure the dropdown inherits the inputClassName and apply bg-black directly
         />
         <Input
           label="State / Province"

@@ -5,8 +5,20 @@ type ModalProps = {
 };
 
 const TermsAndConditionsModal = ({ onClose }: ModalProps) => {
+  // Function to handle clicks on the backdrop
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex justify-center items-center" aria-modal="true" role="dialog">
+    <div 
+      className="fixed inset-0 z-40 bg-black bg-opacity-50 flex justify-center items-center" 
+      aria-modal="true" 
+      role="dialog"
+      onClick={handleBackdropClick} // Listen for clicks on the backdrop
+    >
       <div className="bg-slate-gray p-6 rounded-lg max-w-3xl w-full mx-4" style={{ overflowY: 'auto', height: '80vh' }}>
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-semibold text-pastel-pink">Terms and Conditions</h2>
