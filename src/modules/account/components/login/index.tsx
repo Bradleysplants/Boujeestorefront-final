@@ -35,7 +35,7 @@ const Login = ({ setCurrentView }: Props) => {
               required
               placeholder="Email"
               data-testid="email-input"
-              className=" bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink transition-all duration-200"
+              className="bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink hover:bg-black hover:text-pastel-pink hover:border-pastel-pink active:bg-black active:text-pastel-pink active:border-pastel-pink visited:bg-black visited:text-pastel-pink transition-all duration-200"
             />
           </div>
           <div className="relative">
@@ -47,7 +47,7 @@ const Login = ({ setCurrentView }: Props) => {
               required
               placeholder="Password"
               data-testid="password-input"
-              className="bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink transition-all duration-200"
+              className="bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink hover:bg-black hover:text-pastel-pink hover:border-pastel-pink active:bg-black active:text-pastel-pink active:border-pastel-pink visited:bg-black visited:text-pastel-pink transition-all duration-200"
             />
           </div>
         </div>
@@ -66,7 +66,7 @@ const Login = ({ setCurrentView }: Props) => {
           className="underline hover:text-primary-green"
           data-testid="register-button"
         >
-          Join us
+          Sign up
         </button>
         .
       </span>

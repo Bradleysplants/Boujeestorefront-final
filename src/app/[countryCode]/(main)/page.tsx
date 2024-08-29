@@ -59,7 +59,7 @@ export default async function Home({
   const region = await getRegion(countryCode);
 
   if (!collections || !region) {
-    return <div>Error loading data. Please try again later.</div>;
+    return <div className="text-pastel-pink">Error loading data. Please try again later.</div>; {/* Error message styling */}
   }
 
   return (

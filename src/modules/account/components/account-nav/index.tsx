@@ -14,10 +14,10 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 
 const AccountNav = ({
   customer,
-  className, // Accepting the className prop
+  className,
 }: {
   customer: Omit<Customer, "password_hash"> | null;
-  className?: string; // Making className an optional prop
+  className?: string;
 }) => {
   const route = usePathname();
   const { countryCode } = useParams() as { countryCode: string };
@@ -32,7 +32,7 @@ const AccountNav = ({
         {route !== `/${countryCode}/account` ? (
           <LocalizedClientLink
             href="/account"
-            className="flex items-center gap-x-2 text-small-regular py-2 text-pastel-pink hover:text-white"
+            className="flex items-center gap-x-2 text-small-regular py-2 text-pastel-pink hover:primary-green"
             data-testid="account-main-link"
           >
             <>
@@ -42,7 +42,10 @@ const AccountNav = ({
           </LocalizedClientLink>
         ) : (
           <>
-            <div className="text-xl-semi mb-4 px-8 text-pastel-pink">
+            <div
+              className="text-xl-semi mb-4 px-8 text-pastel-pink truncate relative"
+              style={{ marginLeft: "1.5rem" }}  // Adding inline style for precise adjustment
+            >
               Hello {customer?.first_name}
             </div>
             <div className="text-base-regular text-pastel-pink">
@@ -50,7 +53,7 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/profile"
-                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 hover:text-white"
+                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 hover:text-primary-green"
                     data-testid="profile-link"
                   >
                     <>
@@ -65,7 +68,7 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/addresses"
-                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 hover:text-white"
+                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 hover:text-primary-green"
                     data-testid="addresses-link"
                   >
                     <>
@@ -80,7 +83,7 @@ const AccountNav = ({
                 <li>
                   <LocalizedClientLink
                     href="/account/orders"
-                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 hover:text-white"
+                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 hover:text-primary-green"
                     data-testid="orders-link"
                   >
                     <div className="flex items-center gap-x-2">
@@ -93,7 +96,7 @@ const AccountNav = ({
                 <li>
                   <button
                     type="button"
-                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 w-full text-pastel-pink hover:text-white"
+                    className="flex items-center justify-between py-4 border-b border-darker-slate-gray px-8 w-full text-pastel-pink hover:text-primary-green"
                     onClick={handleLogout}
                     data-testid="logout-button"
                   >
@@ -156,7 +159,7 @@ const AccountNav = ({
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="hover:text-white"
+                  className="hover:text-primary-green text-pastel-pink"
                   data-testid="logout-button"
                 >
                   Log out

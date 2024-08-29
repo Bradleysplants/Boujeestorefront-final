@@ -17,14 +17,14 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
   return (
     <div className="small:py-12 bg-slate-gray min-h-screen flex flex-col items-center" data-testid="account-page">
       <div className="relative flex-1 content-container h-full max-w-5xl mx-auto bg-slate-gray flex flex-col justify-center items-center p-8">
-        <div className="w-full grid grid-cols-1 small:grid-cols-1 gap-8">
+        <div className="w-full grid grid-cols-1 md:grid-cols-1 gap-8">
           {/* Account Navigation on the left */}
-          <div className={`transition-transform transform ${showWelcomeBack ? "translate-x-0" : "-translate-x-full"} absolute left-0 top-0 bg-slate-gray p-4 rounded-lg`}>
+          <div className={`transition-transform transform ${showWelcomeBack ? "translate-x-0" : "-translate-x-full"} absolute md:static left-0 top-0 bg-slate-gray p-4 rounded-lg md:translate-x-0 md:w-auto md:h-auto`}>
             {customer && <AccountNav customer={customer} />}
           </div>
           
           {/* Main content on the right */}
-          <div className={`relative bg-slate-gray flex-1 p-8 rounded-lg ${showWelcomeBack ? 'shadow-[0_0_20px_5px_rgba(255,197,225,0.75)]' : ''}`}>
+          <div className={`relative bg-slate-gray flex-1 p-8 rounded-lg ${showWelcomeBack ? 'shadow-[0_0_20px_5px_rgba(255,197,225,0.75)]' : ''} md:ml-0`}>
             {children}
           </div>
         </div>

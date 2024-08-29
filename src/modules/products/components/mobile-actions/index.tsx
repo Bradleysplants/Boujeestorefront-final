@@ -1,31 +1,31 @@
-import { Dialog, Transition } from "@headlessui/react"
+import { Dialog, Transition } from "@headlessui/react";
 import {
   PricedProduct,
   PricedVariant,
-} from "@medusajs/medusa/dist/types/pricing"
-import { Button, clx } from "@medusajs/ui"
-import React, { Fragment, useMemo } from "react"
+} from "@medusajs/medusa/dist/types/pricing";
+import { Button, clx } from "@medusajs/ui";
+import React, { Fragment, useMemo } from "react";
 
-import useToggleState from "@lib/hooks/use-toggle-state"
-import ChevronDown from "@modules/common/icons/chevron-down"
-import X from "@modules/common/icons/x"
+import useToggleState from "@lib/hooks/use-toggle-state";
+import ChevronDown from "@modules/common/icons/chevron-down";
+import X from "@modules/common/icons/x";
 
-import { getProductPrice } from "@lib/util/get-product-price"
-import { Region } from "@medusajs/medusa"
-import OptionSelect from "../option-select"
+import { getProductPrice } from "@lib/util/get-product-price";
+import { Region } from "@medusajs/medusa";
+import OptionSelect from "../option-select";
 
 type MobileActionsProps = {
-  product: PricedProduct
-  variant?: PricedVariant
-  region: Region
-  options: Record<string, string>
-  updateOptions: (update: Record<string, string>) => void
-  inStock?: boolean
-  handleAddToCart: () => void
-  isAdding?: boolean
-  show: boolean
-  optionsDisabled: boolean
-}
+  product: PricedProduct;
+  variant?: PricedVariant;
+  region: Region;
+  options: Record<string, string>;
+  updateOptions: (update: Record<string, string>) => void;
+  inStock?: boolean;
+  handleAddToCart: () => void;
+  isAdding?: boolean;
+  show: boolean;
+  optionsDisabled: boolean;
+};
 
 const MobileActions: React.FC<MobileActionsProps> = ({
   product,
@@ -39,22 +39,22 @@ const MobileActions: React.FC<MobileActionsProps> = ({
   show,
   optionsDisabled,
 }) => {
-  const { state, open, close } = useToggleState()
+  const { state, open, close } = useToggleState();
 
   const price = getProductPrice({
     product: product,
     variantId: variant?.id,
     region,
-  })
+  });
 
   const selectedPrice = useMemo(() => {
     if (!price) {
-      return null
+      return null;
     }
-    const { variantPrice, cheapestPrice } = price
+    const { variantPrice, cheapestPrice } = price;
 
-    return variantPrice || cheapestPrice || null
-  }, [price])
+    return variantPrice || cheapestPrice || null;
+  }, [price]);
 
   return (
     <>
@@ -74,25 +74,27 @@ const MobileActions: React.FC<MobileActionsProps> = ({
           leaveTo="opacity-0"
         >
           <div
-            className="bg-white flex flex-col gap-y-3 justify-center items-center text-large-regular p-4 h-full w-full border-t border-gray-200"
+            className="bg-slate-gray flex flex-col gap-y-3 justify-center items-center text-large-regular p-4 h-full w-full border-t border-pastel-pink"
             data-testid="mobile-actions"
           >
-            <div className="flex items-center gap-x-2">
+            <div className="flex items-center gap-x-2 text-pastel-pink">
               <span data-testid="mobile-title">{product.title}</span>
               <span>—</span>
               {selectedPrice ? (
-                <div className="flex items-end gap-x-2 text-ui-fg-base">
+                <div className="flex items-end gap-x-2">
                   {selectedPrice.price_type === "sale" && (
                     <p>
-                      <span className="line-through text-small-regular">
+                      <span className="line-through text-small-regular text-pastel-pink">
                         {selectedPrice.original_price}
                       </span>
                     </p>
                   )}
                   <span
                     className={clx({
-                      "text-ui-fg-interactive":
+                      "text-primary-green":
                         selectedPrice.price_type === "sale",
+                      "text-pastel-pink":
+                        selectedPrice.price_type !== "sale",
                     })}
                   >
                     {selectedPrice.calculated_price}
@@ -106,7 +108,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               <Button
                 onClick={open}
                 variant="secondary"
-                className="w-full"
+                className="w-full bg-black border-pastel-pink text-pastel-pink"
                 data-testid="mobile-actions-button"
               >
                 <div className="flex items-center justify-between w-full">
@@ -121,7 +123,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               <Button
                 onClick={handleAddToCart}
                 disabled={!inStock || !variant}
-                className="w-full"
+                className="w-full bg-black border-pastel-pink text-pastel-pink"
                 isLoading={isAdding}
                 data-testid="mobile-cart-button"
               >
@@ -161,19 +163,19 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 leaveTo="opacity-0"
               >
                 <Dialog.Panel
-                  className="w-full h-full transform overflow-hidden text-left flex flex-col gap-y-3"
+                  className="w-full h-full transform overflow-hidden text-left flex flex-col gap-y-3 bg-slate-gray text-pastel-pink"
                   data-testid="mobile-actions-modal"
                 >
                   <div className="w-full flex justify-end pr-6">
                     <button
                       onClick={close}
-                      className="bg-white w-12 h-12 rounded-full text-ui-fg-base flex justify-center items-center"
+                      className="bg-black w-12 h-12 rounded-full text-pastel-pink flex justify-center items-center"
                       data-testid="close-modal-button"
                     >
                       <X />
                     </button>
                   </div>
-                  <div className="bg-white px-6 py-12">
+                  <div className="px-6 py-12">
                     {product.variants.length > 1 && (
                       <div className="flex flex-col gap-y-6">
                         {(product.options || []).map((option) => {
@@ -187,7 +189,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                                 disabled={optionsDisabled}
                               />
                             </div>
-                          )
+                          );
                         })}
                       </div>
                     )}
@@ -199,7 +201,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};
 
-export default MobileActions
+export default MobileActions;

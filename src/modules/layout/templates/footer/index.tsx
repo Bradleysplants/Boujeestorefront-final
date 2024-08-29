@@ -19,9 +19,7 @@ function Footer() {
       script.src =
         "https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js";
       script.type = "text/javascript";
-      script.async = true;
-      document.body.appendChild(script);
-
+      script.defer = true;
       script.onload = () => {
         window.micAccessTool = new MicAccessTool({
           link: "http://your-awesome-website.com/your-accessibility-declaration.pdf",
@@ -30,14 +28,34 @@ function Footer() {
           forceLang: "en",
         });
       };
+      script.onerror = () => {
+        console.error("Failed to load the accessibility toolbar script");
+      };
+      document.body.appendChild(script);
     };
 
-    loadAccToolbarScript();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadAccToolbarScript();
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "100px" }
+    );
+
+    observer.observe(document.querySelector("footer"));
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <footer className="border-t border-gray-300 w-full bg-darker-slate-gray">
-      <div className="content-container flex flex-col w-full py-4">
+      <div className="content-container flex flex-col w-full py-4 px-4">
         <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between">
           <div>
             <LocalizedClientLink
@@ -48,7 +66,7 @@ function Footer() {
               DeLisa&apos;s Boujee Botanical Store
             </LocalizedClientLink>
           </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3 text-pastel-pink">
+          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-1 sm:grid-cols-2 text-pastel-pink">
             <div className="flex flex-col gap-y-2" aria-label="Helpful Links">
               <span className="txt-small-plus text-pastel-pink">
                 Helpful Links
@@ -76,12 +94,14 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="flex w-full justify-between text-pastel-pink">
-          <Text className="txt-compact-small">
+        <div className="flex flex-col sm:flex-row w-full justify-between text-pastel-pink mt-6 sm:mt-0">
+          <Text className="txt-compact-small text-center sm:text-left mb-4 sm:mb-0">
             © {new Date().getFullYear()} DeLisa&apos;s Boujee Botanical Store.
             All rights reserved.
           </Text>
-          <MedusaCTA />
+          <div className="flex justify-center sm:justify-end w-full">
+            <MedusaCTA />
+          </div>
         </div>
       </div>
       {showTerms && <TermsAndConditionsModal onClose={toggleTermsModal} />}
