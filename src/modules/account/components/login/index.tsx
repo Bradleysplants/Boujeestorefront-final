@@ -5,6 +5,7 @@ import { LOGIN_VIEW } from "@modules/account/templates/login-template";
 import { logCustomerIn } from "@modules/account/actions";
 import ErrorMessage from "@modules/checkout/components/error-message";
 import { SubmitButton } from "@modules/checkout/components/submit-button";
+import { useRouter } from "next/navigation";  // Updated import for useRouter
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void;
@@ -12,6 +13,12 @@ type Props = {
 
 const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useFormState(logCustomerIn, null);
+  const router = useRouter();  // Initialize useRouter
+
+  const handleForgotPassword = () => {
+    // Redirect to the password reset page
+    router.push("/password");  // Replace with your actual route
+  };
 
   return (
     <div 
@@ -59,6 +66,12 @@ const Login = ({ setCurrentView }: Props) => {
           Sign in
         </SubmitButton>
       </form>
+      <button
+        onClick={handleForgotPassword}
+        className="text-center text-small-regular mt-6 text-pastel-pink underline hover:text-primary-green"
+      >
+        Forgot Password?
+      </button>
       <span className="text-center text-small-regular mt-6 text-pastel-pink">
         Not a member?{" "}
         <button
