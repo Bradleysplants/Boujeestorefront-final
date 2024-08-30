@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 
 const ForgotPassword = () => {
@@ -7,7 +5,7 @@ const ForgotPassword = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
