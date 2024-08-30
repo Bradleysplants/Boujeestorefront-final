@@ -1,15 +1,12 @@
-import { LOGIN_VIEW } from "@modules/account/components/login-template";
+import { Metadata } from "next"
 
-type Props = {
-  setCurrentView: (view: LOGIN_VIEW) => void;
-};
+import LoginTemplate from "@modules/account/templates/login-template"
 
-const LoginTemplate = ({ setCurrentView }: Props) => {
-  return (
-    <div className="w-full flex justify-center px-0 py-8 bg-slate-gray">
-      {/* You can add logic here to switch between different views */}
-    </div>
-  );
-};
+export const metadata: Metadata = {
+  title: "Sign in",
+  description: "Sign in to your account.",
+}
 
-export default LoginTemplate;
+export default function Login() {
+  return <LoginTemplate />
+}

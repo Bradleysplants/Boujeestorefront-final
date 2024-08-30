@@ -1,11 +1,11 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { LOGIN_VIEW } from "@modules/account/components/login-template";
+import { LOGIN_VIEW } from "@modules/account/templates/login-template";
 import { logCustomerIn } from "@modules/account/actions";
 import ErrorMessage from "@modules/checkout/components/error-message";
 import { SubmitButton } from "@modules/checkout/components/submit-button";
-import { useRouter } from "next/navigation";  // Updated import for useRouter
+import Link from "next/link";  // Import Link for navigation
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void;
@@ -13,12 +13,6 @@ type Props = {
 
 const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useFormState(logCustomerIn, null);
-  const router = useRouter();  // Initialize useRouter
-
-  const handleForgotPassword = () => {
-    // Redirect to the password reset page
-    router.push("/password");  // Replace with your actual route
-  };
 
   return (
     <div 
@@ -57,6 +51,11 @@ const Login = ({ setCurrentView }: Props) => {
               className="bg-black text-pastel-pink border border-pastel-pink p-4 h-14 w-full focus:outline-none focus:bg-black focus:text-pastel-pink focus:border-pastel-pink hover:bg-black hover:text-pastel-pink hover:border-pastel-pink active:bg-black active:text-pastel-pink active:border-pastel-pink visited:bg-black visited:text-pastel-pink transition-all duration-200"
             />
           </div>
+          <div className="text-right">
+            <Link href="/password/forgot-password" className="text-pastel-pink hover:text-primary-green underline">
+              Forgot Password?
+            </Link>
+          </div>
         </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
         <SubmitButton 
@@ -66,12 +65,6 @@ const Login = ({ setCurrentView }: Props) => {
           Sign in
         </SubmitButton>
       </form>
-      <button
-        onClick={handleForgotPassword}
-        className="text-center text-small-regular mt-6 text-pastel-pink underline hover:text-primary-green"
-      >
-        Forgot Password?
-      </button>
       <span className="text-center text-small-regular mt-6 text-pastel-pink">
         Not a member?{" "}
         <button
