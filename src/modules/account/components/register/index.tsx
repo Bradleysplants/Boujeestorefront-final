@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useFormState } from "react-dom";
 import Input from "@modules/common/components/input";
-import { LOGIN_VIEW } from "@modules/account/templates/login-template";
+import { LOGIN_VIEW } from "@modules/account/components/login-template";
 import { signUp } from "@modules/account/actions";
 import ErrorMessage from "@modules/checkout/components/error-message";
 import { SubmitButton } from "@modules/checkout/components/submit-button";
