@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useSearchParams, usePathname } from 'next/navigation';
 import Footer from "@modules/layout/templates/footer";
 
@@ -12,7 +12,7 @@ const PasswordResetPage = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -34,13 +34,14 @@ const PasswordResetPage = () => {
 
       if (response.ok) {
         setSuccess(true);
+        setError('');
       } else {
         setError('Failed to reset the password. Please try again.');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
     }
-  };
+  }, [password, confirmPassword, searchParams, pathname]);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
@@ -50,7 +51,7 @@ const PasswordResetPage = () => {
             Back
           </a>
           <h1 className="text-2xl font-bold text-center flex-grow">
-            DeLisa's Boujee Botanical Store
+            DeLisa&apos;s Boujee Botanical Store
           </h1>
           <div className="w-16"></div> 
         </div>
@@ -60,7 +61,7 @@ const PasswordResetPage = () => {
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
           <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Reset Password</h2>
           {success ? (
-            <p className="text-green-500">Your password has been reset successfully.</p>
+            <p className="text-green-500" aria-live="polite">Your password has been reset successfully.</p>
           ) : (
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
@@ -89,10 +90,11 @@ const PasswordResetPage = () => {
                   required
                 />
               </div>
-              {error && <p className="text-red-500 mb-4">{error}</p>}
+              {error && <p className="text-red-500 mb-4" aria-live="assertive">{error}</p>}
               <button
                 type="submit"
                 className="w-full py-2 px-4 bg-black text-pastel-pink border border-pastel-pink rounded hover:bg-pink-600"
+                disabled={success}
               >
                 Reset Password
               </button>

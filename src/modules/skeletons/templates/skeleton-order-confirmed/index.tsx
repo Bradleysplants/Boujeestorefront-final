@@ -1,21 +1,96 @@
-import SkeletonOrderConfirmedHeader from "@modules/skeletons/components/skeleton-order-confirmed-header"
-import SkeletonOrderInformation from "@modules/skeletons/components/skeleton-order-information"
-import SkeletonOrderItems from "@modules/skeletons/components/skeleton-order-items"
+import { Table } from "@medusajs/ui"
+import repeat from "@lib/util/repeat"
+import SkeletonCartItem from "@modules/skeletons/components/skeleton-cart-item"
+import SkeletonCodeForm from "@modules/skeletons/components/skeleton-code-form"
+import SkeletonOrderSummary from "@modules/skeletons/components/skeleton-order-summary"
 
-const SkeletonOrderConfirmed = () => {
+const SkeletonCartPage = () => {
   return (
-    <div className="bg-gray-50 py-6 min-h-[calc(100vh-64px)] animate-pulse">
-      <div className="content-container flex justify-center">
-        <div className="max-w-4xl h-full bg-white w-full p-10">
-          <SkeletonOrderConfirmedHeader />
-
-          <SkeletonOrderItems />
-
-          <SkeletonOrderInformation />
+    <div className="py-12 bg-slate-gray" aria-live="polite">
+      <div className="content-container">
+        <div className="grid grid-cols-1 small:grid-cols-[1fr_360px] gap-x-8">
+          <div className="flex flex-col bg-white p-6 gap-y-6 rounded-lg shadow-lg">
+            <div className="flex items-start justify-between">
+              <div className="flex flex-col gap-y-2">
+                <div
+                  className="w-60 h-8 bg-gray-200 animate-pulse rounded"
+                  role="status"
+                  aria-label="Loading title"
+                />
+                <div
+                  className="w-48 h-6 bg-gray-200 animate-pulse rounded"
+                  role="status"
+                  aria-label="Loading subtitle"
+                />
+              </div>
+              <div aria-hidden="true">
+                <div
+                  className="w-14 h-8 bg-gray-200 animate-pulse rounded"
+                  role="status"
+                  aria-label="Loading action button"
+                />
+              </div>
+            </div>
+            <div>
+              <div className="pb-3 flex items-center">
+                <div
+                  className="w-20 h-12 bg-gray-200 animate-pulse rounded"
+                  role="status"
+                  aria-label="Loading header"
+                />
+              </div>
+              <Table>
+                <Table.Header className="border-t-0">
+                  <Table.Row>
+                    <Table.HeaderCell className="!pl-0">
+                      <div
+                        className="w-10 h-6 bg-gray-200 animate-pulse rounded"
+                        role="status"
+                        aria-label="Loading column"
+                      />
+                    </Table.HeaderCell>
+                    <Table.HeaderCell></Table.HeaderCell>
+                    <Table.HeaderCell>
+                      <div
+                        className="w-16 h-6 bg-gray-200 animate-pulse rounded"
+                        role="status"
+                        aria-label="Loading column"
+                      />
+                    </Table.HeaderCell>
+                    <Table.HeaderCell>
+                      <div
+                        className="w-12 h-6 bg-gray-200 animate-pulse rounded"
+                        role="status"
+                        aria-label="Loading column"
+                      />
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="!pr-0">
+                      <div className="flex justify-end">
+                        <div
+                          className="w-12 h-6 bg-gray-200 animate-pulse rounded"
+                          role="status"
+                          aria-label="Loading column"
+                        />
+                      </div>
+                    </Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {repeat(4).map((index) => (
+                    <SkeletonCartItem key={index} />
+                  ))}
+                </Table.Body>
+              </Table>
+            </div>
+          </div>
+          <div className="flex flex-col gap-y-8">
+            <SkeletonOrderSummary />
+            <SkeletonCodeForm />
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default SkeletonOrderConfirmed
+export default SkeletonCartPage

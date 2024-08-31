@@ -32,7 +32,7 @@ const nextConfig = withStoreConfig({
     return [
       {
         source: '/store/:path*',
-        destination: 'http://localhost:9000/store/:path*', // Proxy to Backend
+        destination: 'http://boujee-botanical.store/store/:path*', // Proxy to Backend
       },
     ]
   },

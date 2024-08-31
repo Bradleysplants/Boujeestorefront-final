@@ -22,8 +22,8 @@ function Footer() {
       script.defer = true;
       script.onload = () => {
         window.micAccessTool = new MicAccessTool({
-          link: "http://your-awesome-website.com/your-accessibility-declaration.pdf",
-          contact: "mailto:your-mail@your-awesome-website.com",
+          link: "http://boujeebotanical.store/accessibility-statement",
+          contact: "mailto:delisasboujeebotanicalstore@gmail.com",
           buttonPosition: "right",
           forceLang: "en",
         });

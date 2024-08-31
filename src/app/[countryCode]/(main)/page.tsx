@@ -19,34 +19,22 @@ const getCollectionsWithProducts = cache(
       return null;
     }
 
-    const collectionIds = collections.map((collection) => collection.id);
-
-    await Promise.all(
-      collectionIds.map((id) =>
-        getProductsList({
-          queryParams: { collection_id: [id] },
+    const collectionsWithProducts = await Promise.all(
+      collections.map(async (collection) => {
+        const productsResponse = await getProductsList({
+          queryParams: { collection_id: [collection.id] },
           countryCode,
-        })
-      )
-    ).then((responses) =>
-      responses.forEach(({ response, queryParams }) => {
-        let collection;
+        });
 
-        if (collections) {
-          collection = collections.find(
-            (collection) => collection.id === queryParams?.collection_id?.[0]
-          );
-        }
-
-        if (!collection) {
-          return;
-        }
-
-        collection.products = response.products as unknown as Product[];
+        return {
+          ...collection,
+          products: productsResponse.response.products as Product[],
+          onInit: () => {}, // Ensure 'onInit' is included if required
+        } as ProductCollectionWithPreviews; // Explicitly cast to the desired type
       })
     );
 
-    return collections as unknown as ProductCollectionWithPreviews[];
+    return collectionsWithProducts;
   }
 );
 
@@ -59,11 +47,11 @@ export default async function Home({
   const region = await getRegion(countryCode);
 
   if (!collections || !region) {
-    return <div className="text-pastel-pink">Error loading data. Please try again later.</div>; {/* Error message styling */}
+    return <div className="text-pastel-pink">Error loading data. Please try again later.</div>;
   }
 
   return (
-    <div className="bg-slate-gray min-h-screen"> {/* Ensure the whole page has the slate-gray background */}
+    <div className="bg-slate-gray min-h-screen">
       <Hero />
       <div className="container mx-auto py-12">
         <FeaturedProducts collections={collections} region={region} />

@@ -1,6 +1,7 @@
 import { Order } from "@medusajs/medusa";
 import { Heading } from "@medusajs/ui";
 import { cookies } from "next/headers";
+import { Metadata } from "next";
 
 import CartTotals from "@modules/common/components/cart-totals";
 import Help from "@modules/order/components/help";
@@ -31,8 +32,8 @@ export default function OrderCompletedTemplate({
             level="h1"
             className="text-3xl font-bold text-pastel-pink mb-6 text-center"
           >
-            <span>Thank you!</span>
-            <span>Your order was placed successfully.</span>
+            <div>Thank you!</div>
+            <div>Your order was placed successfully.</div>
           </Heading>
           <OrderDetails order={order} />
           <Heading
@@ -45,9 +46,30 @@ export default function OrderCompletedTemplate({
           <CartTotals data={order} />
           <ShippingDetails order={order} />
           <PaymentDetails order={order} />
-          <Help />
+          <div
+            style={{
+              color: '#ef9ed4', // Pastel pink color for text
+              backgroundColor: '#0b1e35', // Slate gray for background
+              borderColor: '#58576B', // Darker slate gray for border
+              padding: '1rem',
+              borderRadius: '0.5rem',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            <Help />
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+// Move themeColor to viewport as per Next.js guidelines
+export const metadata: Metadata = {
+  title: "Order Confirmed",
+  description: "Your purchase was successful",
+};
+
+export const viewport = {
+  themeColor: "#B6B9DB", // Primary green color
+};

@@ -1,36 +1,31 @@
-import { Metadata } from "next"
-import { notFound } from "next/navigation"
-
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import {
   getProductByHandle,
   getProductsList,
   getRegion,
   listRegions,
   retrievePricedProductById,
-} from "@lib/data"
-import { Region } from "@medusajs/medusa"
-import ProductTemplate from "@modules/products/templates"
+} from "@lib/data";
+import { Region } from "@medusajs/medusa";
+import ProductTemplate from "@modules/products/templates";
 
 type Props = {
-  params: { countryCode: string; handle: string }
-}
+  params: { countryCode: string; handle: string };
+};
 
 export async function generateStaticParams() {
   const countryCodes = await listRegions().then((regions) =>
     regions?.map((r) => r.countries.map((c) => c.iso_2)).flat()
-  )
+  );
 
   if (!countryCodes) {
-    return null
+    return [];
   }
 
   const products = await Promise.all(
-    countryCodes.map((countryCode) => {
-      return getProductsList({ countryCode })
-    })
-  ).then((responses) =>
-    responses.map(({ response }) => response.products).flat()
-  )
+    countryCodes.map((countryCode) => getProductsList({ countryCode }))
+  ).then((responses) => responses.map(({ response }) => response.products).flat());
 
   const staticParams = countryCodes
     ?.map((countryCode) =>
@@ -39,20 +34,18 @@ export async function generateStaticParams() {
         handle: product.handle,
       }))
     )
-    .flat()
+    .flat();
 
-  return staticParams
+  return staticParams || [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { handle } = params
+  const { handle } = params;
 
-  const { product } = await getProductByHandle(handle).then(
-    (product) => product
-  )
+  const product = await getProductByHandle(handle).then((result) => result.product);
 
   if (!product) {
-    notFound()
+    notFound();
   }
 
   return {
@@ -61,39 +54,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${product.title} | Delisa's Boujee Botanical Store`,
       description: `${product.title}`,
-      images: product.thumbnail ? [product.thumbnail] : [],
+      images: product.thumbnail ? [product.thumbnail] : ["/default-thumbnail.jpg"], // Default image
     },
-  }
+  };
 }
 
 const getPricedProductByHandle = async (handle: string, region: Region) => {
-  const { product } = await getProductByHandle(handle).then(
-    (product) => product
-  )
+  const product = await getProductByHandle(handle).then((result) => result.product);
 
   if (!product || !product.id) {
-    return null
+    return null;
   }
 
-  const pricedProduct = await retrievePricedProductById({
+  return retrievePricedProductById({
     id: product.id,
     regionId: region.id,
-  })
-
-  return pricedProduct
-}
+  });
+};
 
 export default async function ProductPage({ params }: Props) {
-  const region = await getRegion(params.countryCode)
+  const region = await getRegion(params.countryCode);
 
   if (!region) {
-    notFound()
+    notFound();
   }
 
-  const pricedProduct = await getPricedProductByHandle(params.handle, region)
+  const pricedProduct = await getPricedProductByHandle(params.handle, region);
 
   if (!pricedProduct) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -102,5 +91,5 @@ export default async function ProductPage({ params }: Props) {
       region={region}
       countryCode={params.countryCode}
     />
-  )
+  );
 }

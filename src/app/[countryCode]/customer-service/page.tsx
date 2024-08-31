@@ -5,13 +5,17 @@ import FaqPage from '@modules/account/components/customer-service';
 
 const CustomerServicePage = () => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
+      <a href="#main-content" className="sr-only focus:not-sr-only">
+        Skip to content
+      </a>
+      
       <Header /> {/* Include your Header component at the top */}
-      
-      <main className="bg-slate-gray py-8">
-        <FaqPage /> {/* The main FAQ content */}
+
+      <main id="main-content" className="flex-grow py-8 mx-auto max-w-screen-lg" role="main">
+        <FaqPage />
       </main>
-      
+
       <Footer /> {/* Include your Footer component at the bottom */}
     </div>
   );
