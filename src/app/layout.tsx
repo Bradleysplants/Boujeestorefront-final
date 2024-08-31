@@ -1,20 +1,27 @@
-import { Metadata } from "next"
-import "styles/globals.css"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Metadata } from "next";
+import "styles/globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://localhost:8000"
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://localhost:8000";
 
 if (!process.env.NEXT_PUBLIC_BASE_URL) {
-  console.warn("NEXT_PUBLIC_BASE_URL is not set. Using the default localhost URL.")
+  console.warn("NEXT_PUBLIC_BASE_URL is not set. Using the default localhost URL.");
 }
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: "Your Site Title",
   description: "Your site description goes here",
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#ffffff",
-}
+  // Remove viewport and themeColor from here
+};
+
+// Move viewport and themeColor to separate exports
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export const themeColor = "#ffffff";
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
@@ -34,5 +41,5 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <main className="relative">{props.children}</main>
       </body>
     </html>
-  )
+  );
 }
