@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@modules/layout/templates/footer";
 import { useState } from "react";
 
 const ForgotPassword = () => {
@@ -37,33 +38,49 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-gray">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Forgot Password</h2>
-        {message && <p className="text-green-500 mb-4">{message}</p>}
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-pastel-pink mb-2" htmlFor="email">
-              Enter your email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-2 border border-pastel-pink rounded"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-black text-pastel-pink border border-pastel-pink rounded hover:bg-pink-600"
-          >
-            Send Reset Link
-          </button>
-        </form>
+    <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
+      <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
+        <div className="flex justify-between items-center">
+          <a href="/account" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
+            Back
+          </a>
+          <h1 className="text-2xl font-bold text-center flex-grow">
+            DeLisa's Boujee Botanical Store
+          </h1>
+          <div className="w-16"></div> {/* Empty div to balance the layout */}
+        </div>
+      </header>
+
+      <div className="flex items-center justify-center flex-grow">
+        <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+          <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Forgot Password</h2>
+          {message && <p className="text-green-500 mb-4">{message}</p>}
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-pastel-pink mb-2" htmlFor="email">
+                Enter your email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="w-full p-2 border border-pastel-pink rounded"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full py-2 px-4 bg-black text-pastel-pink border border-pastel-pink rounded hover:bg-pink-600"
+            >
+              Send Reset Link
+            </button>
+          </form>
+        </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

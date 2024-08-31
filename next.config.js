@@ -1,5 +1,5 @@
-const { withStoreConfig } = require("./store-config")
-const store = require("./store.config.json")
+const { withStoreConfig } = require("./store-config");
+const store = require("./store.config.json");
 
 /**
  * @type {import('next').NextConfig}
@@ -28,8 +28,16 @@ const nextConfig = withStoreConfig({
       },
     ],
   },
-})
+  async rewrites() {
+    return [
+      {
+        source: '/store/:path*',
+        destination: 'http://localhost:9000/store/:path*', // Proxy to Backend
+      },
+    ]
+  },
+});
 
 console.log("next.config.js", JSON.stringify(module.exports, null, 2))
 
-module.exports = nextConfig
+module.exports = nextConfig;

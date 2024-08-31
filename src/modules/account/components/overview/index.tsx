@@ -15,15 +15,18 @@ const Overview = ({ customer, orders }: OverviewProps) => {
     <div data-testid="overview-page-wrapper">
       <div className="hidden small:block">
         <div className="text-xl-semi flex justify-between items-center mb-4 text-pastel-pink">
-          <span data-testid="welcome-message" data-value={customer?.first_name}>
-            Hello {customer?.first_name}
-          </span>
-          <span className="text-small-regular text-pastel-pink">
-            Signed in as:{" "}
-            <span className="font-semibold" data-testid="customer-email" data-value={customer?.email}>
-              {customer?.email}
+          <div>
+            <span data-testid="welcome-message" data-value={customer?.first_name}>
+              Hello {customer?.first_name}
             </span>
-          </span>
+            <br /> {/* This adds a space between the two lines */}
+            <span className="text-small-regular text-pastel-pink">
+              Signed in as:{" "}
+              <span className="font-semibold" data-testid="customer-email" data-value={customer?.email}>
+                {customer?.email}
+              </span>
+            </span>
+          </div>
         </div>
         <div className="flex flex-col py-8 border-t border-darker-slate-gray">
           <div className="flex flex-col gap-y-4 h-full col-span-1 row-span-2 flex-1">
