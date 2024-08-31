@@ -1,11 +1,6 @@
-import Nav from "@modules/layout/templates/nav";
-import Footer from "@modules/layout/templates/footer";
-
 const AccessibilityStatement = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-gray">
-      <Nav />
-
       <main className="flex-grow flex flex-col items-center justify-center py-12 px-6">
         <div className="max-w-4xl w-full bg-darker-slate-gray p-8 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold text-pastel-pink mb-6 text-center">
@@ -33,8 +28,6 @@ const AccessibilityStatement = () => {
           </p>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
