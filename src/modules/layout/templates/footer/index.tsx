@@ -22,7 +22,7 @@ function Footer() {
       script.defer = true;
       script.onload = () => {
         window.micAccessTool = new MicAccessTool({
-          link: "http://boujeebotanical.store/us/accessibility-statement",
+          link: "http://boujee-botanical.store/us/accessibility-statement",
           contact: "mailto:delisasboujeebotanicalstore@gmail.com",
           buttonPosition: "right",
           forceLang: "en",
