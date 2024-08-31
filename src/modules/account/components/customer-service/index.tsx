@@ -52,7 +52,7 @@ const FAQPage = () => {
     {
       question: "How can I contact customer service?",
       answer:
-        "You can contact our customer service team via email at delisasboujeebotanical@gmail.com or by phone at [Your Business Phone Number]. We are here to help with any questions or concerns you may have."
+        "You can contact our customer service team via email at delisasboujeebotanicalstore@gmail.com or by phone at [Your Business Phone Number]. We are here to help with any questions or concerns you may have."
     },
     {
       question: "Can I cancel or modify my order?",

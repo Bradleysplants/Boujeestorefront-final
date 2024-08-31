@@ -19,9 +19,9 @@ const AccessibilityStatement = () => {
             For assistance or to report an accessibility issue, please contact us at:
           </p>
           <ul className="text-pastel-pink mb-4 list-disc pl-6">
-            <li>Email: <a href="mailto:support@boujee-botanical.store" className="text-primary-green hover:underline">support@boujee-botanical.store</a></li>
+            <li>Email: <a href="mailto:delisasboujeebotanical.store" className="text-primary-green hover:underline">support@boujee-botanical.store</a></li>
             <li>Phone: <a href="tel:+1234567890" className="text-primary-green hover:underline">+1 (234) 567-890</a></li>
-            <li>Mailing Address: 123 Botanical Way, Greenhouse City, GA 12345</li>
+            <li>Mailing Address: 251 Hillsboro Circle New Market, Al. 35761</li>
           </ul>
           <p className="text-pastel-pink">
             Thank you for visiting DeLisa&apos;s Boujee Botanical Store. We appreciate your support and are committed to ensuring a positive shopping experience for all.
