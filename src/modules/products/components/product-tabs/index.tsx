@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import { PricedProduct } from "@medusajs/medusa/dist/types/pricing"
-import Accordion from "./accordion"
+import { PricedProduct } from "@medusajs/medusa/dist/types/pricing";
+import Accordion from "./accordion";
+import Link from "next/link";
 
 type ProductTabsProps = {
-  product: PricedProduct
-}
+  product: PricedProduct;
+};
 
 const ProductTabs = ({ product }: ProductTabsProps) => {
   const tabs = [
@@ -17,7 +18,7 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
       label: "Shipping & Returns",
       component: <ShippingInfoTab />,
     },
-  ]
+  ];
 
   return (
     <div className="w-full">
@@ -25,18 +26,18 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
         {tabs.map((tab, i) => (
           <Accordion.Item
             key={i}
-            title={tab.label} // Title remains a string
+            title={tab.label}
             headingSize="medium"
             value={tab.label}
-            className="pastel-pink-title" // Applying a custom class for styling
+            className="pastel-pink-title"
           >
             {tab.component}
           </Accordion.Item>
         ))}
       </Accordion>
     </div>
-  )
-}
+  );
+};
 
 const ProductInfoTab = ({ product }: ProductTabsProps) => {
   return (
@@ -58,8 +59,8 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const ShippingInfoTab = () => {
   return (
@@ -67,15 +68,17 @@ const ShippingInfoTab = () => {
       <div className="flex flex-col gap-y-4">
         <div className="flex items-center gap-x-4">
           <span className="font-semibold">Shipping:</span>
-          <p>Free standard shipping on orders over $100.</p>
+          <p>Shipped with care!</p>
         </div>
         <div className="flex items-center gap-x-4">
           <span className="font-semibold">Returns:</span>
-          <p>30-day return policy. See our returns policy for details.</p>
+          <p>
+            Returns not accepted. See FAQ for more information.
+          </p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductTabs
+export default ProductTabs;

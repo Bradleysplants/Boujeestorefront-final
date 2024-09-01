@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Footer from "@modules/layout/templates/footer";
 import { useState, useCallback } from "react";
@@ -14,7 +14,12 @@ const ForgotPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`boujee-botanical.store/store/customers/password-token`, {
+      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL; // Using environment variable
+      if (!backendUrl) {
+        throw new Error("Backend URL is not defined");
+      }
+
+      const response = await fetch(`${backendUrl}/store/customers/password-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

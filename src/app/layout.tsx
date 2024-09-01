@@ -30,11 +30,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <meta charSet="UTF-8" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={BASE_URL} />
-        <meta property="og:title" content="Your Site Title" />
-        <meta property="og:description" content="Your site description goes here" />
-        <meta property="og:image" content="/path/to/image.jpg" />
-        <link rel="preload" href="/path/to/critical.css" as="style" />
-        <link rel="preload" href="/path/to/font.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <meta property="og:title" content="Delisa&apos;s Boujee Botanical Store" />
+        <meta property="og:description" content="Your destination for luxury plants and exclusive care products" />
       </head>
       <body>
         <SpeedInsights />
