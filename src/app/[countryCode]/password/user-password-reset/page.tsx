@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Helmet } from 'react-helmet';
+import Head from 'next/head';
 import Footer from "@modules/layout/templates/footer";
 
 const UserPasswordResetPage = () => {
@@ -61,7 +61,6 @@ const UserPasswordResetPage = () => {
         return;
       }
 
-      // Handle successful response
       if (response.status === 204) {
         setSuccess(true);
         setError('');
@@ -79,13 +78,13 @@ const UserPasswordResetPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
-      <Helmet>
+      <Head>
         <title>Reset Admin Password - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
           content="Reset the password for your DeLisa's Boujee Botanicals Admin account. Enter your email and new password to regain access."
         />
-      </Helmet>
+      </Head>
 
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
         <div className="flex justify-between items-center">

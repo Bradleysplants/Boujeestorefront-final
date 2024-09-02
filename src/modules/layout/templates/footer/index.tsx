@@ -93,6 +93,15 @@ function Footer() {
                     Return Policy
                   </button>
                 </li>
+                <li>
+                  <LocalizedClientLink
+                    href="/customer-service"
+                    className="text-pastel-pink hover:text-primary-green underline"
+                    aria-label="Customer Service"
+                  >
+                    Customer Service
+                  </LocalizedClientLink>
+                </li>
               </ul>
             </div>
           </div>
