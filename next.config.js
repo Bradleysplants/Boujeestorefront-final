@@ -32,7 +32,7 @@ const nextConfig = withStoreConfig({
     return [
       {
         source: '/store/:path*',
-        destination: 'https://https://delisasboujeebotanical.store/store/:path*', // Proxy to Backend
+        destination: 'https://delisasboujeebotanical.store/store/:path*', // Proxy to Backend
       },
     ]
   },
