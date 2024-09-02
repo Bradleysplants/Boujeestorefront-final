@@ -50,7 +50,6 @@ const UserPasswordResetPage = () => {
 
       const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
         method: 'POST',
-        credentials: 'include', // Ensure credentials are included
         headers: {
           'Content-Type': 'application/json',
         },
