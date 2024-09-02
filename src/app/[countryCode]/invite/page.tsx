@@ -77,7 +77,7 @@ const InvitePage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
-        <title>Set Up Your Account - DeLisa's Boujee Botanicals</title>
+        <title>Set Up Your Account - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
           content="Set up your account at DeLisa's Boujee Botanicals. Complete the form to secure your new account and start exploring our exclusive plant collection."

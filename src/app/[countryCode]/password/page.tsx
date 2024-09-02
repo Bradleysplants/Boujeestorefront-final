@@ -69,7 +69,7 @@ const PasswordResetPage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
-        <title>Reset Your Password - DeLisa's Boujee Botanicals</title>
+        <title>Reset Your Password - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
           content="Reset your password for DeLisa's Boujee Botanicals. Enter your email and new password to regain access to your account."
