@@ -34,9 +34,9 @@ export default function CategoryTemplate({
         <div className="flex flex-row mb-8 text-2xl-semi gap-4">
           {parents &&
             parents.map((parent) => (
-              <span key={parent.id} className="text-darker-slate-gray">
+              <span key={parent.id} className="text-pastel-pink">
                 <LocalizedClientLink
-                  className="mr-4 hover:text-white"
+                  className="mr-4 hover:text-primary-green"
                   href={`/categories/${parent.handle}`}
                 >
                   {parent.name}
@@ -44,10 +44,10 @@ export default function CategoryTemplate({
                 /
               </span>
             ))}
-          <h1>{category.name}</h1>
+          <h1 className="text-pastel-pink">{category.name}</h1>
         </div>
         {category.description && (
-          <div className="mb-8 text-base-regular">
+          <div className="mb-8 text-base-regular text-pastel-pink">
             <p>{category.description}</p>
           </div>
         )}
@@ -58,7 +58,7 @@ export default function CategoryTemplate({
                 <li key={c.id}>
                   <InteractiveLink
                     href={`/categories/${c.handle}`}
-                    className="hover:text-white"
+                    className="hover:text-primary-green text-pastel-pink"
                   >
                     {c.name}
                   </InteractiveLink>

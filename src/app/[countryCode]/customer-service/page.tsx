@@ -8,7 +8,7 @@ const CustomerServicePage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
-        <title>Customer Service - DeLisa's Boujee Botanicals</title>
+        <title>Customer Service - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
           content="Find answers to your questions and get support for all your plant-related needs at DeLisa's Boujee Botanicals. Visit our customer service page for FAQs and more."
