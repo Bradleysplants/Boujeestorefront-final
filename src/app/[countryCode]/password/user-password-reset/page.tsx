@@ -23,10 +23,14 @@ const UserPasswordResetPage = () => {
     }
 
     const token = searchParams.get('token');
+    console.log('Token:', token); // Log the token to verify it's correct
     if (!token) {
       setError('Invalid or missing token.');
       return;
     }
+
+    console.log('Email:', email); // Log the email to ensure it's correct
+    console.log('Password:', password); // Log the password to ensure it's correct
 
     if (!email) {
       setError('Email is required.');
@@ -39,12 +43,14 @@ const UserPasswordResetPage = () => {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
+      console.log('Backend URL:', backendUrl); // Log the backend URL being used
       if (!backendUrl) {
         throw new Error('Backend URL is not defined');
       }
 
       const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
         method: 'POST',
+        credentials: 'include', // Ensure credentials are included
         headers: {
           'Content-Type': 'application/json',
         },
@@ -52,10 +58,11 @@ const UserPasswordResetPage = () => {
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText); // Log the error response for debugging
         if (response.status === 401) {
           setError('Unauthorized: Please make sure the token is valid.');
         } else {
-          const errorText = await response.text();
           setError(`Error: ${response.status} ${errorText}`);
         }
         return;
@@ -66,10 +73,12 @@ const UserPasswordResetPage = () => {
         setError('');
       } else {
         const result = await response.json();
+        console.log('User:', result.user); // Log the returned user object
         setSuccess(true);
         setError('');
       }
     } catch (err: any) {
+      console.error('Unexpected error:', err); // Log unexpected errors
       setError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
