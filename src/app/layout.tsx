@@ -10,8 +10,8 @@ if (!process.env.NEXT_PUBLIC_BASE_URL) {
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
-  title: "Your Site Title",
-  description: "Your site description goes here",
+  title: "DeLisa's Boujee Botanical Store - Home of Rare and Exotic Plants",
+  description: "Explore DeLisa's Boujee Botanicals, your ultimate destination for rare and exotic plants. Discover a wide range of tropical houseplants curated with care.",
   // Remove viewport and themeColor from here
 };
 

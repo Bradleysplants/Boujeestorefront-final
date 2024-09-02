@@ -2,6 +2,7 @@
 
 import Footer from "@modules/layout/templates/footer";
 import { useState, useCallback } from "react";
+import { Helmet } from 'react-helmet';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -47,6 +48,14 @@ const ForgotPassword = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
+      <Helmet>
+        <title>Forgot Password - DeLisa&apos;s Boujee Botanicals</title>
+        <meta
+          name="description"
+          content="Forgot your password? Enter your email address to receive a link to reset your password for DeLisa's Boujee Botanicals."
+        />
+      </Helmet>
+
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
         <div className="flex justify-between items-center">
           <a href="/account" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
