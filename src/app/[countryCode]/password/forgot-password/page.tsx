@@ -62,7 +62,7 @@ const ForgotPassword = () => {
       <div className="flex items-center justify-center flex-grow">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
           <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Forgot Password</h2>
-          {message && <p className="text-green-500 mb-4" aria-live="polite">{message}</p>}
+          {message && <p className="text-pastel-pink mb-4" aria-live="polite">{message}</p>}
           {error && <p className="text-red-500 mb-4" aria-live="assertive">{error}</p>}
           <form onSubmit={handleSubmit}>
             <div className="mb-4">

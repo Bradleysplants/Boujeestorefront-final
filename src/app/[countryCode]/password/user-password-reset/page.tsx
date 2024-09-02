@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Footer from "@modules/layout/templates/footer";
 
-const PasswordResetPage = () => {
+const UserPasswordResetPage = () => {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,12 +37,12 @@ const PasswordResetPage = () => {
     setSuccess(false);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
       if (!backendUrl) {
         throw new Error('Backend URL is not defined');
       }
 
-      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
+      const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,13 +51,24 @@ const PasswordResetPage = () => {
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        setError(`Error: ${response.status} ${errorText}`);
+        if (response.status === 401) {
+          setError('Unauthorized: Please make sure the token is valid.');
+        } else {
+          const errorText = await response.text();
+          setError(`Error: ${response.status} ${errorText}`);
+        }
         return;
       }
 
-      setSuccess(true);
-      setError('');
+      // Handle successful response
+      if (response.status === 204) {
+        setSuccess(true);
+        setError('');
+      } else {
+        const result = await response.json();
+        setSuccess(true);
+        setError('');
+      }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
@@ -69,11 +80,11 @@ const PasswordResetPage = () => {
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
         <div className="flex justify-between items-center">
-          <a href="/account" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
+          <a href="/admin/login" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
             Back
           </a>
           <h1 className="text-2xl font-bold text-center flex-grow">
-            DeLisa&apos;s Boujee Botanical Store
+            DeLisa&apos;s Boujee Botanical Admin
           </h1>
           <div className="w-16"></div>
         </div>
@@ -81,10 +92,10 @@ const PasswordResetPage = () => {
 
       <div className="flex items-center justify-center flex-grow">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Reset Password</h2>
+          <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Reset Admin Password</h2>
           {success ? (
             <p className="text-pastel-pink" aria-live="polite">
-              Your password has been reset successfully. You can now <a href="/account" className="text-pastel-pink underline hover:text-primary-green">log in</a>.
+              Your password has been reset successfully. You can now <a href="/admin/login" className="text-pastel-pink underline hover:text-primary-green">log in</a>.
             </p>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -149,4 +160,4 @@ const PasswordResetPage = () => {
   );
 };
 
-export default PasswordResetPage;
+export default UserPasswordResetPage;
