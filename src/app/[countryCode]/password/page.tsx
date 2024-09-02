@@ -39,7 +39,6 @@ const PasswordResetPage = () => {
 
       const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
