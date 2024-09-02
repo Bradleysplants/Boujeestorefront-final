@@ -7,7 +7,6 @@ import Footer from "@modules/layout/templates/footer";
 
 const UserPasswordResetPage = () => {
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -23,17 +22,8 @@ const UserPasswordResetPage = () => {
     }
 
     const token = searchParams.get('token');
-    console.log('Token:', token); // Log the token to verify it's correct
     if (!token) {
       setError('Invalid or missing token.');
-      return;
-    }
-
-    console.log('Email:', email); // Log the email to ensure it's correct
-    console.log('Password:', password); // Log the password to ensure it's correct
-
-    if (!email) {
-      setError('Email is required.');
       return;
     }
 
@@ -42,47 +32,34 @@ const UserPasswordResetPage = () => {
     setSuccess(false);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
-      console.log('Backend URL:', backendUrl); // Log the backend URL being used
+      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL;
       if (!backendUrl) {
         throw new Error('Backend URL is not defined');
       }
 
       const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, token }),
+        body: JSON.stringify({ token, password }),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Error response:', errorText); // Log the error response for debugging
-        if (response.status === 401) {
-          setError('Unauthorized: Please make sure the token is valid.');
-        } else {
-          setError(`Error: ${response.status} ${errorText}`);
-        }
+        setError(`Error: ${response.status} ${errorText}`);
         return;
       }
 
-      if (response.status === 204) {
-        setSuccess(true);
-        setError('');
-      } else {
-        const result = await response.json();
-        console.log('User:', result.user); // Log the returned user object
-        setSuccess(true);
-        setError('');
-      }
+      setSuccess(true);
+      setError('');
     } catch (err: any) {
-      console.error('Unexpected error:', err); // Log unexpected errors
       setError(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
-  }, [email, password, confirmPassword, searchParams]);
+  }, [password, confirmPassword, searchParams]);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
@@ -90,7 +67,7 @@ const UserPasswordResetPage = () => {
         <title>Reset Admin Password - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
-          content="Reset the password for your DeLisa's Boujee Botanicals Admin account. Enter your email and new password to regain access."
+          content="Reset the password for your DeLisa's Boujee Botanicals Admin account. Enter your new password to regain access."
         />
       </Head>
 
@@ -115,19 +92,6 @@ const UserPasswordResetPage = () => {
             </p>
           ) : (
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-pastel-pink mb-2" htmlFor="email">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full p-2 border border-pastel-pink rounded"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
               <div className="mb-4">
                 <label className="block text-pastel-pink mb-2" htmlFor="password">
                   New Password

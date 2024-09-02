@@ -7,7 +7,6 @@ import Footer from "@modules/layout/templates/footer";
 
 const PasswordResetPage = () => {
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -28,11 +27,6 @@ const PasswordResetPage = () => {
       return;
     }
 
-    if (!email) {
-      setError('Email is required.');
-      return;
-    }
-
     setLoading(true);
     setError('');
     setSuccess(false);
@@ -45,10 +39,11 @@ const PasswordResetPage = () => {
 
       const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, token }),
+        body: JSON.stringify({ password, token }),
       });
 
       if (!response.ok) {
@@ -64,21 +59,21 @@ const PasswordResetPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [email, password, confirmPassword, searchParams]);
+  }, [password, confirmPassword, searchParams]);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
-        <title>Reset Your Password - DeLisa&apos;s Boujee Botanicals</title>
+        <title>Reset Password - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
-          content="Reset your password for DeLisa's Boujee Botanicals. Enter your email and new password to regain access to your account."
+          content="Reset the password for your DeLisa's Boujee Botanicals customer account. Enter your new password to regain access."
         />
       </Head>
 
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
         <div className="flex justify-between items-center">
-          <a href="/account" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
+          <a href="/account/login" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
             Back
           </a>
           <h1 className="text-2xl font-bold text-center flex-grow">
@@ -93,23 +88,10 @@ const PasswordResetPage = () => {
           <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Reset Password</h2>
           {success ? (
             <p className="text-pastel-pink" aria-live="polite">
-              Your password has been reset successfully. You can now <a href="/account" className="text-pastel-pink underline hover:text-primary-green">log in</a>.
+              Your password has been reset successfully. You can now <a href="/account/login" className="text-pastel-pink underline hover:text-primary-green">log in</a>.
             </p>
           ) : (
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-pastel-pink mb-2" htmlFor="email">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full p-2 border border-pastel-pink rounded"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
               <div className="mb-4">
                 <label className="block text-pastel-pink mb-2" htmlFor="password">
                   New Password
