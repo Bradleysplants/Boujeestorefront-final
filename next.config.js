@@ -7,7 +7,6 @@ const store = require("./store.config.json");
 const nextConfig = withStoreConfig({
   features: store.features,
   reactStrictMode: true,
-  productionBrowserSourceMaps: true,  // Enable source maps
   images: {
     remotePatterns: [
       {
@@ -28,16 +27,8 @@ const nextConfig = withStoreConfig({
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/store/:path*',
-        destination: 'https://delisasboujeebotanical.store/store/:path*', // Proxy to Backend
-      },
-    ]
-  },
 });
 
-console.log("next.config.js", JSON.stringify(module.exports, null, 2))
+console.log("next.config.js", JSON.stringify(module.exports, null, 2));
 
 module.exports = nextConfig;
