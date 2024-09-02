@@ -7,6 +7,7 @@ import Footer from "@modules/layout/templates/footer";
 
 const UserPasswordResetPage = () => {
   const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,6 +28,11 @@ const UserPasswordResetPage = () => {
       return;
     }
 
+    if (!email) {
+      setError('Email is required.');
+      return;
+    }
+
     setLoading(true);
     setError('');
     setSuccess(false);
@@ -39,10 +45,11 @@ const UserPasswordResetPage = () => {
 
       const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token, password }),
+        body: JSON.stringify({ email, password, token }),
       });
 
       if (!response.ok) {
@@ -58,7 +65,7 @@ const UserPasswordResetPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [password, confirmPassword, searchParams]);
+  }, [email, password, confirmPassword, searchParams]);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
@@ -66,7 +73,7 @@ const UserPasswordResetPage = () => {
         <title>Reset Admin Password - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
-          content="Reset the password for your DeLisa's Boujee Botanicals Admin account. Enter your new password to regain access."
+          content="Reset the password for your DeLisa's Boujee Botanicals Admin account. Enter your email and new password to regain access."
         />
       </Head>
 
@@ -91,6 +98,19 @@ const UserPasswordResetPage = () => {
             </p>
           ) : (
             <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-pastel-pink mb-2" htmlFor="email">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="w-full p-2 border border-pastel-pink rounded"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
               <div className="mb-4">
                 <label className="block text-pastel-pink mb-2" htmlFor="password">
                   New Password
