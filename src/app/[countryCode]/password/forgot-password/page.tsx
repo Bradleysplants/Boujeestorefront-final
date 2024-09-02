@@ -22,6 +22,7 @@ const ForgotPassword = () => {
 
       const response = await fetch(`${backendUrl}/store/customers/password-token`, {
         method: "POST",
+        credentials: "include",  // Include credentials in the request
         headers: {
           "Content-Type": "application/json",
         },
