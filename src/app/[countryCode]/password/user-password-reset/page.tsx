@@ -22,14 +22,7 @@ const UserPasswordResetPage = () => {
       return;
     }
 
-    const encodedToken = searchParams.get('token');
-    if (!encodedToken) {
-      setError('Invalid or missing token.');
-      return;
-    }
-
-    // Decode the Base64 encoded token
-    const token = Buffer.from(decodeURIComponent(encodedToken), 'base64').toString('ascii');
+    const token = searchParams.get('token');
     if (!token) {
       setError('Invalid or missing token.');
       return;
