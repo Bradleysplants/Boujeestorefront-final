@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import Footer from "@modules/layout/templates/footer";
 
-const UserPasswordResetPage = () => {
+const PasswordResetPage = () => {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,14 +22,7 @@ const UserPasswordResetPage = () => {
       return;
     }
 
-    const encodedToken = searchParams.get('token');
-    if (!encodedToken) {
-      setError('Invalid or missing token.');
-      return;
-    }
-
-    // Decode the token and replace any line breaks or unnecessary spaces
-    const token = decodeURIComponent(encodedToken).replace(/\s+/g, '');
+    const token = searchParams.get('token');
     if (!token) {
       setError('Invalid or missing token.');
       return;
@@ -50,7 +43,7 @@ const UserPasswordResetPage = () => {
         throw new Error('Backend URL is not defined');
       }
 
-      const response = await fetch(`${backendUrl}/admin/users/password-reset`, {
+      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,20 +69,20 @@ const UserPasswordResetPage = () => {
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
-        <title>Reset Admin Password - DeLisa&apos;s Boujee Botanicals</title>
+        <title>Reset Password - DeLisa&apos;s Boujee Botanicals</title>
         <meta
           name="description"
-          content="Reset the password for your DeLisa's Boujee Botanicals Admin account. Enter your email and new password to regain access."
+          content="Reset the password for your DeLisa's Boujee Botanicals customer account. Enter your email and new password to regain access."
         />
       </Head>
 
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
         <div className="flex justify-between items-center">
-          <a href="/admin/login" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
+          <a href="/account/login" className="bg-black text-pastel-pink px-4 py-2 rounded hover:bg-pink-600">
             Back
           </a>
           <h1 className="text-2xl font-bold text-center flex-grow">
-            DeLisa&apos;s Boujee Botanical Admin
+            DeLisa&apos;s Boujee Botanical Store
           </h1>
           <div className="w-16"></div>
         </div>
@@ -97,10 +90,10 @@ const UserPasswordResetPage = () => {
 
       <div className="flex items-center justify-center flex-grow">
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Reset Admin Password</h2>
+          <h2 className="text-3xl font-bold mb-4 text-pastel-pink">Reset Password</h2>
           {success ? (
             <p className="text-pastel-pink" aria-live="polite">
-              Your password has been reset successfully. You can now <a href="/admin/login" className="text-pastel-pink underline hover:text-primary-green">log in</a>.
+              Your password has been reset successfully. You can now <a href="/account/login" className="text-pastel-pink underline hover:text-primary-green">log in</a>.
             </p>
           ) : (
             <form onSubmit={handleSubmit}>
@@ -165,4 +158,4 @@ const UserPasswordResetPage = () => {
   );
 };
 
-export default UserPasswordResetPage;
+export default PasswordResetPage;
