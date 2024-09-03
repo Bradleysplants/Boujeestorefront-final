@@ -5,14 +5,16 @@ import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import Footer from "@modules/layout/templates/footer";
 
-const PasswordResetPage = () => {
+const PasswordResetPage: React.FC = () => {
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,13 +27,18 @@ const PasswordResetPage = () => {
     const part1 = searchParams.get('part1') || '';
     const part2 = searchParams.get('part2') || '';
     const part3 = searchParams.get('part3') || '';
-    
+
     const token = decodeURIComponent(part1 + part2 + part3);
 
-    if (!token) {
+    if (!token || token.length < 20) {  // A very basic check to see if the token seems valid
       setError('Invalid or missing token.');
       return;
     }
+
+    console.log('Part 1:', part1);
+    console.log('Part 2:', part2);
+    console.log('Part 3:', part3);
+    console.log('Combined Token:', token);
 
     if (!email) {
       setError('Email is required.');
@@ -43,10 +50,8 @@ const PasswordResetPage = () => {
     setSuccess(false);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      if (!backendUrl) {
-        throw new Error('Backend URL is not defined');
-      }
+      console.log('Making POST request to:', `${backendUrl}/store/customers/password-reset`);
+      console.log('Payload:', { email, password, token });
 
       const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
@@ -69,7 +74,7 @@ const PasswordResetPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [email, password, confirmPassword, searchParams]);
+  }, [email, password, confirmPassword, searchParams, backendUrl]);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
