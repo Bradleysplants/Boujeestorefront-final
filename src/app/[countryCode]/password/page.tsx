@@ -22,25 +22,14 @@ const PasswordResetPage = () => {
       return;
     }
 
-    const encodedToken = searchParams.get('token');
-    if (!encodedToken) {
-      setError('Invalid or missing token.');
-      return;
-    }
-
-    // Decode the token
-    let token;
-    try {
-      token = decodeURIComponent(encodedToken);
-    } catch (err) {
-      setError('Failed to decode token.');
-      return;
-    }
-
+    let token = searchParams.get('token');
     if (!token) {
       setError('Invalid or missing token.');
       return;
     }
+
+    // Remove any line breaks or spaces from the token
+    token = token.replace(/\s+/g, '');
 
     if (!email) {
       setError('Email is required.');
