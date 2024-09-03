@@ -14,8 +14,6 @@ const PasswordResetPage: React.FC = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
-
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -28,17 +26,12 @@ const PasswordResetPage: React.FC = () => {
     const part2 = searchParams.get('part2') || '';
     const part3 = searchParams.get('part3') || '';
 
-    const token = decodeURIComponent(part1 + part2 + part3);
+    const token = decodeURIComponent(`${part1}${part2}${part3}`);
 
-    if (!token || token.length < 20) {  // A very basic check to see if the token seems valid
+    if (!token || token.length < 20) {  // Basic check to validate the token
       setError('Invalid or missing token.');
       return;
     }
-
-    console.log('Part 1:', part1);
-    console.log('Part 2:', part2);
-    console.log('Part 3:', part3);
-    console.log('Combined Token:', token);
 
     if (!email) {
       setError('Email is required.');
@@ -50,10 +43,10 @@ const PasswordResetPage: React.FC = () => {
     setSuccess(false);
 
     try {
-      console.log('Making POST request to:', `${backendUrl}/store/customers/password-reset`);
+      console.log('Making POST request to:', `${process.env.NEXT_PUBLIC_BASE_URL}/store/customers/password-reset`);
       console.log('Payload:', { email, password, token });
 
-      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/store/customers/password-reset`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +67,7 @@ const PasswordResetPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [email, password, confirmPassword, searchParams, backendUrl]);
+  }, [email, password, confirmPassword, searchParams]);
 
   return (
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
