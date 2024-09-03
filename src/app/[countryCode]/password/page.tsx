@@ -1,10 +1,7 @@
-'use client';
-
 import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import Footer from "@modules/layout/templates/footer";
-import { Buffer } from "buffer"; // Import Buffer to handle Base64 decoding
 
 const PasswordResetPage = () => {
   const searchParams = useSearchParams();
@@ -23,20 +20,20 @@ const PasswordResetPage = () => {
       return;
     }
 
-    // Get the Base64 encoded token from the URL
-    const encodedToken = searchParams.get('token');
-    if (!encodedToken) {
+    let token = searchParams.get('token');
+    if (!token) {
       setError('Invalid or missing token.');
       return;
     }
 
-    // Decode the Base64 token
-    let token;
+    // Clean up the token by removing any line breaks or extra spaces
+    token = token.replace(/\s/g, '');
+
+    // Decode the token from Base64
     try {
-      token = Buffer.from(encodedToken, 'base64').toString('utf-8');
-      console.log('Decoded Token:', token);  // Debug log to verify the decoded token
-    } catch (err) {
-      setError('Invalid token format.');
+      token = Buffer.from(decodeURIComponent(token), 'base64').toString('utf-8');
+    } catch (e) {
+      setError('Invalid token.');
       return;
     }
 
@@ -50,24 +47,20 @@ const PasswordResetPage = () => {
     setSuccess(false);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
-      console.log('Making POST request to:', `${backendUrl}/store/customers/password-reset`);
-      console.log('Payload:', { email, password, token });
-    
-      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/store/customers/password-reset`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password, token }),
       });
-    
+
       if (!response.ok) {
         const errorText = await response.text();
         setError(`Error: ${response.status} ${errorText}`);
         return;
       }
-    
+
       setSuccess(true);
       setError('');
     } catch (err: any) {
@@ -81,10 +74,7 @@ const PasswordResetPage = () => {
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
         <title>Reset Password - DeLisa&apos;s Boujee Botanicals</title>
-        <meta
-          name="description"
-          content="Reset the password for your DeLisa's Boujee Botanicals customer account. Enter your new password to regain access."
-        />
+        <meta name="description" content="Reset the password for your DeLisa's Boujee Botanicals customer account. Enter your new password to regain access." />
       </Head>
 
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
