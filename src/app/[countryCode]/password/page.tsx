@@ -22,7 +22,21 @@ const PasswordResetPage = () => {
       return;
     }
 
-    const token = searchParams.get('token');
+    const encodedToken = searchParams.get('token');
+    if (!encodedToken) {
+      setError('Invalid or missing token.');
+      return;
+    }
+
+    // Decode the token
+    let token;
+    try {
+      token = decodeURIComponent(encodedToken);
+    } catch (err) {
+      setError('Failed to decode token.');
+      return;
+    }
+
     if (!token) {
       setError('Invalid or missing token.');
       return;
