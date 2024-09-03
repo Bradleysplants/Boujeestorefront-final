@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
@@ -20,20 +22,16 @@ const PasswordResetPage = () => {
       return;
     }
 
-    let token = searchParams.get('token');
-    if (!token) {
+    const encodedToken = searchParams.get('token');
+    if (!encodedToken) {
       setError('Invalid or missing token.');
       return;
     }
 
-    // Clean up the token by removing any line breaks or extra spaces
-    token = token.replace(/\s/g, '');
-
-    // Decode the token from Base64
-    try {
-      token = Buffer.from(decodeURIComponent(token), 'base64').toString('utf-8');
-    } catch (e) {
-      setError('Invalid token.');
+    // Decode the Base64 encoded token
+    const token = Buffer.from(decodeURIComponent(encodedToken), 'base64').toString('ascii');
+    if (!token) {
+      setError('Invalid or missing token.');
       return;
     }
 
@@ -47,8 +45,14 @@ const PasswordResetPage = () => {
     setSuccess(false);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/store/customers/password-reset`, {
+      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      if (!backendUrl) {
+        throw new Error('Backend URL is not defined');
+      }
+
+      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -74,7 +78,10 @@ const PasswordResetPage = () => {
     <div className="min-h-screen flex flex-col justify-between bg-slate-gray">
       <Head>
         <title>Reset Password - DeLisa&apos;s Boujee Botanicals</title>
-        <meta name="description" content="Reset the password for your DeLisa's Boujee Botanicals customer account. Enter your new password to regain access." />
+        <meta
+          name="description"
+          content="Reset the password for your DeLisa's Boujee Botanicals customer account. Enter your email and new password to regain access."
+        />
       </Head>
 
       <header className="bg-darker-slate-gray text-pastel-pink py-4 px-6 shadow-md">
