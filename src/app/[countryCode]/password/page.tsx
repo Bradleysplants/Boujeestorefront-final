@@ -34,6 +34,7 @@ const PasswordResetPage = () => {
     let token;
     try {
       token = Buffer.from(encodedToken, 'base64').toString('utf-8');
+      console.log('Decoded Token:', token);  // Debug log to verify the decoded token
     } catch (err) {
       setError('Invalid token format.');
       return;
