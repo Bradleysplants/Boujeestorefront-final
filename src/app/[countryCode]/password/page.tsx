@@ -5,14 +5,14 @@ import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import Footer from "@modules/layout/templates/footer";
 
-const PasswordResetPage: React.FC = () => {
+const PasswordResetPage = () => {
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +26,17 @@ const PasswordResetPage: React.FC = () => {
     const part2 = searchParams.get('part2') || '';
     const part3 = searchParams.get('part3') || '';
 
-    const token = decodeURIComponent(`${part1}${part2}${part3}`);
+    const token = decodeURIComponent(part1 + part2 + part3);
 
-    if (!token || token.length < 20) {  // Basic check to validate the token
+    if (!token || token.length < 20) {
       setError('Invalid or missing token.');
       return;
     }
+
+    console.log('Part 1:', part1);
+    console.log('Part 2:', part2);
+    console.log('Part 3:', part3);
+    console.log('Combined Token:', token);
 
     if (!email) {
       setError('Email is required.');
@@ -43,10 +48,12 @@ const PasswordResetPage: React.FC = () => {
     setSuccess(false);
 
     try {
-      console.log('Making POST request to:', `${process.env.NEXT_PUBLIC_BASE_URL}/store/customers/password-reset`);
-      console.log('Payload:', { email, password, token });
+      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      if (!backendUrl) {
+        throw new Error('Backend URL is not defined');
+      }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/store/customers/password-reset`, {
+      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
