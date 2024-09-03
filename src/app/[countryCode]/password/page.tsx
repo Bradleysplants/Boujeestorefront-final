@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import Footer from "@modules/layout/templates/footer";
+import { Buffer } from "buffer"; // Import Buffer to handle Base64 decoding
 
 const PasswordResetPage = () => {
   const searchParams = useSearchParams();
@@ -22,21 +23,21 @@ const PasswordResetPage = () => {
       return;
     }
 
-    const part1 = searchParams.get('part1') || '';
-    const part2 = searchParams.get('part2') || '';
-    const part3 = searchParams.get('part3') || '';
-
-    const token = decodeURIComponent(part1 + part2 + part3);
-
-    if (!token || token.length < 20) {
+    // Get the Base64 encoded token from the URL
+    const encodedToken = searchParams.get('token');
+    if (!encodedToken) {
       setError('Invalid or missing token.');
       return;
     }
 
-    console.log('Part 1:', part1);
-    console.log('Part 2:', part2);
-    console.log('Part 3:', part3);
-    console.log('Combined Token:', token);
+    // Decode the Base64 token
+    let token;
+    try {
+      token = Buffer.from(encodedToken, 'base64').toString('utf-8');
+    } catch (err) {
+      setError('Invalid token format.');
+      return;
+    }
 
     if (!email) {
       setError('Email is required.');
