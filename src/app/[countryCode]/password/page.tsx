@@ -50,7 +50,7 @@ const PasswordResetPage = () => {
         throw new Error('Backend URL is not defined');
       }
 
-      const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
+      const response = await fetch(`${backendUrl}/store/customers/reset-password`, {
         method: 'POST',
         credentials: 'include',
         headers: {
