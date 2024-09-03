@@ -48,11 +48,10 @@ const PasswordResetPage = () => {
     setSuccess(false);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      if (!backendUrl) {
-        throw new Error('Backend URL is not defined');
-      }
-
+      const backendUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:9000';
+      console.log('Making POST request to:', `${backendUrl}/store/customers/password-reset`);
+      console.log('Payload:', { email, password, token });
+    
       const response = await fetch(`${backendUrl}/store/customers/password-reset`, {
         method: 'POST',
         headers: {
@@ -60,13 +59,13 @@ const PasswordResetPage = () => {
         },
         body: JSON.stringify({ email, password, token }),
       });
-
+    
       if (!response.ok) {
         const errorText = await response.text();
         setError(`Error: ${response.status} ${errorText}`);
         return;
       }
-
+    
       setSuccess(true);
       setError('');
     } catch (err: any) {
