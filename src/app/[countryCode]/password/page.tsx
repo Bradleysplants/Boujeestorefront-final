@@ -29,7 +29,7 @@ const PasswordResetPage = () => {
     }
 
     // Decode the Base64 encoded token
-    const token = Buffer.from(decodeURIComponent(encodedToken), 'base64').toString('ascii');
+    const token = Buffer.from(decodeURIComponent(encodedToken), 'base64').toString('utf-8');
     if (!token) {
       setError('Invalid or missing token.');
       return;
