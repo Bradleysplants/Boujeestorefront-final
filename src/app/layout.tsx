@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import "styles/globals.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react"
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://localhost:8000";
 
@@ -35,6 +36,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       </head>
       <body>
         <SpeedInsights />
+        <Analytics />
         <main className="relative">{props.children}</main>
       </body>
     </html>

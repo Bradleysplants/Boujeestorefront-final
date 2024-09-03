@@ -22,7 +22,13 @@ const PasswordResetPage = () => {
       return;
     }
 
-    const token = searchParams.get('token');
+    // Reassemble the token from the parts
+    const part1 = searchParams.get('part1');
+    const part2 = searchParams.get('part2');
+    const part3 = searchParams.get('part3');
+    
+    const token = decodeURIComponent(part1 + part2 + part3);
+
     if (!token) {
       setError('Invalid or missing token.');
       return;
