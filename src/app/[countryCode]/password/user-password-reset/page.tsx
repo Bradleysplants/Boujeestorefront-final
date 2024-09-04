@@ -28,19 +28,11 @@ const UserPasswordResetPage = () => {
       return;
     }
 
-    // Clean up any line breaks or unnecessary spaces in the token
-    token = token.replace(/\s+/g, '');
-
-    // Decode the token (if needed, ensure it's valid UTF-8 or ASCII)
+    // Ensure the token is clean and decoded (no line breaks or extra spaces)
     try {
-      token = decodeURIComponent(token);
+      token = decodeURIComponent(token).replace(/\s+/g, '');
     } catch (decodeError) {
-      setError('Failed to decode token.');
-      return;
-    }
-
-    if (!token) {
-      setError('Invalid or missing token.');
+      setError('Invalid token format.');
       return;
     }
 
@@ -59,7 +51,9 @@ const UserPasswordResetPage = () => {
         throw new Error('Backend URL is not defined');
       }
 
+      // Reset password API call according to Medusa documentation
       const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
+        credentials: "include",
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,6 +66,9 @@ const UserPasswordResetPage = () => {
         setError(`Error: ${response.status} ${errorText}`);
         return;
       }
+
+      const result = await response.json();
+      console.log("Password reset successful, user ID:", result.user.id);
 
       setSuccess(true);
       setError('');
