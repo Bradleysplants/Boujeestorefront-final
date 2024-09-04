@@ -28,9 +28,9 @@ const UserPasswordResetPage = () => {
       return;
     }
 
-    // Decode the token from the URL-encoded format
+    // Decode the token (if encoded using encodeURIComponent)
     try {
-      token = decodeURIComponent(token); // Use decodeURIComponent to decode the token
+      token = decodeURIComponent(token);
     } catch (decodeError) {
       setError('Invalid token format.');
       return;
@@ -57,7 +57,11 @@ const UserPasswordResetPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, token }),
+        body: JSON.stringify({
+          token: token,  // The reset token passed as a query parameter
+          password: password,  // The new password provided by the user
+          email: email // Optional: The email address, if needed
+        }),
       });
 
       if (!response.ok) {
@@ -111,7 +115,7 @@ const UserPasswordResetPage = () => {
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block text-pastel-pink mb-2" htmlFor="email">
-                  Email Address
+                  Email Address (Optional)
                 </label>
                 <input
                   type="email"
@@ -119,7 +123,6 @@ const UserPasswordResetPage = () => {
                   className="w-full p-2 border border-pastel-pink rounded"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
                 />
               </div>
               <div className="mb-4">
