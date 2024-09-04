@@ -53,7 +53,6 @@ const UserPasswordResetPage = () => {
 
       // Reset password API call according to Medusa documentation
       const response = await fetch(`${backendUrl}/admin/users/reset-password`, {
-        credentials: "include",
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
