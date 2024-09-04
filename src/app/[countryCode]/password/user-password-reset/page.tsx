@@ -28,9 +28,9 @@ const UserPasswordResetPage = () => {
       return;
     }
 
-    // Ensure the token is clean and decoded (no line breaks or extra spaces)
+    // Decode the token from the URL-encoded format
     try {
-      token = decodeURIComponent(token).replace(/\s+/g, '');
+      token = decodeURIComponent(token); // Use decodeURIComponent to decode the token
     } catch (decodeError) {
       setError('Invalid token format.');
       return;
