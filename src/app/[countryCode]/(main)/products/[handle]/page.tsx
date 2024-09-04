@@ -2,9 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
   getProductByHandle,
-  getProductsList,
   getRegion,
-  listRegions,
   retrievePricedProductById,
 } from "@lib/data";
 import { Region } from "@medusajs/medusa";
@@ -14,29 +12,35 @@ type Props = {
   params: { countryCode: string; handle: string };
 };
 
-export async function generateStaticParams() {
-  const countryCodes = await listRegions().then((regions) =>
-    regions?.map((r) => r.countries.map((c) => c.iso_2)).flat()
-  );
-
-  if (!countryCodes) {
-    return [];
+export async function getServerSideProps({ params }: { params: { countryCode: string; handle: string } }) {
+  const { countryCode, handle } = params;
+  
+  const region = await getRegion(countryCode);
+  if (!region) {
+    return { notFound: true };
   }
 
-  const products = await Promise.all(
-    countryCodes.map((countryCode) => getProductsList({ countryCode }))
-  ).then((responses) => responses.map(({ response }) => response.products).flat());
+  const product = await getProductByHandle(handle).then((result) => result.product);
+  if (!product || !product.id) {
+    return { notFound: true };
+  }
 
-  const staticParams = countryCodes
-    ?.map((countryCode) =>
-      products.map((product) => ({
-        countryCode,
-        handle: product.handle,
-      }))
-    )
-    .flat();
+  const pricedProduct = await retrievePricedProductById({
+    id: product.id,
+    regionId: region.id,
+  });
 
-  return staticParams || [];
+  if (!pricedProduct) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      product: pricedProduct,
+      region,
+      countryCode,
+    },
+  };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -59,37 +63,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const getPricedProductByHandle = async (handle: string, region: Region) => {
-  const product = await getProductByHandle(handle).then((result) => result.product);
-
-  if (!product || !product.id) {
-    return null;
-  }
-
-  return retrievePricedProductById({
-    id: product.id,
-    regionId: region.id,
-  });
-};
-
-export default async function ProductPage({ params }: Props) {
-  const region = await getRegion(params.countryCode);
-
-  if (!region) {
-    notFound();
-  }
-
-  const pricedProduct = await getPricedProductByHandle(params.handle, region);
-
-  if (!pricedProduct) {
-    notFound();
-  }
-
+export default function ProductPage({ product, region, countryCode }: { product: any; region: Region; countryCode: string }) {
   return (
     <ProductTemplate
-      product={pricedProduct}
+      product={product}
       region={region}
-      countryCode={params.countryCode}
+      countryCode={countryCode}
     />
   );
 }
