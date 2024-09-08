@@ -35,8 +35,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         <meta property="og:description" content="Your destination for luxury plants and exclusive care products" />
       </head>
       <body>
-        <SpeedInsights />
-        <Analytics />
+
+        
         <main className="relative">{props.children}</main>
       </body>
     </html>

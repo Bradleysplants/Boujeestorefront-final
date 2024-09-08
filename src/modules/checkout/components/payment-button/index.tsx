@@ -1,45 +1,72 @@
-"use client"
+"use client";
 
-import { Cart, PaymentSession } from "@medusajs/medusa"
-import { Button } from "@medusajs/ui"
-import { OnApproveActions, OnApproveData } from "@paypal/paypal-js"
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { useElements, useStripe } from "@stripe/react-stripe-js"
-import { placeOrder } from "@modules/checkout/actions"
-import React, { useState, useEffect, useRef } from "react"
-import ErrorMessage from "../error-message"
-import Spinner from "@modules/common/icons/spinner"
+import React, { useState } from "react";
+import { Cart, PaymentSession } from "@medusajs/medusa";
+import { Button } from "@medusajs/ui";
+import { usePayPalScriptReducer, PayPalButtons } from "@paypal/react-paypal-js";
+import { useElements, useStripe } from "@stripe/react-stripe-js";
+import { placeOrder } from "@modules/checkout/actions";
+import ErrorMessage from "../error-message";
+import Spinner from "@modules/common/icons/spinner";
+import axios from "axios"; // Ensure axios is imported
+
+// Setup Axios Debug for logging requests/responses
+const setupAxiosDebug = () => {
+  axios.interceptors.request.use(config => {
+    console.log('Request:', config);
+    return config;
+  });
+
+  axios.interceptors.response.use(response => {
+    console.log('Response:', response);
+    return response;
+  }, error => {
+    console.error('Error:', error);
+    return Promise.reject(error);
+  });
+};
+
+// Invoke Axios debug setup
+setupAxiosDebug();
+
+type OnApproveData = {
+  orderID: string;
+};
+
+import type {
+  OnApproveActions as PayPalOnApproveActions,
+  CreateOrderData,
+  CreateOrderActions,
+} from "@paypal/paypal-js/types/components/buttons";
 
 type PaymentButtonProps = {
-  cart: Omit<Cart, "refundable_amount" | "refunded_total">
-  "data-testid"?: string
-  className?: string
-  inputClassName?: string
-}
+  cart: Omit<Cart, "refundable_amount" | "refunded_total">;
+  "data-testid"?: string;
+  className?: string; // Added className here
+  inputClassName?: string; // Added inputClassName here
+};
 
 const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
   "data-testid": dataTestId,
-  className,
-  inputClassName,
+  className, // Added className here
+  inputClassName, // Added inputClassName here
 }) => {
   const notReady =
     !cart ||
     !cart.shipping_address ||
     !cart.billing_address ||
     !cart.email ||
-    cart.shipping_methods.length < 1
-      ? true
-      : false
+    cart.shipping_methods.length < 1;
 
   const paidByGiftcard =
-    cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
+    cart?.gift_cards?.length > 0 && cart?.total === 0;
 
   if (paidByGiftcard) {
-    return <GiftCardPaymentButton className={className} />
+    return <GiftCardPaymentButton />;
   }
 
-  const paymentSession = cart.payment_session as PaymentSession
+  const paymentSession = cart.payment_session as PaymentSession;
 
   switch (paymentSession.provider_id) {
     case "stripe":
@@ -48,161 +75,141 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
-          className={className}
-          inputClassName={inputClassName}
         />
-      )
+      );
     case "manual":
       return (
-        <ManualTestPaymentButton
-          notReady={notReady}
-          data-testid={dataTestId}
-          className={className}
-          inputClassName={inputClassName}
-        />
-      )
+        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
+      );
     case "paypal":
       return (
         <PayPalPaymentButton
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
-          className={className}
-          inputClassName={inputClassName}
         />
-      )
+      );
     default:
-      return (
-        <Button
-          className={`bg-black text-pastel-pink font-bold ${className}`}
-          disabled
-          aria-disabled="true"
-          aria-label="Select a payment method"
-        >
-          Select a payment method
-        </Button>
-      )
+      return <Button disabled>Select a payment method</Button>;
   }
-}
+};
 
-const GiftCardPaymentButton = ({
-  className,
-}: {
-  className?: string
-}) => {
-  const [submitting, setSubmitting] = useState(false)
+// GiftCardPaymentButton component
+const GiftCardPaymentButton = () => {
+  const [submitting, setSubmitting] = useState(false);
 
   const handleOrder = async () => {
-    setSubmitting(true)
-    await placeOrder()
-  }
+    setSubmitting(true);
+    try {
+      await placeOrder();
+    } catch (error) {
+      console.error("Error placing gift card order:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Button
       onClick={handleOrder}
       isLoading={submitting}
       data-testid="submit-order-button"
-      className={`bg-black text-pastel-pink font-bold ${className}`}
-      aria-label="Place order using gift card"
     >
       Place order
     </Button>
-  )
-}
+  );
+};
 
+// StripePaymentButton component
 const StripePaymentButton = ({
   cart,
   notReady,
   "data-testid": dataTestId,
-  className,
-  inputClassName,
 }: {
-  cart: Omit<Cart, "refundable_amount" | "refunded_total">
-  notReady: boolean
-  "data-testid"?: string
-  className?: string
-  inputClassName?: string
+  cart: Omit<Cart, "refundable_amount" | "refunded_total">;
+  notReady: boolean;
+  "data-testid"?: string;
 }) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const errorRef = useRef<HTMLDivElement>(null)
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (errorMessage) {
-      errorRef.current?.focus()
-    }
-  }, [errorMessage])
+  const stripe = useStripe();
+  const elements = useElements();
+  const cardElement = elements?.getElement("card");
 
   const onPaymentCompleted = async () => {
-    await placeOrder().catch(() => {
-      setErrorMessage("An error occurred, please try again.")
-      setSubmitting(false)
-    })
-  }
+    try {
+      await placeOrder();
+    } catch (error) {
+      console.error("Error completing Stripe payment:", error);
+      setErrorMessage("An error occurred, please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-  const stripe = useStripe()
-  const elements = useElements()
-  const card = elements?.getElement("card")
-
-  const session = cart.payment_session as PaymentSession
-
-  const disabled = !stripe || !elements ? true : false
+  const session = cart.payment_session as PaymentSession;
 
   const handlePayment = async () => {
-    setSubmitting(true)
+    setSubmitting(true);
 
-    if (!stripe || !elements || !card || !cart) {
-      setSubmitting(false)
-      return
+    if (!stripe || !elements || !cardElement || !cart) {
+      setSubmitting(false);
+      return;
     }
 
-    await stripe
-      .confirmCardPayment(session.data.client_secret as string, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            name:
-              cart.billing_address.first_name +
-              " " +
-              cart.billing_address.last_name,
-            address: {
-              city: cart.billing_address.city ?? undefined,
-              country: cart.billing_address.country_code ?? undefined,
-              line1: cart.billing_address.address_1 ?? undefined,
-              line2: cart.billing_address.address_2 ?? undefined,
-              postal_code: cart.billing_address.postal_code ?? undefined,
-              state: cart.billing_address.province ?? undefined,
+    try {
+      const result = await stripe.confirmCardPayment(
+        session.data.client_secret as string,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: `${cart.billing_address.first_name} ${cart.billing_address.last_name}`,
+              address: {
+                city: cart.billing_address.city ?? undefined,
+                country: cart.billing_address.country_code ?? undefined,
+                line1: cart.billing_address.address_1 ?? undefined,
+                line2: cart.billing_address.address_2 ?? undefined,
+                postal_code: cart.billing_address.postal_code ?? undefined,
+                state: cart.billing_address.province ?? undefined,
+              },
+              email: cart.email,
+              phone: cart.billing_address.phone ?? undefined,
             },
-            email: cart.email,
-            phone: cart.billing_address.phone ?? undefined,
           },
-        },
-      })
-      .then(({ error, paymentIntent }) => {
-        if (error) {
-          const pi = error.payment_intent
-
-          if (
-            (pi && pi.status === "requires_capture") ||
-            (pi && pi.status === "succeeded")
-          ) {
-            onPaymentCompleted()
-          }
-
-          setErrorMessage(error.message || null)
-          return
         }
+      );
 
+      if (result.error) {
+        const pi = result.error.payment_intent;
         if (
-          (paymentIntent && paymentIntent.status === "requires_capture") ||
-          paymentIntent.status === "succeeded"
+          (pi && pi.status === "requires_capture") ||
+          (pi && pi.status === "succeeded")
         ) {
-          return onPaymentCompleted()
+          await onPaymentCompleted();
         }
 
-        return
-      })
-  }
+        setErrorMessage(result.error.message || null);
+        return;
+      }
+
+      if (
+        result.paymentIntent &&
+        (result.paymentIntent.status === "requires_capture" ||
+          result.paymentIntent.status === "succeeded")
+      ) {
+        await onPaymentCompleted();
+      }
+    } catch (error) {
+      console.error("Error processing Stripe payment:", error);
+      setErrorMessage("An error occurred, please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const disabled = !stripe || !elements;
 
   return (
     <>
@@ -212,131 +219,126 @@ const StripePaymentButton = ({
         size="large"
         isLoading={submitting}
         data-testid={dataTestId}
-        className={`bg-black text-pastel-pink font-bold ${className}`}
-        aria-label="Place order using Stripe"
       >
         Place order
       </Button>
-      <div ref={errorRef} tabIndex={-1} aria-live="assertive">
-        <ErrorMessage
-          error={errorMessage}
-          data-testid="stripe-payment-error-message"
-          className={inputClassName}
-        />
-      </div>
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="stripe-payment-error-message"
+      />
     </>
-  )
-}
+  );
+};
 
+// PayPalPaymentButton component
 const PayPalPaymentButton = ({
   cart,
   notReady,
   "data-testid": dataTestId,
-  className,
-  inputClassName,
 }: {
-  cart: Omit<Cart, "refundable_amount" | "refunded_total">
-  notReady: boolean
-  "data-testid"?: string
-  className?: string
-  inputClassName?: string
+  cart: Omit<Cart, "refundable_amount" | "refunded_total">;
+  notReady: boolean;
+  "data-testid"?: string;
 }) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const errorRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (errorMessage) {
-      errorRef.current?.focus()
-    }
-  }, [errorMessage])
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onPaymentCompleted = async () => {
-    await placeOrder().catch(() => {
-      setErrorMessage("An error occurred, please try again.")
-      setSubmitting(false)
-    })
-  }
+    try {
+      await placeOrder();
+    } catch (error) {
+      console.error("Error completing PayPal payment:", error);
+      setErrorMessage("An error occurred, please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-  const session = cart.payment_session as PaymentSession
+  const session = cart.payment_session as PaymentSession;
 
   const handlePayment = async (
     _data: OnApproveData,
-    actions: OnApproveActions
+    actions: PayPalOnApproveActions
   ) => {
-    actions?.order
-      ?.authorize()
-      .then((authorization) => {
-        if (authorization.status !== "COMPLETED") {
-          setErrorMessage(`An error occurred, status: ${authorization.status}`)
-          return
-        }
-        onPaymentCompleted()
-      })
-      .catch(() => {
-        setErrorMessage(`An unknown error occurred, please try again.`)
-        setSubmitting(false)
-      })
-  }
+    try {
+      const authorization = await actions.order?.authorize();
+      if (authorization?.status !== "COMPLETED") {
+        console.error("PayPal authorization status:", authorization);
+        throw new Error(`An error occurred, status: ${authorization?.status}`);
+      }
+      await onPaymentCompleted();
+    } catch (error: any) {
+      const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
+      console.error("Error processing PayPal payment:", error);
+      setErrorMessage(errorMessage);
+      setSubmitting(false);
+    }
+  };
 
-  const [{ isPending, isResolved }] = usePayPalScriptReducer()
+  const createOrder = (data: CreateOrderData, actions: CreateOrderActions): Promise<string> => {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            currency_code: 'USD',
+            value: '100.00',
+          },
+        },
+      ],
+      intent: 'AUTHORIZE',  // Ensure intent is either 'CAPTURE' or 'AUTHORIZE'
+    });
+  };
+
+  const [{ isPending, isResolved }] = usePayPalScriptReducer();
 
   if (isPending) {
-    return <Spinner />
+    return <Spinner />;
   }
 
-  if (isResolved) {
-    return (
-      <>
-        <PayPalButtons
-          style={{ layout: "horizontal" }}
-          createOrder={async () => session.data.id as string}
-          onApprove={handlePayment}
-          disabled={notReady || submitting || isPending}
-          data-testid={dataTestId}
-        />
-        <div ref={errorRef} tabIndex={-1} aria-live="assertive">
-          <ErrorMessage
-            error={errorMessage}
-            data-testid="paypal-payment-error-message"
-            className={inputClassName}
-          />
-        </div>
-      </>
-    )
-  }
-}
+  return isResolved ? (
+    <>
+      <PayPalButtons
+        style={{ layout: "horizontal" }}
+        createOrder={createOrder}
+        onApprove={handlePayment}
+        onError={(error: any) => {
+          console.error("Error processing PayPal payment:", error);
+          setErrorMessage(error.message || "An error occurred processing the PayPal payment.");
+        }}
+        disabled={notReady || submitting || isPending}
+        data-testid={dataTestId}
+      />
+      <ErrorMessage error={errorMessage} data-testid="paypal-payment-error-message" />
+    </>
+  ) : null;
+};
 
+// ManualTestPaymentButton component
 const ManualTestPaymentButton = ({
   notReady,
-  className,
-  inputClassName,
+  "data-testid": dataTestId,
 }: {
-  notReady: boolean
-  className?: string
-  inputClassName?: string
+  notReady: boolean;
+  "data-testid"?: string;
 }) => {
-  const [submitting, setSubmitting] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const errorRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (errorMessage) {
-      errorRef.current?.focus()
-    }
-  }, [errorMessage])
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onPaymentCompleted = async () => {
-    await placeOrder().catch((err) => {
-      setErrorMessage(err.toString())
-      setSubmitting(false)
-    })
-  }
+    try {
+      await placeOrder();
+    } catch (error) {
+      console.error("Error completing manual payment:", error);
+      setErrorMessage("An error occurred, please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const handlePayment = () => {
-    setSubmitting(true)
-    onPaymentCompleted()
-  }
+    setSubmitting(true);
+    onPaymentCompleted();
+  };
 
   return (
     <>
@@ -346,20 +348,15 @@ const ManualTestPaymentButton = ({
         onClick={handlePayment}
         size="large"
         data-testid="submit-order-button"
-        className={`bg-black text-pastel-pink font-bold ${className}`}
-        aria-label="Place order using Manual payment method"
       >
         Place order
       </Button>
-      <div ref={errorRef} tabIndex={-1} aria-live="assertive">
-        <ErrorMessage
-          error={errorMessage}
-          data-testid="manual-payment-error-message"
-          className={inputClassName}
-        />
-      </div>
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="manual-payment-error-message"
+      />
     </>
-  )
-}
+  );
+};
 
-export default PaymentButton
+export default PaymentButton;

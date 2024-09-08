@@ -13,7 +13,6 @@ type PaymentContainerProps = {
   selectedPaymentOptionId: string | null
   disabled?: boolean
   paymentInfoMap: Record<string, { title: string; icon: JSX.Element }>
-  inputClassName?: string // Add the inputClassName prop
 }
 
 const PaymentContainer: React.FC<PaymentContainerProps> = ({
@@ -21,7 +20,6 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   selectedPaymentOptionId,
   paymentInfoMap,
   disabled = false,
-  inputClassName, // Destructure the inputClassName prop
 }) => {
   const isDevelopment = process.env.NODE_ENV === "development"
 
@@ -32,9 +30,9 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
         value={paymentSession.provider_id}
         disabled={disabled}
         className={clx(
-          "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active bg-black text-pastel-pink font-bold", // Apply black background, pastel-pink text, and bold font
+          "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
           {
-            "border-pastel-pink": // Apply pastel-pink border when selected
+            "border-ui-border-interactive":
               selectedPaymentOptionId === paymentSession.provider_id,
           }
         )}
@@ -43,7 +41,6 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
           <div className="flex items-center gap-x-4">
             <Radio
               checked={selectedPaymentOptionId === paymentSession.provider_id}
-              className={inputClassName} // Apply the inputClassName prop to the Radio component
             />
             <Text className="text-base-regular">
               {paymentInfoMap[paymentSession.provider_id]?.title ||
@@ -63,7 +60,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
               <PaymentTest className="hidden small:block" />
             )}
           </div>
-          <span className="justify-self-end text-pastel-pink"> {/* Ensure icon text is pastel-pink */}
+          <span className="justify-self-end text-ui-fg-base">
             {paymentInfoMap[paymentSession.provider_id]?.icon}
           </span>
         </div>
