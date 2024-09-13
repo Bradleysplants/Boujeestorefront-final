@@ -17,10 +17,16 @@ import { setPaymentMethod } from "@modules/checkout/actions"
 import { paymentInfoMap } from "@lib/constants"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper"
 
-const Payment = ({
-  cart,
-}: {
+type PaymentProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
+  inputClassName?: string // Added inputClassName prop
+  className?: string // Optional: Added className prop for additional styling
+}
+
+const Payment: React.FC<PaymentProps> = ({
+  cart,
+  inputClassName, // Destructure inputClassName
+  className, // Destructure className if needed
 }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -104,7 +110,7 @@ const Payment = ({
   }, [isOpen])
 
   return (
-    <div className="bg-white">
+    <div className={clx("bg-white", className)}>
       <div className="flex flex-row items-center justify-between mb-6">
         <Heading
           level="h2"
@@ -201,7 +207,7 @@ const Payment = ({
 
           <Button
             size="large"
-            className="mt-6"
+            className={clx("mt-6", inputClassName)} // Apply inputClassName here
             onClick={handleSubmit}
             isLoading={isLoading}
             disabled={

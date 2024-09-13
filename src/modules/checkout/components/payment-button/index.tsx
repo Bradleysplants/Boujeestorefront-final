@@ -13,11 +13,15 @@ import Spinner from "@modules/common/icons/spinner"
 type PaymentButtonProps = {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
   "data-testid": string
+  className?: string // Added className prop
+  inputClassName?: string // Added inputClassName prop
 }
 
 const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
   "data-testid": dataTestId,
+  className, // Destructure className
+  inputClassName, // Destructure inputClassName
 }) => {
   const notReady =
     !cart ||
@@ -32,7 +36,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
 
   if (paidByGiftcard) {
-    return <GiftCardPaymentButton />
+    return <GiftCardPaymentButton className={className} inputClassName={inputClassName} />
   }
 
   const paymentSession = cart.payment_session as PaymentSession
@@ -44,11 +48,18 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
+          className={className} // Pass className down
+          inputClassName={inputClassName} // Pass inputClassName down
         />
       )
     case "manual":
       return (
-        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
+        <ManualTestPaymentButton
+          notReady={notReady}
+          data-testid={dataTestId}
+          className={className} // Pass className down
+          inputClassName={inputClassName} // Pass inputClassName down
+        />
       )
     case "paypal":
       return (
@@ -56,14 +67,22 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
+          className={className} // Pass className down
+          inputClassName={inputClassName} // Pass inputClassName down
         />
       )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return <Button disabled className={className}>Select a payment method</Button>
   }
 }
 
-const GiftCardPaymentButton = () => {
+const GiftCardPaymentButton = ({
+  className,
+  inputClassName,
+}: {
+  className?: string
+  inputClassName?: string
+}) => {
   const [submitting, setSubmitting] = useState(false)
 
   const handleOrder = async () => {
@@ -76,6 +95,7 @@ const GiftCardPaymentButton = () => {
       onClick={handleOrder}
       isLoading={submitting}
       data-testid="submit-order-button"
+      className={`${className} ${inputClassName}`} // Apply className and inputClassName
     >
       Place order
     </Button>
@@ -86,10 +106,14 @@ const StripePaymentButton = ({
   cart,
   notReady,
   "data-testid": dataTestId,
+  className,
+  inputClassName,
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
   notReady: boolean
   "data-testid"?: string
+  className?: string
+  inputClassName?: string
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -173,6 +197,7 @@ const StripePaymentButton = ({
         size="large"
         isLoading={submitting}
         data-testid={dataTestId}
+        className={`${className} ${inputClassName}`} // Apply className and inputClassName
       >
         Place order
       </Button>
@@ -188,10 +213,14 @@ const PayPalPaymentButton = ({
   cart,
   notReady,
   "data-testid": dataTestId,
+  className,
+  inputClassName,
 }: {
   cart: Omit<Cart, "refundable_amount" | "refunded_total">
   notReady: boolean
   "data-testid"?: string
+  className?: string
+  inputClassName?: string
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -233,13 +262,15 @@ const PayPalPaymentButton = ({
   if (isResolved) {
     return (
       <>
-        <PayPalButtons
-          style={{ layout: "horizontal" }}
-          createOrder={async () => session.data.id as string}
-          onApprove={handlePayment}
-          disabled={notReady || submitting || isPending}
-          data-testid={dataTestId}
-        />
+        <div className={`${className} ${inputClassName}`}> {/* Wrapper div to apply classes */}
+          <PayPalButtons
+            style={{ layout: "horizontal" }}
+            createOrder={async () => session.data.id as string}
+            onApprove={handlePayment}
+            disabled={notReady || submitting || isPending}
+            data-testid={dataTestId}
+          />
+        </div>
         <ErrorMessage
           error={errorMessage}
           data-testid="paypal-payment-error-message"
@@ -247,9 +278,19 @@ const PayPalPaymentButton = ({
       </>
     )
   }
+
+  return null
 }
 
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+const ManualTestPaymentButton = ({
+  notReady,
+  className,
+  inputClassName,
+}: {
+  notReady: boolean
+  className?: string
+  inputClassName?: string
+}) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -274,6 +315,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         onClick={handlePayment}
         size="large"
         data-testid="submit-order-button"
+        className={`${className} ${inputClassName}`} // Apply className and inputClassName
       >
         Place order
       </Button>
