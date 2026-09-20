@@ -69,34 +69,33 @@ Features include:
 
 # Quickstart
 
-### Setting up the environment variables
+### Requirements
 
-Navigate into your projects directory and get your environment variables ready:
+- Node.js 20 (see `.nvmrc`; anything `>=18.17` works) and npm. The lockfile is `package-lock.json`, so use npm, not yarn.
+- A running Medusa v1 backend (default `http://localhost:9000`). The storefront needs it **at build time too**, because category, collection and product pages are pre-rendered from it.
 
-```shell
-cd nextjs-starter-medusa/
-mv .env.template .env.local
-```
-
-### Install dependencies
-
-Use Yarn to install all dependencies.
+### Run locally
 
 ```shell
-yarn
+nvm use            # optional, picks Node 20 from .nvmrc
+cp .env.example .env.local
+# edit .env.local: at minimum check NEXT_PUBLIC_MEDUSA_BACKEND_URL
+npm ci
+npm run dev        # http://localhost:8000
 ```
 
-### Start developing
-
-You are now ready to start up your project.
+### Production build
 
 ```shell
-yarn dev
+npm run typecheck  # tsc --noEmit
+npm run lint
+npm run build      # backend must be reachable
+npm run start      # http://localhost:8000
 ```
 
-### Open the code and start customizing
+### Environment variables
 
-Your site is now running at http://localhost:8000!
+All variables are documented in [`.env.example`](./.env.example). Real values live in `.env.local`, which is git-ignored.
 
 # Payment integrations
 
@@ -134,7 +133,7 @@ The search components in this starter are developed with Algolia's `react-instan
 To do this you will need to add `algoliasearch` to the project, by running
 
 ```shell
-yarn add algoliasearch
+npm install algoliasearch
 ```
 
 After this you will need to switch the current MeiliSearch `SearchClient` out with a Alogolia client. To do this update `@lib/search-client`.

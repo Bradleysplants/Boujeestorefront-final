@@ -7,11 +7,15 @@
   "keywords": [
     "medusa-storefront"
   ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "scripts": {
     "dev": "next dev -p 8000",
     "build": "next build",
     "start": "next start -p 8000",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "analyze": "ANALYZE=true next build",
     "test-e2e": "playwright test e2e"
   },
