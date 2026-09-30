@@ -1,19 +1,19 @@
-import { RadioGroup } from "@headlessui/react"
-import { InformationCircleSolid } from "@medusajs/icons"
-import { PaymentSession } from "@medusajs/medusa"
-import { Text, Tooltip, clx } from "@medusajs/ui"
-import React from "react"
+import React from "react";
+import { RadioGroup } from "@headlessui/react";
+import { InformationCircleSolid } from "@medusajs/icons";
+import { PaymentSession } from "@medusajs/medusa";
+import { Text, Tooltip, clx } from "@medusajs/ui";
 
-import Radio from "@modules/common/components/radio"
+import Radio from "@modules/common/components/radio";
 
-import PaymentTest from "../payment-test"
+import PaymentTest from "../payment-test";
 
 type PaymentContainerProps = {
-  paymentSession: PaymentSession
-  selectedPaymentOptionId: string | null
-  disabled?: boolean
-  paymentInfoMap: Record<string, { title: string; icon: JSX.Element }>
-}
+  paymentSession: PaymentSession;
+  selectedPaymentOptionId: string | null;
+  disabled?: boolean;
+  paymentInfoMap: Record<string, { title: string; icon: JSX.Element }>;
+};
 
 const PaymentContainer: React.FC<PaymentContainerProps> = ({
   paymentSession,
@@ -21,7 +21,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   paymentInfoMap,
   disabled = false,
 }) => {
-  const isDevelopment = process.env.NODE_ENV === "development"
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   return (
     <>
@@ -46,8 +46,11 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
               {paymentInfoMap[paymentSession.provider_id]?.title ||
                 paymentSession.provider_id}
             </Text>
-            {process.env.NODE_ENV === "development" &&
-              !Object.hasOwn(paymentInfoMap, paymentSession.provider_id) && (
+            {isDevelopment &&
+              !Object.hasOwn(
+                paymentInfoMap,
+                paymentSession.provider_id
+              ) && (
                 <Tooltip
                   content="You can add a user-friendly name and icon for this payment provider in 'src/modules/checkout/components/payment/index.tsx'"
                   className="min-w-fit"
@@ -69,7 +72,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
         )}
       </RadioGroup.Option>
     </>
-  )
-}
+  );
+};
 
-export default PaymentContainer
+export default PaymentContainer;

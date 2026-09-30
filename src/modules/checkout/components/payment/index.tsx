@@ -1,53 +1,53 @@
-"use client"
+"use client";
 
-import { useCallback, useContext, useEffect, useMemo, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { RadioGroup } from "@headlessui/react"
-import ErrorMessage from "@modules/checkout/components/error-message"
-import { Cart } from "@medusajs/medusa"
-import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
-import { Button, Container, Heading, Text, Tooltip, clx } from "@medusajs/ui"
-import { CardElement } from "@stripe/react-stripe-js"
-import { StripeCardElementOptions } from "@stripe/stripe-js"
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { RadioGroup } from "@headlessui/react";
+import ErrorMessage from "@modules/checkout/components/error-message";
+import { Cart } from "@medusajs/medusa";
+import { CheckCircleSolid, CreditCard } from "@medusajs/icons";
+import { Button, Container, Heading, Text, Tooltip, clx } from "@medusajs/ui";
+import { CardElement } from "@stripe/react-stripe-js";
+import { StripeCardElementOptions } from "@stripe/stripe-js";
 
-import Divider from "@modules/common/components/divider"
-import Spinner from "@modules/common/icons/spinner"
-import PaymentContainer from "@modules/checkout/components/payment-container"
-import { setPaymentMethod } from "@modules/checkout/actions"
-import { paymentInfoMap } from "@lib/constants"
-import { StripeContext } from "@modules/checkout/components/payment-wrapper"
+import Divider from "@modules/common/components/divider";
+import Spinner from "@modules/common/icons/spinner";
+import PaymentContainer from "@modules/checkout/components/payment-container";
+import { setPaymentMethod } from "@modules/checkout/actions";
+import { paymentInfoMap } from "@lib/constants";
+import { StripeContext } from "@modules/checkout/components/payment-wrapper";
 
 type PaymentProps = {
-  cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null
-  inputClassName?: string // Added inputClassName prop
-  className?: string // Optional: Added className prop for additional styling
-}
+  cart: Omit<Cart, "refundable_amount" | "refunded_total"> | null;
+  className?: string;        // Optional prop for styling containers
+  inputClassName?: string;   // Optional prop for styling input elements
+};
 
 const Payment: React.FC<PaymentProps> = ({
   cart,
-  inputClassName, // Destructure inputClassName
-  className, // Destructure className if needed
+  className,
+  inputClassName,
 }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [cardBrand, setCardBrand] = useState<string | null>(null)
-  const [cardComplete, setCardComplete] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setErrorMessage] = useState<string | null>(null);
+  const [cardBrand, setCardBrand] = useState<string | null>(null);
+  const [cardComplete, setCardComplete] = useState(false);
 
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const isOpen = searchParams.get("step") === "payment"
+  const isOpen = searchParams.get("step") === "payment";
 
-  const isStripe = cart?.payment_session?.provider_id === "stripe"
-  const stripeReady = useContext(StripeContext)
+  const isStripe = cart?.payment_session?.provider_id === "stripe";
+  const stripeReady = useContext(StripeContext);
 
   const paidByGiftcard =
-    cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0
+    cart?.gift_cards && cart?.gift_cards?.length > 0 && cart?.total === 0;
 
   const paymentReady =
     (cart?.payment_session && cart?.shipping_methods.length !== 0) ||
-    paidByGiftcard
+    paidByGiftcard;
 
   const useOptions: StripeCardElementOptions = useMemo(() => {
     return {
@@ -61,56 +61,66 @@ const Payment: React.FC<PaymentProps> = ({
         },
       },
       classes: {
-        base: "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out",
+        base: inputClassName || "pt-3 pb-1 block w-full h-11 px-4 mt-0 bg-ui-bg-field border rounded-md appearance-none focus:outline-none focus:ring-0 focus:shadow-borders-interactive-with-active border-ui-border-base hover:bg-ui-bg-field-hover transition-all duration-300 ease-in-out",
       },
-    }
-  }, [])
+    };
+  }, [inputClassName]);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams)
-      params.set(name, value)
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
 
-      return params.toString()
+      return params.toString();
     },
     [searchParams]
-  )
+  );
 
   const set = async (providerId: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     await setPaymentMethod(providerId)
-      .catch((err) => setError(err.toString()))
+      .catch((err) => setErrorMessage(err.toString()))
       .finally(() => {
-        if (providerId === "paypal") return
-        setIsLoading(false)
-      })
-  }
+        if (providerId === "paypal") return;
+        setIsLoading(false);
+      });
+  };
 
   const handleChange = (providerId: string) => {
-    setError(null)
-    set(providerId)
-  }
+    setErrorMessage(null);
+    set(providerId);
+  };
 
   const handleEdit = () => {
     router.push(pathname + "?" + createQueryString("step", "payment"), {
       scroll: false,
-    })
-  }
+    });
+  };
 
   const handleSubmit = () => {
-    setIsLoading(true)
+    setIsLoading(true);
     router.push(pathname + "?" + createQueryString("step", "review"), {
       scroll: false,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    setIsLoading(false)
-    setError(null)
-  }, [isOpen])
+    setIsLoading(false);
+    setErrorMessage(null);
+  }, [isOpen]);
+
+  const handleCardChange = (e: any) => {
+    // Replace 'any' with appropriate type if available, e.g., StripeCardElementChangeEvent
+    setCardBrand(
+      e.brand &&
+        e.brand.charAt(0).toUpperCase() + e.brand.slice(1)
+    );
+    setErrorMessage(e.error?.message || null);
+    setCardComplete(e.complete);
+  };
 
   return (
-    <div className={clx("bg-white", className)}>
+    <div className={className || "bg-white"}>
       <div className="flex flex-row items-center justify-between mb-6">
         <Heading
           level="h2"
@@ -147,7 +157,7 @@ const Payment: React.FC<PaymentProps> = ({
               >
                 {cart.payment_sessions
                   .sort((a, b) => {
-                    return a.provider_id > b.provider_id ? 1 : -1
+                    return a.provider_id > b.provider_id ? 1 : -1;
                   })
                   .map((paymentSession) => {
                     return (
@@ -159,7 +169,7 @@ const Payment: React.FC<PaymentProps> = ({
                           cart.payment_session?.provider_id || null
                         }
                       />
-                    )
+                    );
                   })}
               </RadioGroup>
               {isStripe && stripeReady && (
@@ -170,14 +180,7 @@ const Payment: React.FC<PaymentProps> = ({
 
                   <CardElement
                     options={useOptions as StripeCardElementOptions}
-                    onChange={(e) => {
-                      setCardBrand(
-                        e.brand &&
-                          e.brand.charAt(0).toUpperCase() + e.brand.slice(1)
-                      )
-                      setError(e.error?.message || null)
-                      setCardComplete(e.complete)
-                    }}
+                    onChange={handleCardChange}
                   />
                 </div>
               )}
@@ -207,7 +210,7 @@ const Payment: React.FC<PaymentProps> = ({
 
           <Button
             size="large"
-            className={clx("mt-6", inputClassName)} // Apply inputClassName here
+            className={clx("mt-6", className)}
             onClick={handleSubmit}
             isLoading={isLoading}
             disabled={
@@ -231,8 +234,10 @@ const Payment: React.FC<PaymentProps> = ({
                   className="txt-medium text-ui-fg-subtle"
                   data-testid="payment-method-summary"
                 >
-                  {paymentInfoMap[cart.payment_session.provider_id]?.title ||
-                    cart.payment_session.provider_id}
+                  {
+                    paymentInfoMap[cart.payment_session.provider_id]?.title ||
+                    cart.payment_session.provider_id
+                  }
                 </Text>
                 {process.env.NODE_ENV === "development" &&
                   !Object.hasOwn(
@@ -280,7 +285,7 @@ const Payment: React.FC<PaymentProps> = ({
       </div>
       <Divider className="mt-8" />
     </div>
-  )
-}
+  );
+};
 
-export default Payment
+export default Payment;
